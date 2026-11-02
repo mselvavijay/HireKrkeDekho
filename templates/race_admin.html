@@ -1,240 +1,1305 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover">
-<title>AI Race Admin - HireKrkeDekho</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Race Admin Portal - HireKrkeDekho</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261030-race-interactions">
+<link rel="stylesheet" href="/static/app.css?v=20261103-admin">
 <link rel="icon" type="image/png" href="/static/favicon.ico">
+<style>
+/* ===== Dedicated Admin Dashboard Modern Styles ===== */
+:root {
+  --admin-bg: #070d18;
+  --admin-card: #0c1628;
+  --admin-card-hover: #101d36;
+  --admin-card-border: rgba(255, 255, 255, 0.08);
+  --admin-accent: #3b82f6;
+  --admin-accent-glow: rgba(59, 130, 246, 0.25);
+  --admin-gold: #fbbf24;
+  --admin-gold-bg: rgba(251, 191, 36, 0.12);
+  --admin-emerald: #10b981;
+  --admin-emerald-bg: rgba(16, 185, 129, 0.12);
+  --admin-rose: #f43f5e;
+  --admin-rose-bg: rgba(244, 63, 94, 0.12);
+  --admin-text-main: #f8fafc;
+  --admin-text-sub: #94a3b8;
+  --admin-text-dim: #64748b;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body.admin-body {
+  background: var(--admin-bg);
+  color: var(--admin-text-main);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.admin-header {
+  background: rgba(12, 22, 40, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--admin-card-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 24px;
+}
+
+.admin-header-inner {
+  max-width: 1380px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-brand-group img {
+  height: 28px;
+  width: auto;
+}
+
+.admin-badge-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #93c5fd;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-live-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--admin-text-sub);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulseAnim 2s infinite ease-in-out;
+}
+
+@keyframes pulseAnim {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: var(--admin-text-sub);
+}
+
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.admin-btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--admin-text-sub);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.admin-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.admin-btn-primary {
+  background: #1f6bff;
+  color: #fff;
+}
+
+.admin-btn-primary:hover {
+  background: #3b82f6;
+  box-shadow: 0 4px 16px rgba(31, 107, 255, 0.35);
+}
+
+/* ===== Main Dashboard Container ===== */
+.admin-container {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* KPI Summary Cards Grid */
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.admin-kpi-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-card-border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-kpi-card:hover {
+  border-color: rgba(59, 130, 246, 0.35);
+  transform: translateY(-2px);
+}
+
+.kpi-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--admin-text-dim);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-value {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.kpi-sub {
+  font-size: 0.8rem;
+  color: var(--admin-text-sub);
+  margin-top: 6px;
+}
+
+/* Tabs Navigation */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--admin-card-border);
+  margin-bottom: 24px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.admin-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--admin-text-sub);
+  padding: 10px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  position: relative;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.admin-tab-btn.active {
+  color: #60a5fa;
+  font-weight: 700;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.admin-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #3b82f6;
+  border-radius: 2px;
+}
+
+/* Tab Panels */
+.admin-tab-panel {
+  display: none;
+}
+
+.admin-tab-panel.active {
+  display: block;
+}
+
+/* Card Sections */
+.admin-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-card-border);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-card-desc {
+  font-size: 0.82rem;
+  color: var(--admin-text-sub);
+  margin-top: 4px;
+}
+
+/* Control Toolbar */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-input-date {
+  padding: 7px 12px;
+  font-size: 0.84rem;
+  background: #0f1c32;
+  border: 1px solid #223555;
+  color: #fff;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+.admin-input-date:focus {
+  border-color: #3b82f6;
+}
+
+/* Data Table */
+.admin-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  text-align: left;
+}
+
+.admin-table th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--admin-text-dim);
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--admin-text-main);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.row-champion {
+  background: linear-gradient(90deg, rgba(251, 191, 36, 0.08), transparent);
+  border-left: 3px solid #fbbf24;
+}
+
+/* Badges & Tags */
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--admin-text-sub);
+}
+
+.rank-badge-1 {
+  background: #fbbf24;
+  color: #000;
+  font-weight: 900;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+}
+
+.rank-badge-2 {
+  background: #cbd5e1;
+  color: #000;
+}
+
+.rank-badge-3 {
+  background: #d97706;
+  color: #fff;
+}
+
+.email-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  color: #93c5fd;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.74rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.score-pill {
+  font-weight: 700;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score-bar-mini {
+  width: 50px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.score-bar-fill {
+  height: 100%;
+  background: #10b981;
+  border-radius: 3px;
+}
+
+/* Empty State */
+.admin-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--admin-text-sub);
+}
+
+.admin-empty-icon {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+/* Question Audit Accordion */
+.question-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.question-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.option-box {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.84rem;
+  color: var(--admin-text-sub);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.option-box.correct {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #a7f3d0;
+  font-weight: 600;
+}
+
+/* Auth Guard Modal / Box */
+.admin-auth-guard {
+  max-width: 500px;
+  margin: 60px auto;
+  text-align: center;
+  background: var(--admin-card);
+  border: 1px solid var(--admin-card-border);
+  border-radius: 20px;
+  padding: 36px 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+}
+
+.admin-auth-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  color: #60a5fa;
+}
+
+/* Toast */
+.admin-toast-box {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-toast {
+  padding: 12px 18px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.85rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  animation: slideToast 0.2s ease-out;
+}
+
+.admin-toast-success { border-color: #10b981; }
+.admin-toast-error { border-color: #ef4444; }
+
+@keyframes slideToast {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .admin-header-inner { flex-direction: column; align-items: stretch; }
+  .admin-actions { justify-content: space-between; }
+  .admin-card-header { flex-direction: column; align-items: stretch; }
+  .admin-toolbar { justify-content: flex-start; }
+}
+</style>
 </head>
-<body class="page-enter">
-<div class="ambient-glow-left"></div>
-<div class="ambient-glow-right"></div>
-<header class="site-header">
-    <a href="/" class="header-brand" aria-label="HireKrkeDekho home">
-        <img class="brand-wordmark" src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" width="220" height="36">
-    </a>
-    <nav class="nav-links">
-        <a href="/" class="nav-link">Back to Site</a>
-    </nav>
-    <div class="header-actions">
-        <button class="btn-ghost btn-icon" onclick="window.location.reload()" title="Refresh">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M1 4c0-1.1.9-2 2-2h11.5l-1.3-1.3C15.55 1.35 16.66 1 18 1s2.45.35 3.3.94L22.9 4.2c-.73-.74-1.8-1.19-2.9-1.19H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h11.5l-1.3 1.3C15.55 20.65 14.44 21 13 21s-2.45-.35-3.3-.94L1.1 19.8c.73.74 1.8 1.19 2.9 1.19H21c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H3z" fill="currentColor"/></svg>
-        </button>
-        <button class="btn-ghost btn-icon" onclick="signOutAdmin()" title="Sign Out">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z" fill="currentColor"/></svg>
-        </button>
+<body class="admin-body">
+
+<header class="admin-header">
+  <div class="admin-header-inner">
+    <div class="admin-brand-group">
+      <a href="/" aria-label="HireKrkeDekho Home">
+        <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho">
+      </a>
+      <span class="admin-badge-title">AI Race Admin</span>
+      <div class="admin-live-clock">
+        <span class="pulse-dot"></span>
+        <span id="live_ist_time">IST Live</span>
+      </div>
     </div>
+    
+    <div class="admin-actions">
+      <span id="admin_user_pill" class="admin-user-pill" style="display:none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span id="admin_user_email">Admin</span>
+      </span>
+      <a href="/" class="admin-btn admin-btn-ghost" title="View Public Platform">Public Site</a>
+      <button class="admin-btn admin-btn-ghost" onclick="refreshData()" title="Reload Data">
+        <svg id="refresh_spinner" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        <span>Refresh</span>
+      </button>
+      <button class="admin-btn admin-btn-ghost" onclick="signOutAdmin()" title="Sign Out">Sign Out</button>
+    </div>
+  </div>
 </header>
 
-<main class="ai-race-section">
-    <section class="race-panel">
-        <div>
-            <div class="race-kicker">Admin Control Room</div>
-            <h1 class="race-title text-h2">AI Race Dashboard</h1>
-            <p class="race-copy text-sm">Review today's standings, announcement-ready top three, complete test data, and winner emails for certificate delivery.</p>
-        </div>
-        <aside class="race-rules">
-            <h3>Contest Control</h3>
-            <ol>
-                <li><span class="badge badge-neutral">Public</span> Leaderboard: rank, username, score, time.</li>
-                <li><span class="badge badge-primary">Admin Only</span> Audit: questions and every saved response.</li>
-                <li><span class="badge badge-warning">Private</span> Emails visible only here for certificate hand-off.</li>
-            </ol>
-        </aside>
-    </section>
+<main class="admin-container">
 
-    <!-- Admin Sign-in Section -->
-    <section class="race-result-card card" id="admin-auth-box">
-        <div class="race-result-header">
-            <div><span class="race-result-brand text-h3">Admin Sign In</span><span class="race-result-meta text-xs">Authorized Google account required</span></div>
-        </div>
-        <div id="admin-google-slot" class="google-login-slot" style="margin-top:var(--space-4);"></div>
-        <p id="admin-auth-note" class="race-copy text-sm text-muted" style="margin-top:var(--space-2);">Sign in with an authorized Google account to load the admin audit.</p>
-    </section>
+  <!-- Admin Sign-In Box (Shown when not authenticated) -->
+  <div id="admin_auth_box" class="admin-auth-guard" style="display:none;">
+    <div class="admin-auth-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h2 style="margin:0 0 8px;font-size:1.4rem;">Admin Control Room</h2>
+    <p style="color:var(--admin-text-sub);font-size:0.88rem;margin:0 0 22px;line-height:1.5;">
+      Access is restricted to authorized HireKrkeDekho administrators. Sign in with your registered Google account to view live candidate audits and certificate contacts.
+    </p>
+    <div id="admin_google_slot" style="display:flex;justify-content:center;margin-bottom:14px;"></div>
+    <p id="admin_auth_error" style="color:#f87171;font-size:0.82rem;margin:8px 0 0;"></p>
+  </div>
 
-    <!-- Latest Winner -->
-    <section class="race-result-card card">
-        <div class="race-result-header">
-            <div><span class="race-result-brand text-h3">Latest Winner</span><span class="race-result-meta text-xs">Decided after midnight IST for the previous day</span></div>
-        </div>
-        <div id="latest-winner" class="text-muted">Loading winner...</div>
-    </section>
+  <!-- Authenticated Dashboard Area -->
+  <div id="admin_dashboard_content">
+    
+    <!-- Top KPI Cards -->
+    <div class="admin-kpi-grid">
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Contest Date & Theme</div>
+        <div class="kpi-value" id="kpi_date" style="font-size:1.3rem;">—</div>
+        <div class="kpi-sub" id="kpi_theme">Loading daily theme…</div>
+      </div>
+      
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Today's Candidate Turnout</div>
+        <div class="kpi-value"><span id="kpi_completed">0</span> <span style="font-size:0.9rem;font-weight:400;color:var(--admin-text-dim);">completed</span></div>
+        <div class="kpi-sub"><span id="kpi_started">0</span> attempts initiated</div>
+      </div>
+      
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Current Leader (#1 Projected) 🏆</div>
+        <div class="kpi-value" id="kpi_leader" style="font-size:1.3rem;color:#fde047;">—</div>
+        <div class="kpi-sub" id="kpi_leader_meta">Finalizes at 00:00 IST</div>
+      </div>
 
-    <!-- Top 3 Podium -->
-    <section class="race-result-card card">
-        <div class="race-result-header">
-            <div><span class="race-result-brand text-h3">Announcement</span><span class="race-result-meta text-xs">Top three - publish after midnight IST</span></div>
-        </div>
-        <div id="podium" class="text-muted">Loading top three...</div>
-    </section>
+      <div class="admin-kpi-card">
+        <div class="kpi-label">Archived Winners</div>
+        <div class="kpi-value" id="kpi_winners_count">0</div>
+        <div class="kpi-sub">Champions across past contests</div>
+      </div>
+    </div>
 
-    <!-- Leaderboard -->
-    <section class="race-result-card card">
-        <div class="race-result-header" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-            <div>
-                <span class="race-result-brand text-h3">Leaderboard</span>
-                <span class="race-result-meta text-xs">All completed attempts (admin only - includes email). 7-day auto-retention policy applies.</span>
-            </div>
-            <div style="display:flex;gap:8px;align-items:center;">
-                <input type="date" id="csv_date_input" style="padding:6px 10px;font-size:0.85rem;background:#1e293b;border:1px solid #334155;color:#fff;border-radius:6px;">
-                <button class="btn btn-primary btn-sm" onclick="downloadLeaderboardCSV()" title="Download Leaderboard as CSV">
-                    <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-                    Download CSV
-                </button>
-            </div>
-        </div>
-        <div id="leaderboard-list" class="text-muted">Loading leaderboard...</div>
-    </section>
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchTab('tab_leaderboard', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        Today's Live Leaderboard
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab_winners', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        Winner History (Hall of Fame)
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab_questions', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Quiz Questions & Answers
+      </button>
+      <button class="admin-tab-btn" onclick="switchTab('tab_audit', this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Candidate Answer Audit
+      </button>
+    </div>
 
-    <!-- Winner History -->
-    <section class="race-result-card card">
-        <div class="race-result-header">
-            <div><span class="race-result-brand text-h3">Winner History</span><span class="race-result-meta text-xs">All past winners</span></div>
+    <!-- TAB 1: Live Leaderboard -->
+    <div id="tab_leaderboard" class="admin-tab-panel active">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h2 class="admin-card-title">Live Candidate Standings</h2>
+            <p class="admin-card-desc">Ranked by score (desc), total time (asc), and earliest completion time. 7-day retention applies.</p>
+          </div>
+          <div class="admin-toolbar">
+            <label style="font-size:0.8rem;color:var(--admin-text-sub);">Contest Date:</label>
+            <input type="date" id="admin_date_filter" class="admin-input-date" onchange="loadSelectedDateData()">
+            <button class="admin-btn admin-btn-primary" onclick="downloadLeaderboardCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </button>
+            <button class="admin-btn admin-btn-ghost" onclick="pregenerateTomorrowModal()">
+              ⚡ Pre-generate Tomorrow
+            </button>
+          </div>
         </div>
-        <div id="winner-history" class="text-muted">Loading winner history...</div>
-    </section>
 
-    <!-- Test Audit -->
-    <section class="race-result-card card">
-        <div class="race-result-header">
-            <div><span class="race-result-brand text-h3">Test Audit</span><span class="race-result-meta text-xs">Questions and saved answers - admin only</span></div>
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width:60px;">Rank</th>
+                <th>Candidate</th>
+                <th>Verified Email</th>
+                <th>Score</th>
+                <th>Time Taken</th>
+                <th>Completed At (IST)</th>
+                <th>Inspect</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard_tbody">
+              <tr><td colspan="7" class="admin-empty-state">Loading candidate records…</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div id="test-audit" class="text-muted">Loading test audit...</div>
-    </section>
+      </div>
+    </div>
+
+    <!-- TAB 2: Winner History (Hall of Fame) -->
+    <div id="tab_winners" class="admin-tab-panel">
+      <!-- Today's Projected Banner -->
+      <div class="admin-card" style="border-left:4px solid #fbbf24;background:rgba(251,191,36,0.04);">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <span style="font-size:0.75rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#fbbf24;">⚡ Today's Projected Champion</span>
+            <h3 id="projected_winner_title" style="margin:4px 0 6px;color:#fff;font-size:1.25rem;">Awaiting first attempt…</h3>
+            <p id="projected_winner_desc" style="margin:0;font-size:0.84rem;color:var(--admin-text-sub);">
+              Contest winners are finalized daily at 00:00 IST for each completed day. Once the clock strikes midnight, today's #1 candidate will be crowned and permanently archived into the Hall of Fame below.
+            </p>
+          </div>
+          <div id="projected_winner_badge" style="display:none;">
+            <span class="email-pill" style="font-size:0.86rem;padding:6px 12px;background:rgba(251,191,36,0.15);border-color:rgba(251,191,36,0.4);color:#fde047;">
+              Projected Winner #1
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h2 class="admin-card-title">Permanent Winner Hall of Fame</h2>
+            <p class="admin-card-desc">All past contest winners finalized after midnight IST. Contact information is available for certificate generation.</p>
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Contest Date</th>
+                <th>Winner Name</th>
+                <th>Google Verified Email</th>
+                <th>Score</th>
+                <th>Time</th>
+                <th>Finalized Timestamp</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="winners_tbody">
+              <tr><td colspan="7" class="admin-empty-state">Loading winner history…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Quiz Questions & Answers -->
+    <div id="tab_questions" class="admin-tab-panel">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h2 class="admin-card-title">Active Daily Quiz Calibration</h2>
+            <p class="admin-card-desc">15 calibrated AI and domain questions generated for the selected contest date. The green highlight indicates the correct answer index.</p>
+          </div>
+        </div>
+        <div id="questions_container">
+          <div class="admin-empty-state">Loading questions…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Candidate Answer Audit -->
+    <div id="tab_audit" class="admin-tab-panel">
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h2 class="admin-card-title">Per-Question Candidate Audit</h2>
+            <p class="admin-card-desc">Select any candidate to review their submitted options and reaction times per question.</p>
+          </div>
+          <div class="admin-toolbar">
+            <label style="font-size:0.82rem;color:var(--admin-text-sub);">Select Candidate:</label>
+            <select id="audit_candidate_select" class="admin-input-date" onchange="renderCandidateAuditDetails()" style="min-width:220px;">
+              <option value="">Choose candidate…</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="candidate_audit_details">
+          <div class="admin-empty-state">Select a candidate above to view their response log.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </main>
 
-<!-- Toast Container -->
-<div class="toast-container" id="toast_container"></div>
+<div class="admin-toast-box" id="admin_toast_box"></div>
 
 <script>
 const TOKEN_KEY = 'career_bot_token';
-function getToken(){ return localStorage.getItem(TOKEN_KEY); }
-function setToken(t){ localStorage.setItem(TOKEN_KEY, t); }
-function authHeaders(){ const t = getToken(); return t ? { 'Authorization': 'Bearer ' + t } : {}; }
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY) || getCookie('hkd_token') || '';
+}
+function setToken(t) {
+  localStorage.setItem(TOKEN_KEY, t);
+  document.cookie = `hkd_token=${encodeURIComponent(t)}; path=/; max-age=${30*86400}; SameSite=Lax; Secure`;
+}
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : '';
+}
+function authHeaders() {
+  const t = getToken();
+  return t ? { 'Authorization': 'Bearer ' + t, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+}
 
 let googleClientId = '';
 let googleInitialized = false;
+let currentDayData = null;
+let currentWinners = [];
 
-async function initGoogle(){
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function showToast(msg, type = 'info') {
+  const box = document.getElementById('admin_toast_box');
+  if (!box) return;
+  const t = document.createElement('div');
+  t.className = `admin-toast ${type === 'success' ? 'admin-toast-success' : type === 'error' ? 'admin-toast-error' : ''}`;
+  t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(() => { t.remove(); }, 4000);
+}
+
+function copyToClipboard(text, label = 'Copied') {
+  navigator.clipboard.writeText(text).then(() => {
+    showToast(`${label}: ${text}`, 'success');
+  }).catch(() => {
+    prompt('Copy email manually:', text);
+  });
+}
+
+function updateClock() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const ist = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
+  const timeStr = ist.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+  const dateStr = ist.toISOString().split('T')[0];
+  const el = document.getElementById('live_ist_time');
+  if (el) el.textContent = `${dateStr} ${timeStr} IST`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(tabId);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// Google Auth Handlers
+async function initGoogle() {
   try {
     const r = await fetch('/auth/config');
     if (!r.ok) return;
     const d = await r.json();
     googleClientId = d.google_client_id || '';
     if (googleClientId) waitForGoogle();
-  } catch (e){ console.warn(e); }
+  } catch (e) { console.warn(e); }
 }
 
-function waitForGoogle(attempts){
-  if (attempts === undefined) attempts = 20;
+function waitForGoogle(attempts = 25) {
   if (googleClientId && window.google && google.accounts && google.accounts.id) {
     setupGoogle();
   } else if (attempts > 0) {
-    setTimeout(function(){ waitForGoogle(attempts - 1); }, 250);
+    setTimeout(() => waitForGoogle(attempts - 1), 200);
   }
 }
 
-function setupGoogle(){
+function setupGoogle() {
   if (googleInitialized) return;
   try {
-    google.accounts.id.initialize({ client_id: googleClientId, callback: handleGoogleCredential, auto_select: false });
+    google.accounts.id.initialize({
+      client_id: googleClientId,
+      callback: handleGoogleCredential,
+      auto_select: false
+    });
     googleInitialized = true;
     renderGoogleButton();
-  } catch (e){ console.warn(e); }
+  } catch (e) { console.warn(e); }
 }
 
-function renderGoogleButton(){
-  const slot = document.getElementById('admin-google-slot');
+function renderGoogleButton() {
+  const slot = document.getElementById('admin_google_slot');
   if (!slot || !googleInitialized) return;
   slot.innerHTML = '';
-  google.accounts.id.renderButton(slot, { theme: 'filled_blue', size: 'large', text: 'continue_with', shape: 'pill', width: 320 });
+  google.accounts.id.renderButton(slot, {
+    theme: 'filled_blue',
+    size: 'large',
+    text: 'continue_with',
+    shape: 'pill'
+  });
 }
 
-async function handleGoogleCredential(response){
-  const note = document.getElementById('admin-auth-note');
+async function handleGoogleCredential(response) {
+  const errEl = document.getElementById('admin_auth_error');
+  if (errEl) errEl.textContent = '';
   try {
     const r = await fetch('/auth/google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ credential: response.credential })
     });
-    if (!r.ok) throw new Error('Sign in failed');
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.detail || 'Sign-in failed');
+    }
     const user = await r.json();
     if (user.access_token) setToken(user.access_token);
-    const box = document.getElementById('admin-auth-box');
-    if (box) box.style.display = 'none';
+    showToast('Signed in successfully', 'success');
     await loadAll();
   } catch (err) {
-    if (note) note.textContent = 'Authentication failed: ' + err.message;
-    if (typeof window.showToast === 'function') window.showToast('Authentication failed: ' + err.message, 'error', 5000);
+    if (errEl) errEl.textContent = 'Authentication failed: ' + err.message;
+    showToast('Authentication failed: ' + err.message, 'error');
   }
 }
-async function loadDay(){
-  const r = await fetch('/race/admin/day', { headers: authHeaders() });
-  const d = await r.json();
-  if (!r.ok) throw new Error((d && d.detail) || 'Access denied');
-  const podium = document.getElementById('podium');
-  podium.innerHTML = (d.top_three || []).map(function(x){
-    return '<article class="leaderboard-row ' + (x.rank === 1 ? 'leaderboard-row-winner' : '') + '">' +
-      '<strong>#' + x.rank + '</strong>' +
-      '<span>' + x.display_name + '<small style="display:block;color:#aebbd0;font-weight:400">' + (x.email || '') + '</small></span>' +
-      '<b>' + x.score + '/15</b>' +
-      '<time>' + (x.total_time_ms / 1000).toFixed(1) + 's</time>' +
-      '</article>';
-  }).join('') || 'No completed attempts yet.';
 
-  const audit = document.getElementById('test-audit');
-  audit.innerHTML = (d.questions || []).map(function(q, i){
-    const answer = q.options && q.options[q.answer_index] ? q.options[q.answer_index] : 'Unavailable';
-    return '<details style="padding:12px 0;border-bottom:1px solid #26334d">' +
-      '<summary style="cursor:pointer;color:#fff;font-weight:700">Q' + (i + 1) + '. ' + q.question + '</summary>' +
-      '<p><strong style="color:#71e2b2">Correct answer:</strong> ' + String.fromCharCode(65 + q.answer_index) + '. ' + answer + '</p>' +
-    '</details>';
-  }).join('') || 'No quiz generated.';
+function signOutAdmin() {
+  localStorage.removeItem(TOKEN_KEY);
+  document.cookie = "hkd_token=; path=/; max-age=0";
+  window.location.reload();
 }
 
-async function loadLeaderboard(){
-  const r = await fetch('/race/admin/leaderboard', { headers: authHeaders() });
-  const d = await r.json();
-  if (!r.ok) throw new Error((d && d.detail) || 'Access denied');
-  const lb = document.getElementById('leaderboard-list');
-  lb.innerHTML = (d.entries || []).map(function(x){
-    return '<article class="leaderboard-row ' + (x.rank === 1 ? 'leaderboard-row-winner' : '') + '">' +
-      '<strong>#' + x.rank + '</strong>' +
-      '<span>' + x.display_name + '<small style="display:block;color:#aebbd0;font-weight:400">' + (x.email || '') + '</small></span>' +
-      '<b>' + x.score + '/15</b>' +
-      '<time>' + (x.total_time_ms / 1000).toFixed(1) + 's</time>' +
-      '</article>';
-  }).join('') || 'No completed attempts yet.';
-}
+// Data Loaders
+async function loadAll() {
+  const token = getToken();
+  const authBox = document.getElementById('admin_auth_box');
+  const dashboard = document.getElementById('admin_dashboard_content');
+  const userPill = document.getElementById('admin_user_pill');
 
-async function loadWinners(){
-  const r = await fetch('/race/admin/winners', { headers: authHeaders() });
-  const winners = await r.json();
-  if (!r.ok) throw new Error((winners && winners.detail) || 'Access denied');
-  const latest = (winners && winners.length) ? winners[0] : null;
-  const lw = document.getElementById('latest-winner');
-  if (lw) {
-    lw.innerHTML = latest
-      ? '<article class="leaderboard-row leaderboard-row-winner"><strong>' + latest.contest_date + '</strong><span>' + latest.name + '<small style="display:block;color:#aebbd0;font-weight:400">' + (latest.email || '') + '</small></span><b>Winner</b></article>'
-      : 'No winner decided yet (finalized after midnight IST).';
+  if (!token) {
+    if (authBox) authBox.style.display = 'block';
+    if (dashboard) dashboard.style.opacity = '0.3';
+    return;
   }
-  const wh = document.getElementById('winner-history');
-  if (wh) {
-    wh.innerHTML = (winners || []).map(function(w){
-      return '<article class="leaderboard-row"><span>' + w.contest_date + '</span><span>' + w.name + '<small style="display:block;color:#aebbd0;font-weight:400">' + (w.email || '') + '</small></span></article>';
-    }).join('') || 'No winners yet.';
+
+  if (authBox) authBox.style.display = 'none';
+  if (dashboard) dashboard.style.opacity = '1';
+
+  try {
+    await Promise.all([loadDayData(), loadWinnersData()]);
+  } catch (err) {
+    if (err.message && (err.message.includes('Admin access required') || err.message.includes('403'))) {
+      if (authBox) {
+        authBox.style.display = 'block';
+        const errEl = document.getElementById('admin_auth_error');
+        if (errEl) errEl.textContent = 'Access Denied: Your Google account is not configured in ADMIN_EMAILS.';
+      }
+      if (dashboard) dashboard.style.opacity = '0.3';
+      showToast('Admin access required for this account', 'error');
+    } else {
+      showToast(err.message || 'Error loading dashboard', 'error');
+    }
+  }
+}
+
+async function loadDayData(dateVal = null) {
+  const url = '/race/admin/day' + (dateVal ? `?date_value=${encodeURIComponent(dateVal)}` : '');
+  const res = await fetch(url, { headers: authHeaders() });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || 'Failed to load day data');
+  currentDayData = data;
+
+  // Set date filter input
+  const dateInput = document.getElementById('admin_date_filter');
+  if (dateInput && !dateVal) dateInput.value = data.contest_date;
+
+  // Update KPIs
+  document.getElementById('kpi_date').textContent = data.contest_date;
+  document.getElementById('kpi_theme').textContent = data.theme || 'AI Talent Calibration';
+  document.getElementById('kpi_completed').textContent = data.total_completed || 0;
+  document.getElementById('kpi_started').textContent = data.total_started || 0;
+
+  // Update Current Leader KPI
+  const top1 = data.top_three && data.top_three.length ? data.top_three[0] : null;
+  const kpiLeader = document.getElementById('kpi_leader');
+  const kpiLeaderMeta = document.getElementById('kpi_leader_meta');
+  if (top1) {
+    kpiLeader.textContent = top1.display_name;
+    kpiLeaderMeta.textContent = `${top1.score}/15 score · ${(top1.total_time_ms / 1000).toFixed(1)}s time`;
+  } else {
+    kpiLeader.textContent = 'None yet';
+    kpiLeaderMeta.textContent = 'No attempts finished yet';
+  }
+
+  // Render Leaderboard Table
+  renderLeaderboardTable(data.attempts || []);
+
+  // Render Questions
+  renderQuestionsList(data.questions || []);
+
+  // Update Candidate Select Dropdown for Audit
+  populateAuditSelect(data.attempts || []);
+
+  // Update Projected Winner Card in Tab 2
+  updateProjectedWinnerBanner(top1, data.contest_date);
+}
+
+function renderLeaderboardTable(attempts) {
+  const tbody = document.getElementById('leaderboard_tbody');
+  if (!tbody) return;
+
+  if (!attempts.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="admin-empty-state"><div class="admin-empty-icon">🏁</div>No completed attempts found for this contest date.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = attempts.map(a => {
+    const isChamp = a.rank === 1;
+    const rankClass = a.rank === 1 ? 'rank-badge-1' : a.rank === 2 ? 'rank-badge-2' : a.rank === 3 ? 'rank-badge-3' : '';
+    const scorePct = Math.round((a.score / 15) * 100);
+    const completedStr = a.completed_at ? new Date(a.completed_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '—';
+    const emailEsc = escapeHtml(a.email || '—');
+
+    return `
+      <tr class="${isChamp ? 'row-champion' : ''}">
+        <td><span class="rank-badge ${rankClass}">#${a.rank}</span></td>
+        <td>
+          <strong style="color:#fff;font-size:0.92rem;">${escapeHtml(a.display_name)}</strong>
+          ${isChamp ? '<span style="margin-left:6px;font-size:0.75rem;color:#fbbf24;">★ #1 Leader</span>' : ''}
+        </td>
+        <td>
+          <span class="email-pill">
+            ${emailEsc}
+            ${a.email ? `<button class="copy-btn" onclick="copyToClipboard('${emailEsc}', 'Email copied')">📋</button>` : ''}
+          </span>
+        </td>
+        <td>
+          <div class="score-pill">
+            <span>${a.score}/15</span>
+            <div class="score-bar-mini"><div class="score-bar-fill" style="width:${scorePct}%;"></div></div>
+          </div>
+        </td>
+        <td><span style="font-family:var(--font-mono);font-size:0.84rem;">${(a.total_time_ms / 1000).toFixed(1)}s</span></td>
+        <td><span style="color:var(--admin-text-sub);font-size:0.82rem;">${completedStr}</span></td>
+        <td>
+          <button class="admin-btn admin-btn-ghost" style="padding:4px 8px;font-size:0.76rem;" onclick="jumpToCandidateAudit('${escapeHtml(a.display_name)}')">
+            Audit Answers
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function updateProjectedWinnerBanner(top1, dateStr) {
+  const title = document.getElementById('projected_winner_title');
+  const desc = document.getElementById('projected_winner_desc');
+  const badge = document.getElementById('projected_winner_badge');
+
+  if (top1) {
+    if (title) title.innerHTML = `🏆 ${escapeHtml(top1.display_name)} <span style="font-size:0.88rem;color:#fbbf24;font-weight:400;">(${top1.score}/15 in ${(top1.total_time_ms / 1000).toFixed(1)}s)</span>`;
+    if (desc) desc.textContent = `Current #1 on ${dateStr}. If no higher score arrives before midnight IST, ${top1.display_name} (${top1.email || 'Candidate'}) will officially be crowned today's contest Champion.`;
+    if (badge) badge.style.display = 'block';
+  } else {
+    if (title) title.textContent = `Awaiting today's completed attempts (${dateStr})…`;
+    if (desc) desc.textContent = `No candidates have completed today's AI Race yet. Standings update live as attempts finish. Contests finalize at 00:00 IST.`;
+    if (badge) badge.style.display = 'none';
+  }
+}
+
+async function loadWinnersData() {
+  const res = await fetch('/race/admin/winners', { headers: authHeaders() });
+  const winners = await res.json();
+  if (!res.ok) throw new Error(winners.detail || 'Failed to load winner history');
+  currentWinners = winners || [];
+
+  document.getElementById('kpi_winners_count').textContent = currentWinners.length;
+  renderWinnersTable(currentWinners);
+}
+
+function renderWinnersTable(winners) {
+  const tbody = document.getElementById('winners_tbody');
+  if (!tbody) return;
+
+  if (!winners.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="admin-empty-state">
+          <div class="admin-empty-icon">🏆</div>
+          <strong style="color:#fff;display:block;margin-bottom:6px;">No finalized past winners yet</strong>
+          Contests finalize automatically every night at 00:00 IST. Once the first daily contest closes, the verified champions will be cataloged here permanently.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = winners.map(w => {
+    const emailEsc = escapeHtml(w.email || '—');
+    const compStr = w.completed_at ? new Date(w.completed_at).toLocaleDateString('en-IN') : w.contest_date;
+    return `
+      <tr class="row-champion">
+        <td><strong style="color:#fbbf24;font-family:var(--font-mono);">${w.contest_date}</strong></td>
+        <td><strong style="color:#fff;">${escapeHtml(w.name)}</strong></td>
+        <td>
+          <span class="email-pill">
+            ${emailEsc}
+            ${w.email && w.email !== '—' ? `<button class="copy-btn" onclick="copyToClipboard('${emailEsc}', 'Winner Email copied')">📋</button>` : ''}
+          </span>
+        </td>
+        <td><span style="font-weight:700;color:#10b981;">${w.score}/15</span></td>
+        <td><span style="font-family:var(--font-mono);">${(w.total_time_ms / 1000).toFixed(1)}s</span></td>
+        <td><span style="color:var(--admin-text-sub);font-size:0.8rem;">${compStr}</span></td>
+        <td>
+          <button class="admin-btn admin-btn-ghost" style="padding:4px 8px;font-size:0.76rem;" onclick="copyToClipboard('${emailEsc}', 'Email copied')">
+            Copy for Certificate
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderQuestionsList(questions) {
+  const container = document.getElementById('questions_container');
+  if (!container) return;
+
+  if (!questions.length) {
+    container.innerHTML = '<div class="admin-empty-state">No questions found for this contest date.</div>';
+    return;
+  }
+
+  container.innerHTML = questions.map((q, idx) => {
+    const opts = q.options || [];
+    const correctIdx = q.answer_index !== undefined ? q.answer_index : -1;
+
+    return `
+      <div class="question-card">
+        <div class="question-title">
+          <span style="color:#60a5fa;margin-right:6px;">Q${idx + 1}.</span> ${escapeHtml(q.question)}
+        </div>
+        <div class="options-grid">
+          ${opts.map((opt, oIdx) => {
+            const isCorrect = oIdx === correctIdx;
+            const letter = String.fromCharCode(65 + oIdx);
+            return `
+              <div class="option-box ${isCorrect ? 'correct' : ''}">
+                <strong style="${isCorrect ? 'color:#10b981;' : 'color:var(--admin-text-dim);'}">${letter}.</strong>
+                <span>${escapeHtml(opt)} ${isCorrect ? '✓ (Correct)' : ''}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function populateAuditSelect(attempts) {
+  const sel = document.getElementById('audit_candidate_select');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Choose candidate to inspect…</option>' +
+    attempts.map(a => `<option value="${escapeHtml(a.display_name)}">#${a.rank} · ${escapeHtml(a.display_name)} (${a.score}/15)</option>`).join('');
+}
+
+function jumpToCandidateAudit(name) {
+  switchTab('tab_audit', document.querySelectorAll('.admin-tab-btn')[3]);
+  const sel = document.getElementById('audit_candidate_select');
+  if (sel) {
+    sel.value = name;
+    renderCandidateAuditDetails();
+  }
+}
+
+function renderCandidateAuditDetails() {
+  const sel = document.getElementById('audit_candidate_select');
+  const container = document.getElementById('candidate_audit_details');
+  if (!sel || !container || !currentDayData) return;
+
+  const chosenName = sel.value;
+  if (!chosenName) {
+    container.innerHTML = '<div class="admin-empty-state">Select a candidate above to view their response log.</div>';
+    return;
+  }
+
+  const attempt = (currentDayData.attempts || []).find(a => a.display_name === chosenName);
+  if (!attempt) {
+    container.innerHTML = '<div class="admin-empty-state">Candidate record not found.</div>';
+    return;
+  }
+
+  const answers = attempt.answers || [];
+  const questions = currentDayData.questions || [];
+
+  container.innerHTML = `
+    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 20px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h3 style="margin:0 0 4px;font-size:1.15rem;color:#fff;">Candidate: ${escapeHtml(attempt.display_name)}</h3>
+        <p style="margin:0;font-size:0.84rem;color:var(--admin-text-sub);">
+          Verified Email: <span class="email-pill">${escapeHtml(attempt.email || '—')}</span> · Finished: ${attempt.completed_at ? new Date(attempt.completed_at).toLocaleString('en-IN') : '—'}
+        </p>
+      </div>
+      <div>
+        <span class="score-pill" style="font-size:1.1rem;">Final Score: ${attempt.score}/15</span>
+        <span style="margin-left:12px;font-family:var(--font-mono);color:#93c5fd;">Total: ${(attempt.total_time_ms / 1000).toFixed(1)}s</span>
+      </div>
+    </div>
+
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th style="width:40px;">Q#</th>
+            <th>Question</th>
+            <th>Candidate Choice</th>
+            <th>Correct Choice</th>
+            <th>Result</th>
+            <th>Time Spent</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${questions.map((q, i) => {
+            const ans = answers.find(a => a.question_index === i);
+            const selIdx = ans ? ans.selected_index : -1;
+            const correctIdx = q.answer_index !== undefined ? q.answer_index : -1;
+            const isCorrect = ans ? ans.is_correct : false;
+            const selText = selIdx >= 0 && q.options && q.options[selIdx] ? `${String.fromCharCode(65 + selIdx)}. ${q.options[selIdx]}` : (selIdx === -1 ? 'Timed Out / Skipped' : 'None');
+            const corrText = correctIdx >= 0 && q.options && q.options[correctIdx] ? `${String.fromCharCode(65 + correctIdx)}. ${q.options[correctIdx]}` : '—';
+            const elapsed = ans ? (ans.elapsed_ms / 1000).toFixed(2) + 's' : '—';
+
+            return `
+              <tr style="${isCorrect ? '' : 'background:rgba(244,63,94,0.03);'}">
+                <td><strong>Q${i + 1}</strong></td>
+                <td><span style="font-size:0.86rem;color:#fff;">${escapeHtml(q.question)}</span></td>
+                <td><span style="${isCorrect ? 'color:#10b981;' : 'color:#f87171;'}">${escapeHtml(selText)}</span></td>
+                <td><span style="color:#10b981;">${escapeHtml(corrText)}</span></td>
+                <td>
+                  <span style="padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:700;background:${isCorrect ? 'rgba(16,185,129,0.15)' : 'rgba(244,63,94,0.15)'};color:${isCorrect ? '#10b981' : '#f87171'};">
+                    ${isCorrect ? '✓ CORRECT' : '✗ INCORRECT'}
+                  </span>
+                </td>
+                <td><span style="font-family:var(--font-mono);font-size:0.8rem;">${elapsed}</span></td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function loadSelectedDateData() {
+  const dateVal = document.getElementById('admin_date_filter').value;
+  if (dateVal) {
+    loadDayData(dateVal);
+  }
+}
+
+async function refreshData() {
+  const spin = document.getElementById('refresh_spinner');
+  if (spin) spin.style.animation = 'pulseAnim 0.6s infinite linear';
+  try {
+    const dateVal = document.getElementById('admin_date_filter')?.value;
+    await Promise.all([loadDayData(dateVal), loadWinnersData()]);
+    showToast('Dashboard data refreshed', 'success');
+  } catch (e) {
+    showToast('Failed to refresh data: ' + e.message, 'error');
+  } finally {
+    if (spin) spin.style.animation = 'none';
   }
 }
 
 async function downloadLeaderboardCSV() {
-  const dateVal = document.getElementById('csv_date_input').value;
-  const url = '/race/admin/leaderboard/csv' + (dateVal ? '?date_value=' + encodeURIComponent(dateVal) : '');
+  const dateVal = document.getElementById('admin_date_filter')?.value;
+  const url = '/race/admin/leaderboard/csv' + (dateVal ? `?date_value=${encodeURIComponent(dateVal)}` : '');
   try {
     const res = await fetch(url, { headers: authHeaders() });
     if (!res.ok) {
@@ -245,45 +1310,39 @@ async function downloadLeaderboardCSV() {
     const blobUrl = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = blobUrl;
-    a.download = 'ai_race_leaderboard_' + (dateVal || new Date().toISOString().split('T')[0]) + '.csv';
+    a.download = `ai_race_leaderboard_${dateVal || new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
     a.remove();
     window.URL.revokeObjectURL(blobUrl);
-    if (typeof window.showToast === 'function') {
-      window.showToast('Leaderboard CSV downloaded successfully', 'success');
-    }
+    showToast('Leaderboard CSV exported', 'success');
   } catch (err) {
-    if (typeof window.showToast === 'function') {
-      window.showToast('CSV download failed: ' + err.message, 'error');
-    } else {
-      alert('CSV download failed: ' + err.message);
-    }
+    showToast('CSV export failed: ' + err.message, 'error');
   }
 }
 
-async function loadAll(){
-  const token = getToken();
-  const authBox = document.getElementById('admin-auth-box');
-  if (!token) {
-    if (authBox) authBox.style.display = 'block';
-    document.getElementById('podium').textContent = 'Sign in with an authorized Google account to load the admin audit.';
-    document.getElementById('leaderboard-list').textContent = 'Sign in required.';
-    document.getElementById('test-audit').textContent = 'Sign in required.';
-    document.getElementById('latest-winner').textContent = 'Sign in required.';
-    document.getElementById('winner-history').textContent = 'Sign in required.';
-    return;
-  }
-  if (authBox) authBox.style.display = 'none';
+async function pregenerateTomorrowModal() {
+  const secret = prompt('Enter RACE_ADMIN_SECRET to pregenerate tomorrow\'s quiz:');
+  if (!secret) return;
   try {
-    await Promise.all([loadDay(), loadLeaderboard(), loadWinners()]);
+    const res = await fetch('/race/admin/pregenerate', {
+      method: 'POST',
+      headers: {
+        ...authHeaders(),
+        'x-admin-secret': secret
+      }
+    });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.detail || 'Pregeneration failed');
+    showToast(`Tomorrow's quiz generated (${d.contest_date}) with theme: ${d.theme}`, 'success');
   } catch (e) {
-    document.getElementById('podium').textContent = e.message;
+    showToast(e.message, 'error');
   }
 }
 
 initGoogle();
 loadAll();
 </script>
+
 </body>
 </html>

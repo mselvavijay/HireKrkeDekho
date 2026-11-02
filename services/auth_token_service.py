@@ -44,22 +44,57 @@ def verify_access_token(token: str, max_age_days: int = 30) -> Optional[Dict[str
 
     return {"user_id": user_id, "email": email}
 
-def get_current_user_from_header(authorization: Optional[str] = Header(None)) -> Dict[str, str]:
+def extract_token_from_request(authorization: Optional[str] = None, request: Optional[Request] = None) -> Optional[str]:
+    """Helper to extract bearer token from header, cookies, or query parameters."""
+    if authorization and authorization.startswith("Bearer "):
+        return authorization.split("Bearer ", 1)[1].strip()
+    if request:
+        # Check Cookies (for direct browser navigation)
+        cookie_val = request.cookies.get("hkd_token") or request.cookies.get("access_token")
+        if cookie_val:
+            return cookie_val.strip()
+        # Check Query Parameters
+        query_val = request.query_params.get("token") or request.query_params.get("auth_token")
+        if query_val:
+            return query_val.strip()
+    return None
+
+def get_current_user_from_header(
+    authorization: Optional[str] = Header(None),
+    request: Request = None
+) -> Dict[str, str]:
     """
     FastAPI dependency to enforce authenticated user token.
     Accepts:
       Authorization: Bearer <signed_token>
+      Cookie: hkd_token=<signed_token>
+      Query: ?token=<signed_token>
     """
-    if not authorization or not authorization.startswith("Bearer "):
+    token_str = extract_token_from_request(authorization, request)
+    if not token_str:
         raise HTTPException(
             status_code=401,
             detail="Authentication token missing or invalid. Please sign in with Google."
         )
-    token = authorization.split("Bearer ")[1].strip()
-    user_data = verify_access_token(token)
+    user_data = verify_access_token(token_str)
     if not user_data:
         raise HTTPException(
             status_code=401,
             detail="Session has expired or is invalid. Please sign in again."
         )
     return user_data
+
+def get_optional_user_from_header(
+    authorization: Optional[str] = Header(None),
+    request: Request = None
+) -> Optional[Dict[str, str]]:
+    """
+    FastAPI dependency to optionally resolve user token if present.
+    Returns user dict if valid token provided; returns None if missing or expired.
+    Never raises 401 HTTPException.
+    """
+    token_str = extract_token_from_request(authorization, request)
+    if not token_str:
+        return None
+    return verify_access_token(token_str)
+

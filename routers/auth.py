@@ -2,7 +2,7 @@ import os
 import uuid
 import httpx
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 from database import get_db
 from models import models
@@ -20,7 +20,7 @@ def get_auth_config():
     }
 
 @router.post("/google", response_model=schemas.UserProfileResponse)
-async def google_auth(auth_req: schemas.GoogleAuthRequest, db: Session = Depends(get_db)):
+async def google_auth(auth_req: schemas.GoogleAuthRequest, response: Response, db: Session = Depends(get_db)):
     """
     Authenticate user via Google Sign-In token or profile credential.
     Verifies token with Google and creates/fetches the user profile in database.
@@ -88,7 +88,19 @@ async def google_auth(auth_req: schemas.GoogleAuthRequest, db: Session = Depends
 
     from services.auth_token_service import create_access_token
     user_resp = schemas.UserProfileResponse.model_validate(user)
-    user_resp.access_token = create_access_token(user.id, user.email)
+    token = create_access_token(user.id, user.email)
+    user_resp.access_token = token
+    try:
+        response.set_cookie(
+            key="hkd_token",
+            value=token,
+            max_age=30 * 86400,
+            httponly=False,
+            samesite="lax",
+            secure=True
+        )
+    except Exception:
+        pass
     return user_resp
 
 @router.get("/me", response_model=schemas.UserProfileResponse)

@@ -1,4 +1,5 @@
 import os
+import json
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 import time
@@ -8,7 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from database import get_db
 from models.models import UserProfile, RaceAttempt, RaceAnswer, RaceWinner, RaceDailyQuiz
-from services.auth_token_service import get_current_user_from_header
+from services.auth_token_service import get_current_user_from_header, get_optional_user_from_header
 from services.race_service import contest_date, create_daily_quiz, decide_winner, get_cached_quiz, get_cached_quiz_questions, leaderboard, now_ist, public_name, questions_for_player, QUESTION_SECONDS, GRACE_SECONDS
 
 router = APIRouter(prefix="/race", tags=["AI Race"])
@@ -29,21 +30,39 @@ class AnswerRequest(BaseModel): question_index: int = Field(ge=0, le=14); option
 class DisplayNameRequest(BaseModel): display_name: str
 
 def user_from_token(token, db):
-    user = db.query(UserProfile).filter_by(id=token["user_id"], email=token["email"]).first()
-    if not user: raise HTTPException(401, "Sign in with Google to continue.")
+    if not token or not isinstance(token, dict):
+        return None
+    user = db.query(UserProfile).filter_by(id=token.get("user_id"), email=token.get("email")).first()
+    if not user:
+        raise HTTPException(401, "Sign in with Google to continue.")
     return user
 
 def require_admin(token):
-    if not ADMIN_EMAILS or token["email"].lower() not in ADMIN_EMAILS: raise HTTPException(403, "Admin access required.")
+    if not token or not isinstance(token, dict):
+        raise HTTPException(401, "Admin sign-in required.")
+    if not ADMIN_EMAILS or token.get("email", "").lower() not in ADMIN_EMAILS:
+        raise HTTPException(403, "Admin access required.")
 
 @router.get("/today")
-async def today(db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
+async def today(db: Session = Depends(get_db), token=Depends(get_optional_user_from_header)):
     _race_required()
-    user = user_from_token(token, db); day = contest_date(); quiz = await create_daily_quiz(db, day)
+    user = user_from_token(token, db) if token else None
+    day = contest_date()
+    quiz = await create_daily_quiz(db, day)
     if quiz is None:
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
-    attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
-    return {"contest_date": day, "theme": quiz.theme, "question_count": 15, "seconds_per_question": QUESTION_SECONDS, "grace_seconds": GRACE_SECONDS, "attempt_status": attempt.status if attempt else "not_started", "leaderboard": leaderboard(db, day)[:10]}
+    attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first() if user else None
+    return {
+        "contest_date": day,
+        "theme": quiz.theme,
+        "question_count": 15,
+        "seconds_per_question": QUESTION_SECONDS,
+        "grace_seconds": GRACE_SECONDS,
+        "attempt_status": attempt.status if attempt else "not_started",
+        "leaderboard": leaderboard(db, day)[:10],
+        "authenticated": user is not None,
+        "user_email": user.email if user else None
+    }
 
 @router.post("/start")
 async def start(db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
@@ -179,16 +198,32 @@ def board(db: Session = Depends(get_db)):
     return {"contest_date": contest_date(), "entries": leaderboard(db, contest_date())}
 
 @router.get("/winner/latest")
-def latest_winner(db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
-    user = user_from_token(token, db); yesterday = (now_ist().date().fromordinal(now_ist().date().toordinal()-1)).isoformat(); winner = decide_winner(db, yesterday)
-    if not winner: return {"winner": None}
-    attempt = db.query(RaceAttempt).filter_by(id=winner.attempt_id).first(); result={"contest_date": yesterday, "display_name": attempt.display_name, "score": attempt.score, "total_time_ms": attempt.total_time_ms}
-    if winner.user_id == user.id: result["real_name"] = user.name; result["is_you"] = True
+def latest_winner(db: Session = Depends(get_db), token=Depends(get_optional_user_from_header)):
+    user = user_from_token(token, db) if token else None
+    yesterday = (now_ist().date().fromordinal(now_ist().date().toordinal() - 1)).isoformat()
+    winner = decide_winner(db, yesterday)
+    if not winner:
+        return {"winner": None}
+    attempt = db.query(RaceAttempt).filter_by(id=winner.attempt_id).first()
+    result = {
+        "contest_date": yesterday,
+        "display_name": attempt.display_name if attempt else "Champion",
+        "score": attempt.score if attempt else 0,
+        "total_time_ms": attempt.total_time_ms if attempt else 0
+    }
+    if user and winner.user_id == user.id:
+        result["real_name"] = user.name
+        result["is_you"] = True
+    else:
+        result["is_you"] = False
     return {"winner": result}
 
 @router.put("/display-name")
 def display_name(payload: DisplayNameRequest, db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
-    user=user_from_token(token, db); user.display_name=public_name(payload.display_name); db.commit(); return {"display_name": user.display_name}
+    user = user_from_token(token, db)
+    user.display_name = public_name(payload.display_name)
+    db.commit()
+    return {"display_name": user.display_name}
 
 @router.get("/admin/leaderboard")
 def admin_leaderboard(db: Session = Depends(get_db), token=Depends(get_current_user_from_header), request: Request = None):
@@ -205,7 +240,14 @@ def admin_leaderboard(db: Session = Depends(get_db), token=Depends(get_current_u
     entries = []
     for rank, attempt in enumerate(attempts, start=1):
         user = db.query(UserProfile).filter_by(id=attempt.user_id).first()
-        entries.append({"rank": rank, "display_name": attempt.display_name, "email": user.email if user else None, "score": attempt.score, "total_time_ms": attempt.total_time_ms, "finished_at": attempt.completed_at.isoformat() if attempt.completed_at else None})
+        entries.append({
+            "rank": rank,
+            "display_name": attempt.display_name,
+            "email": user.email if user else None,
+            "score": attempt.score,
+            "total_time_ms": attempt.total_time_ms,
+            "finished_at": attempt.completed_at.isoformat() if attempt.completed_at else None
+        })
     return {"contest_date": contest_date(), "entries": entries}
 
 @router.get("/admin/day")
@@ -214,16 +256,79 @@ def admin_day(date_value: str | None = None, db: Session = Depends(get_db), toke
     require_admin(token)
     day = date_value or contest_date()
     quiz = db.query(RaceDailyQuiz).filter_by(contest_date=day).first()
-    attempts = db.query(RaceAttempt).filter_by(contest_date=day, status="completed").order_by(RaceAttempt.score.desc(), RaceAttempt.total_time_ms.asc(), RaceAttempt.completed_at.asc()).all()
+    attempts = db.query(RaceAttempt).filter_by(contest_date=day, status="completed").order_by(
+        RaceAttempt.score.desc(), RaceAttempt.total_time_ms.asc(), RaceAttempt.completed_at.asc()
+    ).all()
     rows = []
     for rank, attempt in enumerate(attempts, start=1):
         user = db.query(UserProfile).filter_by(id=attempt.user_id).first()
         answers = db.query(RaceAnswer).filter_by(attempt_id=attempt.id).order_by(RaceAnswer.question_index).all()
-        rows.append({"rank": rank, "display_name": attempt.display_name, "email": user.email if user else None, "score": attempt.score, "total_time_ms": attempt.total_time_ms, "completed_at": attempt.completed_at.isoformat() if attempt.completed_at else None, "answers": [{"question_index": answer.question_index, "selected_index": answer.selected_index, "is_correct": bool(answer.is_correct), "elapsed_ms": answer.elapsed_ms} for answer in answers]})
-    return {"contest_date": day, "theme": quiz.theme if quiz else None, "questions": __import__('json').loads(quiz.questions_json) if quiz else [], "top_three": rows[:3], "attempts": rows}
+        rows.append({
+            "rank": rank,
+            "display_name": attempt.display_name,
+            "email": user.email if user else None,
+            "score": attempt.score,
+            "total_time_ms": attempt.total_time_ms,
+            "completed_at": attempt.completed_at.isoformat() if attempt.completed_at else None,
+            "answers": [
+                {
+                    "question_index": answer.question_index,
+                    "selected_index": answer.selected_index,
+                    "is_correct": bool(answer.is_correct),
+                    "elapsed_ms": answer.elapsed_ms
+                }
+                for answer in answers
+            ]
+        })
+
+    questions_list = []
+    if quiz and quiz.questions_json:
+        try:
+            questions_list = json.loads(quiz.questions_json)
+        except Exception:
+            questions_list = []
+
+    total_started = db.query(RaceAttempt).filter_by(contest_date=day).count()
+    return {
+        "contest_date": day,
+        "theme": quiz.theme if quiz else "General AI & Career Competencies",
+        "questions": questions_list,
+        "top_three": rows[:3],
+        "attempts": rows,
+        "total_started": total_started,
+        "total_completed": len(rows),
+        "is_today": day == contest_date()
+    }
+
 @router.get("/admin/winners")
 def admin_winners(db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
-    require_admin(token); winners=db.query(RaceWinner).order_by(RaceWinner.contest_date.desc()).all(); return [{"contest_date": w.contest_date, "attempt_id": w.attempt_id, "name": db.query(UserProfile).filter_by(id=w.user_id).first().name, "email": db.query(UserProfile).filter_by(id=w.user_id).first().email} for w in winners]
+    require_admin(token)
+    today = contest_date()
+    # Backfill any past dates where winners have not been finalized yet
+    past_dates = (
+        db.query(RaceAttempt.contest_date)
+        .filter(RaceAttempt.contest_date < today, RaceAttempt.status == "completed")
+        .distinct()
+        .all()
+    )
+    for (p_date,) in past_dates:
+        decide_winner(db, p_date)
+
+    winners = db.query(RaceWinner).order_by(RaceWinner.contest_date.desc()).all()
+    result = []
+    for w in winners:
+        user = db.query(UserProfile).filter_by(id=w.user_id).first()
+        attempt = db.query(RaceAttempt).filter_by(id=w.attempt_id).first()
+        result.append({
+            "contest_date": w.contest_date,
+            "attempt_id": w.attempt_id,
+            "name": (user.name if user and user.name else None) or (attempt.display_name if attempt else "Candidate"),
+            "email": (user.email if user and user.email else None) or "—",
+            "score": attempt.score if attempt else 0,
+            "total_time_ms": attempt.total_time_ms if attempt else 0,
+            "completed_at": attempt.completed_at.isoformat() if attempt and attempt.completed_at else None
+        })
+    return result
 
 
 @router.get("/admin/leaderboard/csv")

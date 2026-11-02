@@ -3954,11 +3954,12 @@
             }
 
             .btn-modal-close {
-                min-width: 44px;
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                /* Keep visual circle small; expand tap area with transparent padding */
+                padding: 8px;
+                margin: -8px;
+                min-width: unset;
+                min-height: unset;
+                box-sizing: content-box;
             }
 
             .telemetry-badge {
