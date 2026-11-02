@@ -77,11 +77,44 @@ async def pregenerate_quiz(x_admin_secret: str = Header(default=""), db: Session
 
 
 @router.post("/answer")
-async def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
+def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(get_current_user_from_header)):
     _race_required()
-    user = user_from_token(token, db); day = contest_date(); attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
-    if not attempt or attempt.status != "in_progress": raise HTTPException(409, "No active contest attempt.")
-    if payload.question_index != attempt.current_question: raise HTTPException(409, "That question is no longer active.")
+    user = user_from_token(token, db)
+    day = contest_date()
+    attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
+    if not attempt:
+        raise HTTPException(409, "No active contest attempt.")
+    if attempt.status == "completed":
+        return {"correct": None, "completed": True, "score": attempt.score, "next_question": attempt.current_question}
+
+    # If this question was already answered / recorded (e.g. duplicate network request or retry)
+    if payload.question_index < attempt.current_question:
+        return {"correct": None, "completed": attempt.status == "completed", "score": attempt.score, "next_question": attempt.current_question}
+
+    # If client jumped ahead (e.g. intermediate question missed / timed out), backfill missed questions
+    if payload.question_index > attempt.current_question:
+        while attempt.current_question < payload.question_index and attempt.current_question < 15:
+            missed_idx = attempt.current_question
+            db.add(RaceAnswer(
+                attempt_id=attempt.id,
+                question_index=missed_idx,
+                selected_index=-1,
+                is_correct=0,
+                elapsed_ms=(QUESTION_SECONDS + GRACE_SECONDS) * 1000,
+            ))
+            attempt.total_time_ms += (QUESTION_SECONDS + GRACE_SECONDS) * 1000
+            attempt.current_question += 1
+
+    # Check if backfilling brought the attempt to completion
+    if attempt.current_question >= 15:
+        attempt.status = "completed"
+        attempt.completed_at = now_ist()
+        try:
+            db.commit()
+        except SQLAlchemyError:
+            db.rollback()
+        return {"correct": None, "completed": True, "score": attempt.score, "next_question": attempt.current_question}
+
     started_at = attempt.question_started_at
     if started_at.tzinfo is None:
         started_at = started_at.replace(tzinfo=IST)
@@ -97,9 +130,14 @@ async def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=De
     correct = elapsed <= (QUESTION_SECONDS + GRACE_SECONDS) * 1000 and payload.option_index >= 0 and payload.option_index == question["answer_index"]
     # is_correct is an INTEGER column; bind an integer explicitly for PostgreSQL.
     db.add(RaceAnswer(attempt_id=attempt.id, question_index=payload.question_index, selected_index=payload.option_index, is_correct=int(correct), elapsed_ms=elapsed))
-    attempt.score += int(correct); attempt.total_time_ms += min(elapsed, (QUESTION_SECONDS + GRACE_SECONDS) * 1000); attempt.current_question += 1
-    if attempt.current_question >= 15: attempt.status="completed"; attempt.completed_at=now_ist()
-    else: attempt.question_started_at=now_ist()
+    attempt.score += int(correct)
+    attempt.total_time_ms += min(elapsed, (QUESTION_SECONDS + GRACE_SECONDS) * 1000)
+    attempt.current_question += 1
+    if attempt.current_question >= 15:
+        attempt.status = "completed"
+        attempt.completed_at = now_ist()
+    else:
+        attempt.question_started_at = now_ist()
     try:
         db.commit()
     except SQLAlchemyError:

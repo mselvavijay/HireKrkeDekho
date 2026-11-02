@@ -478,7 +478,7 @@
             if (heroDate) heroDate.textContent = formattedDate;
         }
 
-        let raceQuestions = [], raceTimer = null, raceAnswerSubmitting = false;
+        let raceQuestions = [], raceTimer = null, raceSubmissionQueue = Promise.resolve(), raceAnsweredMap = {};
         const raceHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUserToken || ''}` });
         async function loadRaceStatus() {
             if (!currentUserToken) return;
@@ -503,12 +503,128 @@
             } catch (error) { rows.innerHTML = `<p class="race-status">${escapeHtml(error.message)}</p>`; }
         }
         function closeRaceLeaderboard() { document.getElementById('race_leaderboard_overlay').classList.remove('open'); }
-        async function startRaceAttempt() {
-            const status=document.getElementById('race_payment_status'); status.textContent='Loading today\'s questions…';
-            try { const r=await fetch('/race/start',{method:'POST',headers:raceHeaders()}); const data=await r.json(); if(!r.ok) throw new Error(data.detail||'Unable to start the contest.'); raceQuestions=data.questions; document.getElementById('race_intro').hidden=true; document.getElementById('race_play').hidden=false; status.textContent=''; renderRaceQuestion(data.current_question); } catch(e){status.textContent=e.message;}
+        function finishRace(data) {
+            clearInterval(raceTimer);
+            const play = document.getElementById('race_play');
+            const complete = document.getElementById('race_complete');
+            const completeText = document.getElementById('race_complete_text');
+            const status = document.getElementById('race_payment_status');
+            if (status) status.textContent = '';
+            if (play) play.hidden = true;
+            if (complete) complete.hidden = false;
+            if (completeText) {
+                const score = (data && typeof data.score === 'number') ? data.score : '—';
+                completeText.textContent = `Final score: ${score}/15. Rankings are published after the contest day ends.`;
+            }
+            if (typeof refreshRaceResultCard === 'function') refreshRaceResultCard();
         }
-        function renderRaceQuestion(index) { const q=raceQuestions[index]; if(!q)return; raceAnswerSubmitting=false; const play=document.getElementById('race_play'); play.classList.remove('race-question-leaving'); play.classList.add('race-question-entering'); document.getElementById('race_question_count').textContent=`Question ${index+1} of ${raceQuestions.length}`; document.getElementById('race_question_text').textContent=q.question; const options=document.getElementById('race_options'); options.innerHTML=q.options.map((o,i)=>`<button type="button" onclick="submitRaceAnswer(${index},${i})">${String.fromCharCode(65+i)}. ${escapeHtml(o)}</button>`).join(''); requestAnimationFrame(()=>play.classList.remove('race-question-entering')); let remaining=17; clearInterval(raceTimer); const timer=document.getElementById('race_timer'), bar=document.getElementById('race_timer_bar'); timer.textContent=remaining; bar.style.width='100%'; raceTimer=setInterval(()=>{remaining--;timer.textContent=Math.max(0,remaining);bar.style.width=`${Math.max(0,remaining)/17*100}%`;if(remaining<=0){clearInterval(raceTimer);submitRaceAnswer(index,-1);}},1000); }
-        async function submitRaceAnswer(questionIndex, optionIndex) { if(raceAnswerSubmitting)return; raceAnswerSubmitting=true; clearInterval(raceTimer); const options=document.getElementById('race_options'); const selected=optionIndex >= 0 ? options.children[optionIndex] : null; if(selected)selected.classList.add('race-option-selected'); document.querySelectorAll('#race_options button').forEach(b=>b.disabled=true); const isLast=(questionIndex>=14||questionIndex>=raceQuestions.length-1); if(!isLast){ const nextPlay=document.getElementById('race_play'); nextPlay.classList.add('race-question-leaving'); window.setTimeout(()=>renderRaceQuestion(questionIndex+1),120); } fetch('/race/answer',{method:'POST',headers:raceHeaders(),body:JSON.stringify({question_index:questionIndex,option_index:optionIndex})}).then(r=>r.ok?r.json():r.json().then(d=>{throw new Error(d.detail||'Answer save failed.');})).then(data=>{ if(data.completed){ clearInterval(raceTimer); document.getElementById('race_play').hidden=true; document.getElementById('race_complete').hidden=false; document.getElementById('race_complete_text').textContent=`Final score: ${data.score}/15. Rankings are published after the contest day ends.`; } }).catch(e=>{ if(isLast){ raceAnswerSubmitting=false; document.querySelectorAll('#race_options button').forEach(b=>b.disabled=false); document.getElementById('race_payment_status').textContent=e.message; } }); if(isLast){ /* wait for fetch to resolve, handled above */ } }
+
+        async function startRaceAttempt() {
+            const status = document.getElementById('race_payment_status');
+            status.textContent = "Loading today's questions…";
+            try {
+                const r = await fetch('/race/start', { method: 'POST', headers: raceHeaders() });
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.detail || 'Unable to start the contest.');
+                raceQuestions = data.questions;
+                document.getElementById('race_intro').hidden = true;
+                document.getElementById('race_play').hidden = false;
+                status.textContent = '';
+                raceSubmissionQueue = Promise.resolve();
+                raceAnsweredMap = {};
+                renderRaceQuestion(data.current_question || 0);
+            } catch (e) {
+                status.textContent = e.message;
+            }
+        }
+
+        function renderRaceQuestion(index) {
+            const q = raceQuestions[index];
+            if (!q) return;
+            const play = document.getElementById('race_play');
+            play.classList.remove('race-question-leaving');
+            play.classList.add('race-question-entering');
+            document.getElementById('race_question_count').textContent = `Question ${index + 1} of ${raceQuestions.length}`;
+            document.getElementById('race_question_text').textContent = q.question;
+            const options = document.getElementById('race_options');
+            options.innerHTML = q.options.map((o, i) => `<button type="button" onclick="submitRaceAnswer(${index}, ${i})">${String.fromCharCode(65 + i)}. ${escapeHtml(o)}</button>`).join('');
+            requestAnimationFrame(() => play.classList.remove('race-question-entering'));
+            let remaining = 17;
+            clearInterval(raceTimer);
+            const timer = document.getElementById('race_timer');
+            const bar = document.getElementById('race_timer_bar');
+            timer.textContent = remaining;
+            bar.style.width = '100%';
+            raceTimer = setInterval(() => {
+                remaining--;
+                timer.textContent = Math.max(0, remaining);
+                bar.style.width = `${Math.max(0, remaining) / 17 * 100}%`;
+                if (remaining <= 0) {
+                    clearInterval(raceTimer);
+                    submitRaceAnswer(index, -1);
+                }
+            }, 1000);
+        }
+
+        function submitRaceAnswer(questionIndex, optionIndex) {
+            if (raceAnsweredMap[questionIndex] !== undefined) return;
+            raceAnsweredMap[questionIndex] = optionIndex;
+            clearInterval(raceTimer);
+
+            const options = document.getElementById('race_options');
+            const selected = optionIndex >= 0 && options ? options.children[optionIndex] : null;
+            if (selected) selected.classList.add('race-option-selected');
+            if (options) options.querySelectorAll('button').forEach(b => b.disabled = true);
+
+            const isLast = (questionIndex >= 14 || questionIndex >= raceQuestions.length - 1);
+            if (!isLast) {
+                const nextPlay = document.getElementById('race_play');
+                if (nextPlay) nextPlay.classList.add('race-question-leaving');
+                window.setTimeout(() => renderRaceQuestion(questionIndex + 1), 120);
+            } else {
+                const status = document.getElementById('race_payment_status');
+                if (status) status.textContent = 'Submitting final score…';
+            }
+
+            raceSubmissionQueue = raceSubmissionQueue.then(async () => {
+                let attempts = 0;
+                while (attempts < 3) {
+                    try {
+                        const r = await fetch('/race/answer', {
+                            method: 'POST',
+                            headers: raceHeaders(),
+                            body: JSON.stringify({ question_index: questionIndex, option_index: optionIndex })
+                        });
+                        const data = await r.json().catch(() => ({}));
+                        if (!r.ok) {
+                            if (data.detail && (data.detail.includes('completed') || data.detail.includes('No active contest'))) {
+                                finishRace(data);
+                                return;
+                            }
+                            throw new Error(data.detail || 'Answer save failed.');
+                        }
+                        if (data.completed || isLast) {
+                            finishRace(data);
+                        }
+                        return;
+                    } catch (err) {
+                        attempts++;
+                        if (attempts >= 3) {
+                            const status = document.getElementById('race_payment_status');
+                            if (status) status.textContent = err.message;
+                            if (isLast && options) {
+                                options.querySelectorAll('button').forEach(b => b.disabled = false);
+                                delete raceAnsweredMap[questionIndex];
+                            }
+                            throw err;
+                        }
+                        await new Promise(res => setTimeout(res, 200));
+                    }
+                }
+            }).catch(e => {
+                console.warn('Race answer submission error:', e);
+            });
+        }
         function openRaceModal() { if (!requireAuthentication(openRaceModal)) return; document.getElementById('race_modal_overlay').classList.add('open'); loadRaceStatus(); }
         function closeRaceModal() { clearInterval(raceTimer); document.getElementById('race_modal_overlay').classList.remove('open'); }        function openPremiumModal() {
             if (!requireAuthentication(openPremiumModal)) return;
