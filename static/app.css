@@ -1359,9 +1359,15 @@
         .how-head p {
             font-size: 0.95rem;
             color: var(--text-secondary);
-            max-width: 56ch;
+            max-width: 100%;
             margin: 0;
             line-height: 1.6;
+        }
+
+        @media (min-width: 900px) {
+            .how-head p {
+                white-space: nowrap;
+            }
         }
 
         .how-grid {
