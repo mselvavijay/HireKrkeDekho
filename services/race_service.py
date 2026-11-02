@@ -11,19 +11,29 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from models.models import RaceDailyQuiz, RaceAttempt, RaceAnswer, RaceWinner, RaceQuestionArchive
-# ── In-process cache for today's quiz (avoids DB round-trip on each answer) ──
+# ── In-process cache for today's quiz questions (pure Python dicts, safe across sessions) ──
 _quiz_cache: dict = {}
 
 
-def get_cached_quiz(db, day: str):
-    """Return today's quiz from process cache; fall back to DB and cache it."""
+def get_cached_quiz_questions(db: Session, day: str) -> list[dict]:
+    """Return today's quiz questions as pure in-memory Python objects (no DetachedInstanceError)."""
     global _quiz_cache
     if day in _quiz_cache:
         return _quiz_cache[day]
     quiz = db.query(RaceDailyQuiz).filter_by(contest_date=day).first()
-    if quiz:
-        _quiz_cache = {day: quiz}   # evict stale dates automatically
-    return quiz
+    if quiz and quiz.questions_json:
+        try:
+            questions = json.loads(quiz.questions_json)
+            _quiz_cache = {day: questions}  # store pure Python data, NOT ORM instances
+            return questions
+        except Exception:
+            pass
+    return []
+
+
+def get_cached_quiz(db: Session, day: str) -> RaceDailyQuiz | None:
+    """Return the RaceDailyQuiz ORM instance bound to the active session."""
+    return db.query(RaceDailyQuiz).filter_by(contest_date=day).first()
 
 
 

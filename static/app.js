@@ -586,7 +586,7 @@
                 if (status) status.textContent = 'Submitting final score…';
             }
 
-            raceSubmissionQueue = raceSubmissionQueue.then(async () => {
+            raceSubmissionQueue = raceSubmissionQueue.catch(() => {}).then(async () => {
                 let attempts = 0;
                 while (attempts < 3) {
                     try {
@@ -595,13 +595,18 @@
                             headers: raceHeaders(),
                             body: JSON.stringify({ question_index: questionIndex, option_index: optionIndex })
                         });
-                        const data = await r.json().catch(() => ({}));
+                        const rawText = await r.text();
+                        let data = {};
+                        try { data = rawText ? JSON.parse(rawText) : {}; } catch (_) {}
+
                         if (!r.ok) {
+                            // If contest is already completed or inactive, finish contest gracefully
                             if (data.detail && (data.detail.includes('completed') || data.detail.includes('No active contest'))) {
                                 finishRace(data);
                                 return;
                             }
-                            throw new Error(data.detail || 'Answer save failed.');
+                            const errMsg = data.detail || (r.status ? `Server response error (${r.status})` : 'Network error');
+                            throw new Error(errMsg);
                         }
                         if (data.completed || isLast) {
                             finishRace(data);
@@ -610,19 +615,29 @@
                     } catch (err) {
                         attempts++;
                         if (attempts >= 3) {
+                            console.error('Race answer save error:', err);
                             const status = document.getElementById('race_payment_status');
-                            if (status) status.textContent = err.message;
-                            if (isLast && options) {
-                                options.querySelectorAll('button').forEach(b => b.disabled = false);
+                            if (status) status.textContent = err.message || 'Error saving answer.';
+
+                            if (isLast) {
+                                // On the last question, verify if contest finished on server despite any packet issue
+                                try {
+                                    const chk = await fetch('/race/today', { headers: raceHeaders() });
+                                    const chkData = await chk.json();
+                                    if (chkData && chkData.attempt_status === 'completed') {
+                                        finishRace({ score: chkData.leaderboard?.find(x => x.display_name)?.score });
+                                        return;
+                                    }
+                                } catch (_) {}
+
+                                if (options) options.querySelectorAll('button').forEach(b => b.disabled = false);
                                 delete raceAnsweredMap[questionIndex];
                             }
-                            throw err;
+                            return;
                         }
-                        await new Promise(res => setTimeout(res, 200));
+                        await new Promise(res => setTimeout(res, 300));
                     }
                 }
-            }).catch(e => {
-                console.warn('Race answer submission error:', e);
             });
         }
         function openRaceModal() { if (!requireAuthentication(openRaceModal)) return; document.getElementById('race_modal_overlay').classList.add('open'); loadRaceStatus(); }

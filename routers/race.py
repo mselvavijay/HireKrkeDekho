@@ -9,7 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from database import get_db
 from models.models import UserProfile, RaceAttempt, RaceAnswer, RaceWinner, RaceDailyQuiz
 from services.auth_token_service import get_current_user_from_header
-from services.race_service import contest_date, create_daily_quiz, decide_winner, get_cached_quiz, leaderboard, now_ist, public_name, questions_for_player, QUESTION_SECONDS, GRACE_SECONDS
+from services.race_service import contest_date, create_daily_quiz, decide_winner, get_cached_quiz, get_cached_quiz_questions, leaderboard, now_ist, public_name, questions_for_player, QUESTION_SECONDS, GRACE_SECONDS
 
 router = APIRouter(prefix="/race", tags=["AI Race"])
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -91,17 +91,24 @@ def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(
     if payload.question_index < attempt.current_question:
         return {"correct": None, "completed": attempt.status == "completed", "score": attempt.score, "next_question": attempt.current_question}
 
-    # If client jumped ahead (e.g. intermediate question missed / timed out), backfill missed questions
+    # Check if an answer for this question was already recorded for this attempt
+    existing_answer = db.query(RaceAnswer).filter_by(attempt_id=attempt.id, question_index=payload.question_index).first()
+    if existing_answer:
+        return {"correct": bool(existing_answer.is_correct), "completed": attempt.status == "completed", "score": attempt.score, "next_question": attempt.current_question}
+
+    # If client jumped ahead (e.g. intermediate question missed / timed out), backfill missed questions safely
     if payload.question_index > attempt.current_question:
         while attempt.current_question < payload.question_index and attempt.current_question < 15:
             missed_idx = attempt.current_question
-            db.add(RaceAnswer(
-                attempt_id=attempt.id,
-                question_index=missed_idx,
-                selected_index=-1,
-                is_correct=0,
-                elapsed_ms=(QUESTION_SECONDS + GRACE_SECONDS) * 1000,
-            ))
+            prior = db.query(RaceAnswer).filter_by(attempt_id=attempt.id, question_index=missed_idx).first()
+            if not prior:
+                db.add(RaceAnswer(
+                    attempt_id=attempt.id,
+                    question_index=missed_idx,
+                    selected_index=-1,
+                    is_correct=0,
+                    elapsed_ms=(QUESTION_SECONDS + GRACE_SECONDS) * 1000,
+                ))
             attempt.total_time_ms += (QUESTION_SECONDS + GRACE_SECONDS) * 1000
             attempt.current_question += 1
 
@@ -115,24 +122,45 @@ def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(
             db.rollback()
         return {"correct": None, "completed": True, "score": attempt.score, "next_question": attempt.current_question}
 
-    started_at = attempt.question_started_at
+    started_at = attempt.question_started_at or now_ist()
     if started_at.tzinfo is None:
         started_at = started_at.replace(tzinfo=IST)
-    elapsed = int((now_ist() - started_at).total_seconds() * 1000)
-    quiz = get_cached_quiz(db, day)
-    if not quiz:
+    elapsed = max(0, int((now_ist() - started_at).total_seconds() * 1000))
+
+    questions = get_cached_quiz_questions(db, day)
+    if not questions:
+        quiz = db.query(RaceDailyQuiz).filter_by(contest_date=day).first()
+        if quiz and quiz.questions_json:
+            try:
+                import json as _json
+                questions = _json.loads(quiz.questions_json)
+            except Exception:
+                pass
+    if not questions:
         raise HTTPException(status_code=503, detail="Today's quiz is unavailable. Please restart the contest.")
-    import json as _json
-    questions = _json.loads(quiz.questions_json)
     if payload.question_index >= len(questions):
         raise HTTPException(status_code=409, detail="That question is unavailable.")
     question = questions[payload.question_index]
-    correct = elapsed <= (QUESTION_SECONDS + GRACE_SECONDS) * 1000 and payload.option_index >= 0 and payload.option_index == question["answer_index"]
-    # is_correct is an INTEGER column; bind an integer explicitly for PostgreSQL.
-    db.add(RaceAnswer(attempt_id=attempt.id, question_index=payload.question_index, selected_index=payload.option_index, is_correct=int(correct), elapsed_ms=elapsed))
-    attempt.score += int(correct)
-    attempt.total_time_ms += min(elapsed, (QUESTION_SECONDS + GRACE_SECONDS) * 1000)
-    attempt.current_question += 1
+    correct = (
+        elapsed <= (QUESTION_SECONDS + GRACE_SECONDS) * 1000
+        and payload.option_index >= 0
+        and payload.option_index == question.get("answer_index")
+    )
+
+    # Double check before adding answer to prevent unique constraint violation
+    existing_curr = db.query(RaceAnswer).filter_by(attempt_id=attempt.id, question_index=payload.question_index).first()
+    if not existing_curr:
+        db.add(RaceAnswer(
+            attempt_id=attempt.id,
+            question_index=payload.question_index,
+            selected_index=payload.option_index,
+            is_correct=int(correct),
+            elapsed_ms=elapsed,
+        ))
+        attempt.score += int(correct)
+        attempt.total_time_ms += min(elapsed, (QUESTION_SECONDS + GRACE_SECONDS) * 1000)
+
+    attempt.current_question = payload.question_index + 1
     if attempt.current_question >= 15:
         attempt.status = "completed"
         attempt.completed_at = now_ist()
