@@ -4720,3 +4720,109 @@
             color: #4C8DFF;
             text-decoration: underline;
         }
+
+/* ==========================================================================
+   UNSLOP PASS: Clean, deliberate craftsmanship based on heydamir/unslop
+   ========================================================================== */
+
+/* 1. Deactivate ambient blur blobs & glows */
+.ambient-glow-left,
+.ambient-glow-right,
+.hero-blue-glow,
+.hero-glow-center,
+.hero-glow-left,
+.hero-glow-right,
+.avatar-pedestal-glow,
+.champion-card-glow {
+    display: none !important;
+}
+
+/* 2. Text: solid, crisp hierarchy — no gradient text */
+.text-gradient-blue {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    color: #f8fafc !important;
+}
+
+/* 3. Typography weights: calm 500-600, no shouting 800-900 */
+.hero-title-accent {
+    color: #f8fafc;
+    font-weight: 600;
+}
+
+.hero-title-line {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.hero-title-subline {
+    font-weight: 500;
+    color: var(--primary);
+    letter-spacing: -0.015em;
+}
+
+/* 4. Motion: eliminate looping bobbing animations */
+.avatar-3d-bobbing {
+    animation: none !important;
+    transform: none !important;
+}
+
+/* 5. Details & Elevation: hairlines over heavy glowing shadows */
+:root {
+    --shadow-glow: none !important;
+}
+
+.hero-stage-split,
+.service-card,
+.about-card,
+.champion-spotlight-card,
+.arena-rules-card,
+.workspace-frame,
+.auth-modal {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.service-card:hover,
+.about-card:hover {
+    border-color: rgba(59, 130, 246, 0.3) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 6. Numbers: tabular figures across all metrics */
+.champ-stat-val,
+.score-pill,
+.leaderboard-row b,
+.leaderboard-row time,
+#race_timer,
+.badge-comp-number {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+}
+
+/* 7. Nested radii: controls 8-10px, cards 12-14px, modals 16-18px */
+.btn-primary-hero,
+.btn-secondary-hero,
+.btn-primary-action {
+    border-radius: 10px !important;
+}
+
+.service-card,
+.about-card,
+.champion-spotlight-card,
+.arena-rules-card {
+    border-radius: 14px !important;
+}
+
+.auth-modal {
+    border-radius: 18px !important;
+}
+
+.badge-contest-cta,
+.badge-companies {
+    border-radius: 12px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}

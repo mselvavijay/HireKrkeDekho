@@ -18,8 +18,7 @@
 </head>
 
 <body>
-    <div class="ambient-glow-left"></div>
-    <div class="ambient-glow-right"></div>
+    <!-- Ambient background quieted -->
 
     <!-- Header Navigation -->
     <header class="site-header">
@@ -65,11 +64,8 @@
     ═══════════════════════════════════════════════════════════════ -->
     <section class="hero-section" id="app_workspace" aria-label="Hero">
 
-        <!-- Subtle Tech Mesh & Ambient Blue Glows -->
+        <!-- Subtle Background Grid -->
         <div class="hero-ambient-mesh" aria-hidden="true">
-            <div class="hero-blue-glow hero-glow-center"></div>
-            <div class="hero-blue-glow hero-glow-left"></div>
-            <div class="hero-blue-glow hero-glow-right"></div>
             <div class="hero-grid-pattern"></div>
         </div>
 
@@ -88,12 +84,12 @@
                     </h1>
 
                     <p class="hero-subtitle">
-                        The only talent discovery engine calibrated to your degree, experience, and technical skills. Get instant AI guidance, a 3-week roadmap, and daily challenges.
+                        Evaluated on your degree, experience, and core technical skills. Access structured preparation roadmaps, career guidance, and daily engineering benchmarks.
                     </p>
 
                     <div class="hero-cta-group">
-                        <button class="btn-primary-hero" onclick="openConsultation()" aria-label="Start Free AI Consultation">
-                            <span>Start Free AI Consultation</span>
+                        <button class="btn-primary-hero" onclick="openConsultation()" aria-label="Start Career Consultation">
+                            <span>Start Career Consultation</span>
                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -104,7 +100,7 @@
                 <!-- Right: 3D Team Avatar Stage with Floating Badges -->
                 <div class="hero-avatar-col">
                     <div class="hero-avatar-showcase" aria-label="Tech Community & Opportunities">
-                        <div class="avatar-pedestal-glow" aria-hidden="true"></div>
+                        
                         
                         <div class="avatar-interactive-wrapper">
                             <!-- Top-Right Floating Badge: 100+ Companies -->
@@ -127,7 +123,7 @@
                                     <span>15 Questions · 15s Round</span>
                                 </div>
                                 <div class="badge-contest-footer">
-                                    <span class="badge-trophy" aria-hidden="true">🏆</span>
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
                                     <strong>Daily Champion</strong>
                                     <span class="badge-arrow" aria-hidden="true">→</span>
                                 </div>
@@ -242,7 +238,7 @@
                 </div>
                 <div class="telemetry-meta">
                     <span class="telemetry-title">Tri-Factor Calibrated</span>
-                    <span class="telemetry-sub">Degree + Exp + Skills Precision</span>
+                    <span class="telemetry-sub">Degree, experience, and skills</span>
                 </div>
             </div>
 
@@ -642,7 +638,7 @@
                         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                     <button class="btn-secondary-hero btn-race-standings" type="button" onclick="showRaceLeaderboard()" aria-label="View Leaderboard">
-                        <span>&#127942; Leaderboard</span>
+                        <span>Leaderboard</span>
                     </button>
                     <span class="race-seat-label" id="race_seat_status"></span>
                     <span id="race_contest_date" hidden>Today</span>
@@ -653,11 +649,11 @@
             <div class="race-arena-grid">
                 <!-- 1. Champion Podium Card -->
                 <div class="champion-spotlight-card" aria-label="Leaderboard Champion">
-                    <div class="champion-card-glow" aria-hidden="true"></div>
+                    
                     <div class="champion-card-top">
                         <div class="champion-badge-pill">
-                            <span class="champ-crown">👑</span>
-                            <span>CURRENT #1 PODIUM</span>
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            <span>Current Leader</span>
                         </div>
                         <span class="champion-date-tag" id="race_result_date">Contest Date</span>
                     </div>
@@ -729,10 +725,10 @@
         <div class="about-container">
 
             <h2 class="about-heading">
-                Redefining Tech Careers in the <span class="text-gradient-blue">Age of the AI Race</span>
+                Engineering Career Calibration &amp; Technical Benchmarking
             </h2>
             <p class="about-subtitle">
-                Traditional job boards are noisy, generic, and resume-cluttered. HireKrkeDekho replaces guesswork with precision calibration, structured execution, and competitive benchmarking.
+                Traditional job portals rely on keyword matching and resume clutter. HireKrkeDekho evaluates actual problem-solving speed, verified background, and structured career preparation.
             </p>
 
             <div class="about-content-grid">
@@ -941,9 +937,9 @@
             </div>
 
             <div class="auth-modal-body">
-                <h3 class="auth-modal-title" id="auth_modal_title">Welcome to HireKrkeDekho</h3>
+                <h3 class="auth-modal-title" id="auth_modal_title">Sign in to HireKrkeDekho</h3>
                 <p class="auth-login-copy">
-                    Sign in with Google to calibrate your profile, save private career consultations, and compete on the live AI Race leaderboard.
+                    Sign in with Google to save your private career consultations, update your profile, and compete on the live daily leaderboard.
                 </p>
 
                 <div class="auth-google-center-box">
