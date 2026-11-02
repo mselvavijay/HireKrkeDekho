@@ -1245,3 +1245,30 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
     /* Expose globally for inline handlers */
     window.showToast = showToast;
+
+
+        // Precision Smooth Scroll for Site Header Nav Links
+        document.querySelectorAll('.site-header a[href^="#"], .nav-links a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    const targetEl = document.querySelector(targetId);
+                    if (targetEl) {
+                        e.preventDefault();
+                        if (typeof closeSiteMobileNav === 'function') closeSiteMobileNav();
+                        const headerOffset = 84;
+                        const elementPosition = targetEl.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                            top: Math.max(0, offsetPosition),
+                            behavior: 'smooth'
+                        });
+                        if (history.pushState) {
+                            history.pushState(null, null, targetId);
+                        } else {
+                            location.hash = targetId;
+                        }
+                    }
+                }
+            });
+        });

@@ -1338,7 +1338,7 @@
             margin: 0 auto;
             text-align: left;
             scroll-snap-align: none;
-            scroll-margin-top: var(--header-height);
+            scroll-margin-top: 84px !important;
             position: relative;
             z-index: 1;
         }
@@ -1373,15 +1373,26 @@
 
         .how-card {
             padding: 24px;
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            background: var(--bg-surface);
+            border: 1px solid rgba(59, 130, 246, 0.25) !important;
+            border-radius: 14px !important;
+            background: var(--bg-surface) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3) !important;
             display: flex;
             flex-direction: column;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .how-card.how-output {
-            border-top: 2px solid var(--primary);
+        .how-card:hover {
+            border-color: rgba(59, 130, 246, 0.45) !important;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 12px rgba(31, 107, 255, 0.15) !important;
+        }
+
+        .how-card-subtext {
+            display: block;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-top: 3px;
         }
 
         .how-card h3 {
@@ -1644,14 +1655,18 @@
             text-align: center;
         }
 
-        /* Global Section Snap Settings */
-        section[id] {
-            scroll-margin-top: calc(var(--header-height) + 24px);
-            scroll-snap-align: start;
+        /* Global Section Scroll Settings - Aligned with sticky navbar */
+        section[id],
+        #how_it_works,
+        #ai_race,
+        #about_section {
+            scroll-margin-top: 84px !important;
+            scroll-snap-align: none !important;
         }
 
         html {
-            scroll-snap-type: y proximity;
+            scroll-snap-type: none !important;
+            scroll-behavior: smooth !important;
         }
 
         #ai_race,
@@ -1672,7 +1687,7 @@
                 flex-direction: column;
                 justify-content: center;
                 padding: 40px 24px;
-                scroll-margin-top: var(--header-height);
+                scroll-margin-top: 84px !important;
             }
 
             .ai-race-section {
