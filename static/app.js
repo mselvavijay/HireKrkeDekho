@@ -1,4 +1,4 @@
-﻿let currentUserId = localStorage.getItem('career_bot_user_id') || null;
+let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         let currentUserToken = localStorage.getItem('career_bot_token') || null;
         let currentSessionId = localStorage.getItem('career_bot_session_id') || null;
         let currentUserData = null;
@@ -91,8 +91,12 @@
             const slot = document.getElementById('modal_google_btn_slot');
             if (!slot || !googleIdentityInitialized) return;
             slot.innerHTML = '';
-            const btnWidth = Math.min(300, Math.max(220, window.innerWidth - 64));
-            google.accounts.id.renderButton(slot, { theme: 'outline', size: 'large', text: 'continue_with', shape: 'pill', width: btnWidth });
+            google.accounts.id.renderButton(slot, {
+                theme: 'outline',
+                size: 'large',
+                text: 'continue_with',
+                shape: 'pill'
+            });
         }
 
         function requireAuthentication(continuation) {

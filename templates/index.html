@@ -930,18 +930,17 @@
         </div>
     </div>
 
-    <!-- Auth Modal (Restructured with trusted security badges & clean UX) -->
+    <!-- Auth Modal (Clean, unconstrained Google Login) -->
     <div class="modal-overlay" id="auth_modal_overlay" role="dialog" aria-modal="true" aria-labelledby="auth_modal_title">
         <div class="auth-modal auth-modal-redesign">
+            <button class="btn-modal-close" onclick="closeAuthModal()" aria-label="Close modal">&times;</button>
             <div class="modal-header auth-modal-header">
                 <div class="auth-header-brand">
                     <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" height="26">
                 </div>
-                <button class="btn-modal-close" onclick="closeAuthModal()" aria-label="Close modal">&times;</button>
             </div>
 
             <div class="auth-modal-body">
-
                 <h3 class="auth-modal-title" id="auth_modal_title">Welcome to HireKrkeDekho</h3>
                 <p class="auth-login-copy">
                     Sign in with Google to calibrate your profile, save private career consultations, and compete on the live AI Race leaderboard.
@@ -950,22 +949,11 @@
                 <div class="auth-google-center-box">
                     <div id="modal_google_btn_slot" class="google-login-slot"></div>
                 </div>
-
-                <div class="auth-benefits-strip">
-                    <div class="auth-benefit-item">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4C8DFF" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span>Degree, Experience &amp; Skill Calibration</span>
-                    </div>
-                    <div class="auth-benefit-item">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4C8DFF" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span>Zero Passwords · Instant One-Click Login</span>
-                    </div>
-                </div>
             </div>
 
             <div class="auth-modal-footer">
                 <p class="auth-privacy-disclaimer">
-                    By signing in, you agree to our <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. All consultations auto-purge after 30 days.
+                    By signing in, you agree to our <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
                 </p>
             </div>
         </div>

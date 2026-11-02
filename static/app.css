@@ -3208,6 +3208,7 @@
         }
 
         .auth-modal {
+            position: relative;
             background: var(--bg-surface);
             border: 1px solid var(--border-highlight);
             border-radius: var(--radius-lg);
@@ -3218,6 +3219,13 @@
             animation: modalPop 0.2s ease-out;
             max-height: 90vh;
             overflow-y: auto;
+        }
+
+        .auth-modal .btn-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
         }
 
         @keyframes modalPop {
@@ -4633,11 +4641,17 @@
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 30px rgba(31, 107, 255, 0.18) !important;
         }
 
+        .auth-modal-redesign .btn-modal-close {
+            top: 20px;
+            right: 20px;
+        }
+
         .auth-modal-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            justify-content: flex-start;
+            margin-bottom: 24px;
+            padding-right: 40px;
         }
 
         .auth-header-brand img {
@@ -4648,21 +4662,6 @@
 
         .auth-modal-body {
             text-align: center;
-        }
-
-        .auth-verified-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            background: rgba(31, 107, 255, 0.14);
-            border: 1px solid rgba(76, 141, 255, 0.3);
-            color: #60a5fa;
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            margin-bottom: 16px;
         }
 
         .auth-modal-title {
@@ -4677,39 +4676,30 @@
             font-size: 0.88rem;
             color: #94a3b8;
             line-height: 1.55;
-            margin: 0 0 24px;
+            margin: 0 0 28px;
         }
 
         .auth-google-center-box {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 24px;
+            margin: 0 auto 28px;
             width: 100%;
         }
 
-        .auth-benefits-strip {
+        .google-login-slot {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: rgba(6, 11, 22, 0.5);
-            border: 1px solid rgba(76, 141, 255, 0.16);
-            border-radius: 14px;
-            padding: 14px 16px;
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .auth-benefit-item {
-            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            font-size: 0.82rem;
-            color: #cbd5e1;
+            width: 100%;
+            min-height: 44px;
+            overflow: visible !important;
         }
 
-        .auth-benefit-item svg {
-            flex-shrink: 0;
+        .google-login-slot > div,
+        .google-login-slot iframe {
+            margin: 0 auto !important;
+            overflow: visible !important;
         }
 
         .auth-modal-footer {
