@@ -4773,7 +4773,12 @@
     --shadow-glow: none !important;
 }
 
-.hero-stage-split,
+.hero-stage-split {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
 .service-card,
 .about-card,
 .champion-spotlight-card,
