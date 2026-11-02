@@ -1675,14 +1675,21 @@
             scroll-behavior: smooth !important;
         }
 
-        #ai_race,
-        #about_section {
+        #ai_race {
             min-height: calc(100dvh - var(--header-height));
             display: flex;
             flex-direction: column;
             justify-content: center;
             position: relative;
             z-index: 1;
+        }
+
+        #about_section {
+            display: block !important;
+            min-height: auto !important;
+            position: relative;
+            z-index: 1;
+            scroll-margin-top: 84px !important;
         }
 
         /* ===== DESKTOP 1-VIEWPORT FIT ===== */
@@ -1706,7 +1713,7 @@
             }
 
             .about-section {
-                padding: 48px 24px;
+                padding: 36px 24px 64px;
                 margin: 0 auto;
             }
         }
@@ -4069,7 +4076,7 @@
 
         /* ===== ABOUT SECTION REDESIGN (Strict Electric Blue Theme) ===== */
         .about-section {
-            padding: 84px 24px 76px;
+            padding: 36px 24px 64px;
             position: relative;
             z-index: 2;
             max-width: 1240px;
@@ -4227,7 +4234,16 @@
                 gap: 18px;
             }
             .about-section {
-                padding: 56px 16px 52px;
+                padding: 24px 16px 44px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #about_section {
+                scroll-margin-top: 72px !important;
+            }
+            .about-section {
+                padding: 20px 16px 40px !important;
             }
         }
 

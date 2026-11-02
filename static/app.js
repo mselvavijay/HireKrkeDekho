@@ -1256,7 +1256,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     if (targetEl) {
                         e.preventDefault();
                         if (typeof closeSiteMobileNav === 'function') closeSiteMobileNav();
-                        const headerOffset = 84;
+                        const headerEl = document.querySelector('.site-header');
+                        const headerOffset = headerEl ? headerEl.getBoundingClientRect().height : (window.innerWidth <= 768 ? 72 : 84);
                         const elementPosition = targetEl.getBoundingClientRect().top;
                         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                         window.scrollTo({
