@@ -1,9 +1,10 @@
 <div align="center">
 
-  <img src="static/hirekrkedekho-logo.png" alt="HireKrkeDekho Logo" width="220" />
+  <img src="static/hirekrkedekho-logo.png" alt="HireKrkeDekho Logo" width="240" />
 
-  # HireKrkeDekho 🚀
-  ### Architect Your Career Leap With AI — Calibrated to Your Exact Tech Stack
+  <br>
+
+  <h3>Architect Your Career Leap With AI — Calibrated to Your Exact Tech Stack</h3>
 
   [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
   [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -20,11 +21,11 @@
 
   <p align="center">
     <a href="https://hirekrkedekho.vercel.app"><b>🌐 Live Platform</b></a> •
-    <a href="#-key-features"><b>✨ Features</b></a> •
-    <a href="#-tech-stack"><b>🛠 Tech Stack</b></a> •
-    <a href="#-quickstart"><b>⚡ Quickstart</b></a> •
-    <a href="#-architecture"><b>📐 Architecture</b></a> •
-    <a href="#-api-reference"><b>🔌 API Reference</b></a>
+    <a href="#features"><b>✨ Features</b></a> •
+    <a href="#tech-stack"><b>🛠 Tech Stack</b></a> •
+    <a href="#architecture"><b>📐 Architecture</b></a> •
+    <a href="#quickstart"><b>⚡ Quickstart</b></a> •
+    <a href="#api-reference"><b>🔌 API Reference</b></a>
   </p>
 
   <br>
@@ -35,6 +36,7 @@
 
 ---
 
+<a id="why-hirekrkedekho"></a>
 ## 💡 Why HireKrkeDekho?
 
 Traditional job portals drown candidates in keyword matching, unverified resumes, and ghost job listings. 
@@ -47,6 +49,7 @@ Traditional job portals drown candidates in keyword matching, unverified resumes
 
 ---
 
+<a id="features"></a>
 ## ✨ Key Features
 
 | Capability | Description |
@@ -60,6 +63,7 @@ Traditional job portals drown candidates in keyword matching, unverified resumes
 
 ---
 
+<a id="tech-stack"></a>
 ## 🛠 Tech Stack
 
 ### Backend
@@ -81,7 +85,38 @@ Traditional job portals drown candidates in keyword matching, unverified resumes
 
 ---
 
-## 📁 Repository Structure
+<a id="architecture"></a>
+## 📐 Architecture & System Flow
+
+HireKrkeDekho operates on an asynchronous, decoupled architecture connecting candidate discovery, AI calibration, and real-time contest telemetry:
+
+```mermaid
+flowchart TD
+    User([Candidate / Engineer]) -->|Tri-Factor Inputs: Degree, YOE, Skills| MatchEngine[Tri-Factor Match Engine]
+    User -->|15s Daily Contest| RaceEngine[Daily Contest & Speed Tracker]
+    User -->|Consultation Chat| Advisor[AI Career Advisor]
+
+    subgraph CorePlatform [FastAPI Application Core]
+        MatchEngine --> RoleMatch[Role & Seniority Calibration]
+        RaceEngine --> AntiCheat[Anti-Cheat & Validation Engine]
+        Advisor --> PromptGen[Prompt Generation & Roadmaps]
+    end
+
+    subgraph DataIntegrations [Data & External Services]
+        RoleMatch --> Groq[Groq LLM Structured JSON]
+        PromptGen --> Groq
+        AntiCheat --> Postgres[(PostgreSQL / Supabase)]
+        User -.->|OAuth 2.0| GoogleAuth[Google Identity Services]
+        GoogleAuth --> SessionTokens[HMAC-SHA256 Auth Cookies]
+    end
+
+    subgraph TalentAnalytics [Talent & Contest Analytics]
+        Postgres --> AdminRoom[Admin Control Room /race/admin]
+        AdminRoom --> LeaderboardExport[Live Leaderboards & CSV Export]
+    end
+```
+
+### 📁 Repository Structure
 
 ```text
 HireKrkeDekho/
@@ -112,6 +147,7 @@ HireKrkeDekho/
 
 ---
 
+<a id="quickstart"></a>
 ## ⚡ Quickstart
 
 ### 1. Prerequisites
@@ -181,6 +217,7 @@ http://127.0.0.1:8000
 
 ---
 
+<a id="tests"></a>
 ## 🧪 Running Automated Tests
 
 HireKrkeDekho includes automated guardrail tests to guarantee endpoint stability, schema consistency, and security defaults.
@@ -192,6 +229,7 @@ python -m pytest test_guardrails.py -v
 
 ---
 
+<a id="api-reference"></a>
 ## 🔌 API Reference (Selected Endpoints)
 
 | Method | Endpoint | Description | Access |
@@ -208,6 +246,7 @@ python -m pytest test_guardrails.py -v
 
 ---
 
+<a id="contributing"></a>
 ## 🤝 Contributing
 
 We welcome community contributions, bug reports, and feature suggestions!
@@ -229,6 +268,7 @@ We welcome community contributions, bug reports, and feature suggestions!
 
 ---
 
+<a id="license"></a>
 ## 📜 License
 
 Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
