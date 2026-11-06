@@ -35,6 +35,7 @@ app.add_middleware(
 )
 
 # 2. IP-based Rate Limiter (Token bucket per minute)
+# shortcut: in-process dict is a no-op on Vercel (new process per request); upgrade to Redis/Supabase counter for real serverless rate limiting.
 # 60 req/min for general API, 20 req/min for heavy AI / chat endpoints
 RATE_LIMIT_STORE = defaultdict(list)
 RATE_LIMITS = {

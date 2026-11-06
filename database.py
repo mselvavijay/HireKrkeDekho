@@ -21,8 +21,6 @@ if raw_db_url:
         raw_db_url = raw_db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
     SQLALCHEMY_DATABASE_URL = raw_db_url
 else:
-    # If on serverless platforms (e.g. Vercel), write to /tmp for ephemeral writable access
-    is_serverless = os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME")
     db_path = "/tmp/career_bot.db" if is_serverless else "./career_bot.db"
     SQLALCHEMY_DATABASE_URL = f"sqlite:///{db_path}"
 

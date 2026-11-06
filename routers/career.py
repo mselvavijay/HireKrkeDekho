@@ -12,13 +12,11 @@ _ADMIN_IDS: set[str] = {
 from services.auth_token_service import get_current_user_from_header, verify_access_token
 from services.response_cache import (
     build_cache_key,
-    can_make_fresh_request,
     cleanup_expired_conversations,
     get_cached_response,
     get_daily_fresh_requests_count,
     get_target_job_count,
     is_cacheable_question,
-    record_fresh_request,
     reserve_daily_fresh_request,
     rollback_daily_fresh_request,
     save_cached_response,
@@ -31,7 +29,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import models
 from schemas import schemas
-from services.llm_service import DEFAULT_MODEL, analyze_conversation_turn, analyze_show_more, analyze_user_input
+from services.llm_service import DEFAULT_MODEL, analyze_conversation_turn, analyze_show_more
 from services.jsearch_service import get_recent_jobs_from_jsearch
 
 router = APIRouter()
@@ -437,15 +435,6 @@ async def multi_turn_chat(chat_request: schemas.MultiTurnChatRequest, http_reque
     )
     db.add(assistant_msg)
 
-    # Also keep legacy ChatHistory in sync
-    db_history = models.ChatHistory(
-        user_input=user_input,
-        extracted_interests=",".join(interests_list),
-        career_category=career_category,
-        explanation=explanation,
-        job_titles=",".join(final_job_titles)
-    )
-    db.add(db_history)
     db.commit()
 
     remaining_requests = max(0, DAILY_FRESH_REQUEST_LIMIT - current_fresh_count)

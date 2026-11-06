@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any
 from fastapi import Header, HTTPException, Request
 
 # Secret used to sign session tokens for verified users
-JWT_SECRET = os.getenv("SESSION_SECRET", os.getenv("GROQ_API_KEY", "hirekrkedekho_secure_token_secret_2026"))
+JWT_SECRET = os.getenv("SESSION_SECRET", "hirekrkedekho_secure_token_secret_2026")  # shortcut: hardcoded fallback ok for local dev; set SESSION_SECRET in prod
 
 def create_access_token(user_id: str, email: str) -> str:
     """

@@ -9,14 +9,9 @@ load_dotenv()
 
 # Groq is the sole LLM provider
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-API_KEY = GROQ_API_KEY
 BASE_URL = "https://api.groq.com/openai/v1/chat/completions"
 DEFAULT_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
 
 SYSTEM_PROMPT_TEMPLATE = """You are the HireKrkeDekho AI Career Advisor. You ONLY discuss tech jobs, tech careers, required skills, interview preparation, salary context and learning roadmaps, with a focus on India.
 
@@ -73,6 +68,15 @@ MANDATORY TRI-FACTOR CALIBRATION RULES (EXPERIENCE + SKILLS + DEGREE):
       * 8+ Years: Senior Staff, Principal, or Engineering Manager roles (35 - 60 LPA).
 2. CORE SKILLS: The recommended roles must directly utilize the candidate's declared programming languages, frameworks, and domain competencies.
 """
+
+
+
+def _strip_fence(s: str) -> str:
+    """Strip triple-backtick code fences the LLM sometimes wraps around JSON."""
+    if not s.startswith("```"):
+        return s
+    lines = s.splitlines()
+    return "\n".join(lines[1:-1] if lines[-1].startswith("```") else lines[1:]).strip()
 
 INDIAN_TECH_HUBS = [
     "Bangalore, Karnataka", "Hyderabad, Telangana", "Pune, Maharashtra",
@@ -181,7 +185,7 @@ def sanitize_and_enrich_jobs(parsed: dict, user_profile: Optional[Dict[str, Any]
         for idx, j in enumerate(open_jobs):
             if isinstance(j, dict) and j.get("title"):
                 title = j["title"].strip()
-                location = "India"
+                location = j.get("location", "India")
                 if "India" not in location and not any(h in location for h in ["Bangalore", "Hyderabad", "Pune", "Mumbai", "Delhi", "Gurgaon", "Noida", "Chennai"]):
                     location = f"{location} (India)"
                 job_type = "Remote" if "remote" in str(j.get("job_type", "")).lower() else "Hybrid"
@@ -313,7 +317,7 @@ async def analyze_conversation_turn(
 
     try:
         async with httpx.AsyncClient(timeout=25.0) as client:
-            response = await client.post(BASE_URL, headers=HEADERS, json=payload)
+            response = await client.post(BASE_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload)
             response.raise_for_status()
             result = response.json()
 
@@ -323,13 +327,7 @@ async def analyze_conversation_turn(
             raw_content = result["choices"][0]["message"]["content"].strip()
 
             # Clean any possible markdown code fence ```json ... ``` wrapper
-            if raw_content.startswith("```"):
-                raw_lines = raw_content.splitlines()
-                if raw_lines[0].startswith("```"):
-                    raw_lines = raw_lines[1:]
-                if raw_lines and raw_lines[-1].startswith("```"):
-                    raw_lines = raw_lines[:-1]
-                raw_content = "\n".join(raw_lines).strip()
+            raw_content = _strip_fence(raw_content)
 
             parsed = json.loads(raw_content)
 
@@ -412,7 +410,7 @@ async def analyze_show_more(
 
     try:
         async with httpx.AsyncClient(timeout=25.0) as client:
-            response = await client.post(BASE_URL, headers=HEADERS, json=payload)
+            response = await client.post(BASE_URL, headers={"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}, json=payload)
             response.raise_for_status()
             result = response.json()
 
@@ -421,13 +419,7 @@ async def analyze_show_more(
 
             raw_content = result["choices"][0]["message"]["content"].strip()
 
-            if raw_content.startswith("```"):
-                raw_lines = raw_content.splitlines()
-                if raw_lines[0].startswith("```"):
-                    raw_lines = raw_lines[1:]
-                if raw_lines and raw_lines[-1].startswith("```"):
-                    raw_lines = raw_lines[:-1]
-                raw_content = "\n".join(raw_lines).strip()
+            raw_content = _strip_fence(raw_content)
 
             parsed = json.loads(raw_content)
 
@@ -472,7 +464,3 @@ async def analyze_show_more(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error communicating with LLM: {str(e)}")
 
-
-# Backward compatibility wrapper for old single-turn calls
-async def analyze_user_input(user_input: str) -> dict:
-    return await analyze_conversation_turn(user_input=user_input)

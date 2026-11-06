@@ -2,11 +2,12 @@ import os
 import uuid
 import httpx
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from database import get_db
 from models import models
 from schemas import schemas
+from services.auth_token_service import create_access_token, get_current_user_from_header
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -104,9 +105,9 @@ async def google_auth(auth_req: schemas.GoogleAuthRequest, response: Response, d
     return user_resp
 
 @router.get("/me", response_model=schemas.UserProfileResponse)
-def get_current_user(user_id: str = Query(...), db: Session = Depends(get_db)):
+def get_current_user(auth_user: dict = Depends(get_current_user_from_header), db: Session = Depends(get_db)):
     """Retrieve the authenticated user's current profile."""
-    user = db.query(models.UserProfile).filter(models.UserProfile.id == user_id).first()
+    user = db.query(models.UserProfile).filter(models.UserProfile.id == auth_user["user_id"]).first()
     if not user:
         raise HTTPException(status_code=404, detail="User profile not found.")
     return user
