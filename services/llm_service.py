@@ -185,9 +185,10 @@ def sanitize_and_enrich_jobs(parsed: dict, user_profile: Optional[Dict[str, Any]
         for idx, j in enumerate(open_jobs):
             if isinstance(j, dict) and j.get("title"):
                 title = j["title"].strip()
-                location = j.get("location", "India")
-                if "India" not in location and not any(h in location for h in ["Bangalore", "Hyderabad", "Pune", "Mumbai", "Delhi", "Gurgaon", "Noida", "Chennai"]):
-                    location = f"{location} (India)"
+                loc = str(j.get('location') or 'India').strip()
+                if not ('india' in loc.lower() or any(h in loc.lower() for h in ['bangalore', 'bengaluru', 'hyderabad', 'pune', 'mumbai', 'delhi', 'gurgaon', 'gurugram', 'noida', 'chennai'])):
+                    continue
+                location = loc
                 job_type = "Remote" if "remote" in str(j.get("job_type", "")).lower() else "Hybrid"
                 salary = "5 - 9 LPA" if exp_years == 0 else ("8 - 16 LPA" if exp_years <= 3 else ("18 - 32 LPA" if exp_years <= 7 else "35 - 60 LPA"))
                 skills = j.get("skills_required") or [title]

@@ -6,7 +6,18 @@ from typing import Optional, Dict, Any
 from fastapi import Header, HTTPException, Request
 
 # Secret used to sign session tokens for verified users
-JWT_SECRET = os.getenv("SESSION_SECRET", "hirekrkedekho_secure_token_secret_2026")  # shortcut: hardcoded fallback ok for local dev; set SESSION_SECRET in prod
+SESSION_SECRET = os.getenv("SESSION_SECRET", "")
+DEV_MODE = os.getenv("DEV_MODE", "0") == "1"
+
+if len(SESSION_SECRET) >= 32:
+    JWT_SECRET = SESSION_SECRET
+elif DEV_MODE:
+    JWT_SECRET = "hirekrkedekho_dev_token_secret_32chars_min"
+else:
+    raise RuntimeError(
+        "SESSION_SECRET must be set and at least 32 characters long in production. "
+        "Set DEV_MODE=1 to permit development fallback."
+    )
 
 def create_access_token(user_id: str, email: str) -> str:
     """
