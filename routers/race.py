@@ -314,7 +314,9 @@ def admin_winners(db: Session = Depends(get_db), token=Depends(get_current_user_
     for (p_date,) in past_dates:
         decide_winner(db, p_date)
 
-    winners = db.query(RaceWinner).order_by(RaceWinner.contest_date.desc()).all()
+    # Only show winners from the past 30 days
+    cutoff_date = (now_ist() - timedelta(days=30)).date().isoformat()
+    winners = db.query(RaceWinner).filter(RaceWinner.contest_date >= cutoff_date).order_by(RaceWinner.contest_date.desc()).all()
     result = []
     for w in winners:
         user = db.query(UserProfile).filter_by(id=w.user_id).first()
