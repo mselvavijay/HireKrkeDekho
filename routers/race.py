@@ -52,6 +52,15 @@ async def today(db: Session = Depends(get_db), token=Depends(get_optional_user_f
     if quiz is None:
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first() if user else None
+    if attempt and attempt.status != "completed":
+        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 30
+        created_at = attempt.created_at or attempt.question_started_at or now_ist()
+        if created_at.tzinfo is None:
+            created_at = created_at.replace(tzinfo=IST)
+        if (now_ist() - created_at).total_seconds() > max_sec:
+            attempt.status = "completed"
+            attempt.completed_at = now_ist()
+            db.commit()
     return {
         "contest_date": day,
         "theme": quiz.theme,
@@ -71,7 +80,17 @@ async def start(db: Session = Depends(get_db), token=Depends(get_current_user_fr
     if quiz is None:
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
-    if attempt and attempt.status == "completed": raise HTTPException(409, "You have already completed todays contest.")
+    if attempt:
+        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 30
+        created_at = attempt.created_at or attempt.question_started_at or now_ist()
+        if created_at.tzinfo is None:
+            created_at = created_at.replace(tzinfo=IST)
+        if attempt.status == "completed" or (now_ist() - created_at).total_seconds() > max_sec or attempt.current_question >= 15:
+            if attempt.status != "completed":
+                attempt.status = "completed"
+                attempt.completed_at = now_ist()
+                db.commit()
+            raise HTTPException(409, "You have already completed todays contest.")
     if not attempt:
         name = public_name(getattr(user, "display_name", None) or (user.email or "").split("@")[0])
         attempt = RaceAttempt(contest_date=day, user_id=user.id, display_name=name, status="in_progress", current_question=0, question_started_at=now_ist())

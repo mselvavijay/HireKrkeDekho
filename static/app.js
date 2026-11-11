@@ -486,9 +486,30 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         const raceHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUserToken || ''}` });
         async function loadRaceStatus() {
             if (!currentUserToken) return;
-            try { const r = await fetch('/race/today', {headers: raceHeaders()}); const data = await r.json(); if (!r.ok) return;
-                const label = document.getElementById('race_seat_status'); if (label) label.textContent = `${data.question_count} questions · ${data.seconds_per_question}s each · one attempt today`;
-                const meta = document.getElementById('race_modal_meta'); if (meta) meta.textContent = `${data.theme} · ${data.question_count} rapid-fire questions`;
+            try {
+                const r = await fetch('/race/today', {headers: raceHeaders()});
+                const data = await r.json();
+                if (!r.ok) return;
+                const label = document.getElementById('race_seat_status');
+                if (label) label.textContent = `${data.theme} · ${data.question_count} questions · ${data.seconds_per_question}s each`;
+                const inlineTopic = document.getElementById('race_modal_topic_inline');
+                if (inlineTopic) inlineTopic.textContent = data.theme || 'Technical Challenge';
+                const topicName = document.getElementById('race_modal_topic_name');
+                if (topicName) topicName.textContent = data.theme || 'Core Engineering';
+                const meta = document.getElementById('race_modal_meta');
+                if (meta) meta.textContent = `${data.question_count} rapid-fire questions · ${data.seconds_per_question}s each · accuracy first`;
+                if (data.attempt_status === 'completed') {
+                    const intro = document.getElementById('race_intro');
+                    const play = document.getElementById('race_play');
+                    const complete = document.getElementById('race_complete');
+                    const completeText = document.getElementById('race_complete_text');
+                    const startBtn = document.getElementById('race_start_btn');
+                    if (intro) intro.hidden = true;
+                    if (play) play.hidden = true;
+                    if (complete) complete.hidden = false;
+                    if (completeText) completeText.textContent = "You've already completed today's contest. Check out the leaderboard or come back tomorrow!";
+                    if (startBtn) { startBtn.disabled = true; startBtn.textContent = "Contest Completed Today"; }
+                }
             } catch (e) { console.error('Unable to load race status', e); }
         }
         async function showRaceLeaderboard() {
@@ -525,10 +546,16 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
         async function startRaceAttempt() {
             const status = document.getElementById('race_payment_status');
+            const startBtn = document.getElementById('race_start_btn');
             status.textContent = "Loading today's questions…";
             try {
                 const r = await fetch('/race/start', { method: 'POST', headers: raceHeaders() });
                 const data = await r.json();
+                if (r.status === 409) {
+                    if (startBtn) { startBtn.disabled = true; startBtn.textContent = 'Already completed today!'; }
+                    status.textContent = data.detail || "You have already completed today's contest. Come back tomorrow!";
+                    return;
+                }
                 if (!r.ok) throw new Error(data.detail || 'Unable to start the contest.');
                 raceQuestions = data.questions;
                 document.getElementById('race_intro').hidden = true;
@@ -1135,7 +1162,11 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         loadRaceStatus();
         refreshRaceResultCard();
         if (window.location.pathname === '/consultation') {
-            window.addEventListener('DOMContentLoaded', openConsultation);
+            if (document.readyState === 'loading') {
+                window.addEventListener('DOMContentLoaded', openConsultation);
+            } else {
+                openConsultation();
+            }
         }
 
         /* ===== ANTIGRAVITY-INSPIRED CURSOR BACKGROUND INTERACTION ===== */
@@ -1273,3 +1304,5 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 }
             });
         });
+
+

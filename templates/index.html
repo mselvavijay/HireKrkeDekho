@@ -47,10 +47,10 @@
             },
             {
               "@type": "Question",
-              "name": "What is the daily AI Race?",
+              "name": "What is the Daily Tech Contest?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "The AI Race is a daily 15-question rapid-fire technical benchmarking contest testing algorithms, data structures, and architecture with server-timed anti-cheat, certificates, and live daily leaderboards."
+                "text": "The Daily Tech Contest is a 15-question rapid-fire technical benchmarking contest testing algorithms, data structures, and architecture with server-timed anti-cheat, certificates, and live daily leaderboards."
               }
             }
           ]
@@ -247,7 +247,7 @@
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                             </svg>
                         </div>
-                        <span class="service-tag">Ranked AI Race</span>
+                        <span class="service-tag">Daily Contest</span>
                         <div class="service-arrow" aria-hidden="true">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </div>
@@ -257,7 +257,7 @@
                         15 rapid-fire questions, 15 seconds each. Prove your engineering sharpness on the live leaderboard and claim the Daily Champion Card.
                     </p>
                     <div class="service-card-footer">
-                        <span class="service-action-label">Enter Today&apos;s Race</span>
+                        <span class="service-action-label">Enter Today&apos;s Contest</span>
                         <span class="service-indicator-line"></span>
                     </div>
                 </div>
@@ -703,7 +703,7 @@
         </div>
     </section>
 
-    <section class="ai-race-section" id="ai_race" aria-label="AI Race Arena">
+    <section class="ai-race-section" id="ai_race" aria-label="Daily Contest Arena">
         <div class="race-arena-container">
             <!-- Header Briefing -->
             <div class="race-arena-header">
@@ -729,8 +729,8 @@
                 </div>
 
                 <div class="race-actions-row">
-                    <button class="btn-primary-hero btn-race-start" type="button" onclick="openRaceModal()" aria-label="Enter AI Race">
-                        <span>Enter Race</span>
+                    <button class="btn-primary-hero btn-race-start" type="button" onclick="openRaceModal()" aria-label="Enter Daily Contest">
+                        <span>Enter Contest</span>
                         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                     <button class="btn-secondary-hero btn-race-standings" type="button" onclick="showRaceLeaderboard()" aria-label="View Leaderboard">
@@ -869,7 +869,7 @@
                         </svg>
                     </div>
                     <span class="about-card-badge">Competitive Arena</span>
-                    <h3>Daily AI Race Benchmark</h3>
+                    <h3>Daily Tech Contest Benchmark</h3>
                     <p>
                         Hiring has transformed. Syntax memorization is obsolete; prompt velocity, architectural reasoning, and rapid edge-case debugging dictate value. Our daily tournament benchmarks your speed against top talent in real-time.
                     </p>
@@ -916,14 +916,44 @@
 
     <div class="modal-overlay" id="race_modal_overlay" role="dialog" aria-modal="true" aria-labelledby="race_modal_title">
         <div class="auth-modal race-modal">
-            <div class="modal-header"><div><h3 class="modal-title" id="race_modal_title">Join today&apos;s AI Race</h3><p id="race_modal_meta">15 questions · 15 seconds each · accuracy first</p></div><button class="btn-modal-close" onclick="closeRaceModal()" aria-label="Close">&times;</button></div>
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title" id="race_modal_title">Join Today&apos;s Contest &ndash; <span id="race_modal_topic_inline" class="contest-topic-accent">Skill</span></h3>
+                    <p id="race_modal_meta" class="contest-modal-meta">15 rapid-fire questions &middot; 15s each &middot; Server-timed</p>
+                </div>
+                <button class="btn-modal-close" onclick="closeRaceModal()" aria-label="Close">&times;</button>
+            </div>
             <div id="race_intro">
-                <ul class="race-feature-list">
-                    <li>One verified attempt per day</li>
-                    <li>Server-timed answers with 2-second grace</li>
-                    <li>Champion card and certificate for #1</li>
-                </ul>
-                <button class="btn-primary-action" type="button" onclick="startRaceAttempt()">Continue to contest</button>
+                <div class="contest-brief-card">
+                    <div class="contest-topic-highlight">
+                        <span class="contest-topic-label">TODAY&apos;S TOPIC</span>
+                        <div class="contest-topic-name" id="race_modal_topic_name">Skill Focus</div>
+                    </div>
+                    <div class="contest-rules-grid">
+                        <div class="contest-rule-item">
+                            <span class="rule-icon">&#9201;</span>
+                            <div>
+                                <strong>15s Per Question</strong>
+                                <span>2-second grace period with auto-submit</span>
+                            </div>
+                        </div>
+                        <div class="contest-rule-item">
+                            <span class="rule-icon">&#128737;</span>
+                            <div>
+                                <strong>Single Attempt</strong>
+                                <span>One verified run per candidate daily</span>
+                            </div>
+                        </div>
+                        <div class="contest-rule-item">
+                            <span class="rule-icon">&#127942;</span>
+                            <div>
+                                <strong>Champion Card</strong>
+                                <span>Verified badge &amp; ranking for #1 finish</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary-action" id="race_start_btn" type="button" onclick="startRaceAttempt()">Continue to contest</button>
             </div>
             <div id="race_play" hidden><div class="race-progress"><span id="race_question_count">Question 1 of 15</span><strong id="race_timer">17</strong></div><div class="race-timer-track"><i id="race_timer_bar"></i></div><h4 id="race_question_text"></h4><div id="race_options" class="race-options"></div></div>
             <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><button class="btn-primary-action" type="button" onclick="showRaceLeaderboard()">View today&apos;s leaderboard</button></div>
@@ -931,7 +961,7 @@
         </div>
     </div>    <div class="modal-overlay" id="race_leaderboard_overlay" role="dialog" aria-modal="true" aria-labelledby="race_leaderboard_title">
         <div class="auth-modal race-leaderboard-modal">
-            <div class="modal-header"><div><h3 class="modal-title" id="race_leaderboard_title">Today&apos;s AI Race leaderboard</h3><p id="race_leaderboard_date">Live standings</p></div><button class="btn-modal-close" onclick="closeRaceLeaderboard()" aria-label="Close">&times;</button></div>
+            <div class="modal-header"><div><h3 class="modal-title" id="race_leaderboard_title">Today&apos;s Contest Leaderboard</h3><p id="race_leaderboard_date">Live standings</p></div><button class="btn-modal-close" onclick="closeRaceLeaderboard()" aria-label="Close">&times;</button></div>
             <div class="leaderboard-head"><span>Rank</span><span>Player</span><span>Score</span><span>Time</span></div>
             <div id="race_leaderboard_rows" class="leaderboard-rows" aria-live="polite"></div>
             <p class="race-status">Ranked by score, then total time, then earliest finish.</p>
