@@ -88,7 +88,7 @@ async def _groq_json(messages: list[dict[str, str]]) -> Any:
     key = os.getenv("GROQ_API_KEY", "")
     if not key:
         return []
-    payload = {"model": os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), "messages": messages, "temperature": 0.2, "response_format": {"type": "json_object"}}
+    payload = {"model": os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), "messages": messages, "temperature": 0.7, "response_format": {"type": "json_object"}}
     async with httpx.AsyncClient(timeout=25) as client:
         response = await client.post("https://api.groq.com/openai/v1/chat/completions", headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, json=payload)
         response.raise_for_status()
@@ -104,7 +104,12 @@ async def create_daily_quiz(db: Session, day: str) -> RaceDailyQuiz | None:
     avoid_hashes = _recent_question_hashes(db, HASH_WINDOW_DAYS)
 
     try:
-        prompt = f"""Create 20 easy multiple-choice quiz questions on {theme} for a daily tech contest. Return JSON {{\"questions\":[{{\"question\":\"...\",\"options\":[\"...\",\"...\",\"...\",\"...\"],\"answer_index\":0}}]}}. Exactly four options, one answer, no ambiguous questions."""
+        prompt = f"""Create 20 easy multiple-choice quiz questions on {theme} for a daily tech contest.
+Return JSON {{\"questions\":[{{\"question\":\"...\",\"options\":[\"...\",\"...\",\"...\",\"...\"],\"answer_index\":N}}]}}.
+Rules:
+- Exactly four options per question.
+- answer_index is the zero-based index (0,1,2, or 3) of the CORRECT option — vary it across questions, do NOT default every answer to 0.
+- No ambiguous or trick questions."""
         generated = (await _groq_json([{"role": "user", "content": prompt}])).get("questions", [])
         verifier_prompt = 'Solve these questions independently. Return JSON {"answers":[0,...]}; one zero-based answer index per question only.\n' + json.dumps(generated)
         verified = (await _groq_json([{"role": "user", "content": verifier_prompt}])).get("answers", [])
