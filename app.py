@@ -114,6 +114,10 @@ def privacy_policy_page():
     path = TEMPLATES_DIR / "privacy_policy.html"
     return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
 
+@app.get("/google8fd8ddad5942b8be.html", response_class=HTMLResponse)
+def google_verification():
+    return HTMLResponse(content="google-site-verification: google8fd8ddad5942b8be.html", status_code=200)
+
 @app.on_event("startup")
 async def start_periodic_retention_scheduler():
     """Periodic retention cleanup scheduler running in background every 12 hours."""
