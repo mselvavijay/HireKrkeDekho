@@ -1,7 +1,7 @@
 ﻿import os
 from pathlib import Path
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from database import engine, Base, init_db
 from routers import career, auth, race
@@ -117,6 +117,16 @@ def privacy_policy_page():
 @app.get("/google8fd8ddad5942b8be.html", response_class=HTMLResponse)
 def google_verification():
     return HTMLResponse(content="google-site-verification: google8fd8ddad5942b8be.html", status_code=200)
+
+@app.get("/robots.txt", response_class=Response)
+def robots_txt():
+    path = STATIC_DIR / "robots.txt"
+    return Response(content=path.read_text(encoding="utf-8"), media_type="text/plain")
+
+@app.get("/sitemap.xml", response_class=Response)
+def sitemap_xml():
+    path = STATIC_DIR / "sitemap.xml"
+    return Response(content=path.read_text(encoding="utf-8"), media_type="application/xml")
 
 @app.on_event("startup")
 async def start_periodic_retention_scheduler():
