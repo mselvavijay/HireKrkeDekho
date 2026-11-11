@@ -4,6 +4,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         let currentUserData = null;
         let googleClientId = "";
         let googleIdentityInitialized = false;
+        let _googleButtonRendered = false;
         let pendingAuthAction = null;
         /* ===== JOB CARDS PAGINATION STATE ===== */
         // Client-side pagination: 4 shown initially, then +2, then +2, then cute limit message.
@@ -29,13 +30,17 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         }
 
         window.addEventListener('DOMContentLoaded', async () => {
+            _restoreAdvisorContextFromCache();
             await initializeAuth();
-            if (currentUserId) {
-                await loadUserProfile();
+            if (window.location.pathname === '/consultation') {
+                openConsultation();
             }
-            await loadSessions();
-            if (currentSessionId) {
-                await loadSessionMessages(currentSessionId);
+            if (currentUserId) {
+                const parallel = [loadSessions(), loadUserProfile()];
+                if (currentSessionId) parallel.push(loadSessionMessages(currentSessionId));
+                await Promise.allSettled(parallel);
+            } else {
+                await loadSessions();
             }
         });
 
@@ -68,6 +73,22 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             }
         }
 
+        function _restoreAdvisorContextFromCache() {
+            const name   = localStorage.getItem('career_bot_user_name');
+            const email  = localStorage.getItem('career_bot_user_email');
+            const role   = localStorage.getItem('career_bot_user_role');
+            const exp    = localStorage.getItem('career_bot_user_exp');
+            const skills = localStorage.getItem('career_bot_user_skills');
+            const ctxName = document.getElementById('ctx_user_name');
+            if (ctxName && (name || email)) ctxName.textContent = name || email;
+            const ctxRole = document.getElementById('ctx_target_domain');
+            if (ctxRole && role) ctxRole.textContent = role;
+            const ctxExp = document.getElementById('ctx_experience');
+            if (ctxExp && exp) ctxExp.textContent = exp + ' years';
+            const ctxSkills = document.getElementById('ctx_skills');
+            if (ctxSkills && skills) ctxSkills.textContent = skills;
+        }
+
         function waitForGoogleIdentity(attempts = 20) {
             if (googleClientId && window.google && google.accounts && google.accounts.id) {
                 setupGoogleIdentity(googleClientId);
@@ -88,6 +109,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         }
 
         function renderGoogleLoginButton() {
+            if (_googleButtonRendered) return;
             const slot = document.getElementById('modal_google_btn_slot');
             if (!slot || !googleIdentityInitialized) return;
             slot.innerHTML = '';
@@ -97,6 +119,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 text: 'continue_with',
                 shape: 'pill'
             });
+            _googleButtonRendered = true;
         }
 
         function requireAuthentication(continuation) {
@@ -167,6 +190,9 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             if (user.name) localStorage.setItem('career_bot_user_name', user.name);
             if (user.email) localStorage.setItem('career_bot_user_email', user.email);
             if (user.picture_url) localStorage.setItem('career_bot_user_pic', user.picture_url);
+            if (user.current_role) localStorage.setItem('career_bot_user_role', user.current_role);
+            if (user.years_of_experience) localStorage.setItem('career_bot_user_exp', user.years_of_experience);
+            if (user.skills) localStorage.setItem('career_bot_user_skills', user.skills);
 
             renderUserAccountBadge(user);
             refreshRaceResultCard();
@@ -681,11 +707,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             document.getElementById('premium_modal_overlay').classList.remove('open');
         }
         function openConsultation() {
-            if (!requireAuthentication(openConsultation)) return;
             if (window.location.pathname !== '/consultation') {
+                // navigating from another page — guard then redirect
+                if (!requireAuthentication(openConsultation)) return;
                 window.location.assign('/consultation');
                 return;
             }
+            // already on /consultation: auth resolved by DOMContentLoaded before this call
+            if (!currentUserId) { requireAuthentication(openConsultation); return; }
             document.body.classList.add('consultation-active');
             const shell = document.querySelector('.consultation-shell');
             if (shell) shell.setAttribute('aria-hidden', 'false');
@@ -1161,13 +1190,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         }
         loadRaceStatus();
         refreshRaceResultCard();
-        if (window.location.pathname === '/consultation') {
-            if (document.readyState === 'loading') {
-                window.addEventListener('DOMContentLoaded', openConsultation);
-            } else {
-                openConsultation();
-            }
-        }
+
 
         /* ===== ANTIGRAVITY-INSPIRED CURSOR BACKGROUND INTERACTION ===== */
         (function initAntigravityCursor() {
