@@ -854,7 +854,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
                 const initialVisible = Math.min(JOB_PAGE_INITIAL, batchJobs.length);
                 _jobPageState.visibleCount = initialVisible;
-                _jobPageState.sessionTotal += initialVisible;
+                _jobPageState.sessionTotal = initialVisible;
 
                 const visibleNow = batchJobs.slice(0, initialVisible);
                 const cardsHtml  = visibleNow.map(job => _buildJobCardHtml(job)).join('');

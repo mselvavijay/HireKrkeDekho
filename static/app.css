@@ -3434,7 +3434,9 @@
 
         /* Dedicated consultation experience */
         .consultation-shell { display: none; }
-        body.consultation-active { overflow: hidden; }
+        body.consultation-active,
+        html:has(body.consultation-active) { overflow: hidden !important; }
+        body.consultation-active > *:not(.consultation-shell) { display: none !important; }
         body.consultation-active .site-header { display: none; }
         body.consultation-active .consultation-shell {
             display: block;
@@ -4906,3 +4908,4 @@
     box-shadow: 0 0 8px #fbbf24 !important;
     animation: amber-pulse 2s infinite !important;
 }
+
