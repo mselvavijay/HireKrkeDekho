@@ -120,10 +120,8 @@ def google_verification():
 
 @app.get("/BingSiteAuth.xml", response_class=Response)
 def bing_verification():
-    return Response(content="<?xml version=""1.0""?>
-<users>
-	<user>5E271E0F74B0DBE3C281B0B834E0D541</user>
-</users>", media_type="application/xml")
+    path = BASE_DIR / "BingSiteAuth.xml"
+    return Response(content=path.read_text(encoding="utf-8"), media_type="application/xml")
 
 @app.get("/robots.txt", response_class=Response)
 def robots_txt():
