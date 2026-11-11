@@ -118,6 +118,13 @@ def privacy_policy_page():
 def google_verification():
     return HTMLResponse(content="google-site-verification: google8fd8ddad5942b8be.html", status_code=200)
 
+@app.get("/BingSiteAuth.xml", response_class=Response)
+def bing_verification():
+    return Response(content="<?xml version=""1.0""?>
+<users>
+	<user>5E271E0F74B0DBE3C281B0B834E0D541</user>
+</users>", media_type="application/xml")
+
 @app.get("/robots.txt", response_class=Response)
 def robots_txt():
     path = STATIC_DIR / "robots.txt"
@@ -127,6 +134,11 @@ def robots_txt():
 def sitemap_xml():
     path = STATIC_DIR / "sitemap.xml"
     return Response(content=path.read_text(encoding="utf-8"), media_type="application/xml")
+
+@app.get("/llms.txt", response_class=Response)
+def llms_txt():
+    path = STATIC_DIR / "llms.txt"
+    return Response(content=path.read_text(encoding="utf-8"), media_type="text/plain; charset=utf-8")
 
 @app.on_event("startup")
 async def start_periodic_retention_scheduler():

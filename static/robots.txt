@@ -2,9 +2,9 @@ User-agent: *
 Allow: /
 Allow: /consultation
 Allow: /privacy-policy
+Allow: /llms.txt
 Disallow: /race/admin
 Disallow: /auth/
 Disallow: /api/
 
 Sitemap: https://hirekrkedekho.vercel.app/sitemap.xml
-

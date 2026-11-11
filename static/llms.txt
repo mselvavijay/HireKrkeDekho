@@ -1,0 +1,15 @@
+# HireKrkeDekho
+
+> HireKrkeDekho is an AI-powered engineering career advisory, technical benchmarking, and daily coding contest platform designed for software engineers, developers, and tech professionals in India.
+
+## Core Capabilities
+- **Tri-Factor Matching Engine**: Calibrates career recommendations and real-time open roles across three dimensions: Degree, Years of Experience, and Core Technical Stack.
+- **AI Career Advisor**: Conversational advisor that provides structured role analysis, salary bands (LPA), required skills, and tailored 3-week preparation guides for Indian tech hubs (Bangalore, Hyderabad, Pune, Gurgaon, Noida, Mumbai).
+- **Daily AI Race**: Daily 15-question rapid-fire technical benchmarking contest testing algorithms, data structures, and system design with server-timed anti-cheat and live leaderboards.
+
+## Key URLs
+- Home & Platform Overview: https://hirekrkedekho.vercel.app/
+- AI Career Advisor: https://hirekrkedekho.vercel.app/consultation
+- Daily Tech Contest: https://hirekrkedekho.vercel.app/#ai_race
+- Privacy Policy: https://hirekrkedekho.vercel.app/privacy-policy
+
