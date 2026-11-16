@@ -64,7 +64,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261116-speed-fix">
+<link rel="stylesheet" href="/static/app.css?v=20261116-contest-grid">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
 </head>
@@ -705,78 +705,41 @@
 
     <section class="ai-race-section" id="ai_race" aria-label="Daily Contest Arena">
         <div class="race-arena-container">
-            <!-- Header Briefing -->
-            <div class="race-arena-header">
-                <h2 class="race-arena-title">Daily Contest</h2>
-                <p class="race-arena-copy">15 rapid-fire engineering challenges. 15 seconds on the clock. Put your real problem-solving speed to the test and seize today&apos;s #1 spot on the leaderboard.</p>
-                
-                <div class="race-spec-row">
-                    <div class="race-spec-pill">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        <span>15s Per Question</span>
-                    </div>
-                    <div class="race-spec-pill">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        <span>Single Verified Attempt</span>
-                    </div>
-                    <div class="race-spec-pill">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        <span>Accuracy-First Scoring</span>
-                    </div>
-                </div>
-
-                <div class="race-actions-row">
-                    <button class="btn-primary-hero btn-race-start" type="button" onclick="openRaceModal()" aria-label="Enter Daily Contest">
-                        <span>Enter Contest</span>
-                        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                    <button class="btn-secondary-hero btn-race-standings" type="button" onclick="showRaceLeaderboard()" aria-label="View Leaderboard">
-                        <span>Leaderboard</span>
-                    </button>
-                    <span class="race-seat-label" id="race_seat_status"></span>
-                    <span id="race_contest_date" hidden>Today</span>
-                </div>
-            </div>
-
-            <!-- Two-Column Grid: Champion Spotlight & Arena Rules -->
-            <div class="race-arena-grid">
-                <!-- 1. Champion Podium Card -->
-                <div class="champion-spotlight-card" aria-label="Leaderboard Champion">
+            <div class="race-arena-2col">
+                <!-- Column 1: Header, Description & Actions -->
+                <div class="race-arena-header">
+                    <h2 class="race-arena-title">Daily Contest</h2>
+                    <p class="race-arena-copy">15 rapid-fire engineering challenges. 15 seconds on the clock. Put your real problem-solving speed to the test and seize today&apos;s #1 spot on the leaderboard.</p>
                     
-                    <div class="champion-card-top">
-                        <div class="champion-badge-pill">
-                            <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:#94a3b8;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                            <span>Current Leader</span>
+                    <div class="race-spec-row">
+                        <div class="race-spec-pill">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>15s Per Question</span>
                         </div>
-                        <span class="champion-date-tag" id="race_result_date">Contest Date</span>
-                    </div>
-                    
-                    <div class="champion-main-info">
-                        <div class="champion-avatar-box">#1</div>
-                        <div class="champion-details">
-                            <h3 class="champion-name" id="race_result_winner">Awaiting Today's Winner</h3>
-                            <p class="champion-subtext">First place claims verified recognition and championship badge.</p>
+                        <div class="race-spec-pill">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <span>Single Verified Attempt</span>
                         </div>
-                    </div>
-
-                    <div class="champion-stats-grid">
-                        <div class="champ-stat-box">
-                            <span class="champ-stat-lbl">Score</span>
-                            <strong class="champ-stat-val" id="race_result_score">&mdash;</strong>
-                        </div>
-                        <div class="champ-stat-divider"></div>
-                        <div class="champ-stat-box">
-                            <span class="champ-stat-lbl">Total Time</span>
-                            <strong class="champ-stat-val" id="race_result_time">&mdash;</strong>
+                        <div class="race-spec-pill">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <span>Accuracy-First Scoring</span>
                         </div>
                     </div>
 
-                    <div class="champion-card-footer">
-                        <span class="champ-footer-note">Ranked strictly by verified score, total completion time, then earliest submission.</span>
+                    <div class="race-actions-row">
+                        <button class="btn-primary-hero btn-race-start" type="button" onclick="openRaceModal()" aria-label="Enter Daily Contest">
+                            <span>Enter Contest</span>
+                            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <button class="btn-secondary-hero btn-race-standings" type="button" onclick="showRaceLeaderboard()" aria-label="View Leaderboard">
+                            <span>Leaderboard</span>
+                        </button>
+                        <span class="race-seat-label" id="race_seat_status"></span>
+                        <span id="race_contest_date" hidden>Today</span>
                     </div>
                 </div>
 
-                <!-- 2. Arena Rules -->
+                <!-- Column 2: Tournament Rules -->
                 <div class="arena-rules-card" aria-label="Arena Rules">
                     <h3 class="rules-card-title">Tournament Rules</h3>
                     <ul class="arena-rules-list">
@@ -1079,7 +1042,7 @@
     </div>
 
     <!-- Application Script -->
-    <script src="/static/app.js?v=20261116-speed-fix" defer></script>
+    <script src="/static/app.js?v=20261116-contest-grid" defer></script>
 </body>
 
     <!-- Toast Container -->
