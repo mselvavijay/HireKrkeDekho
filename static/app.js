@@ -1019,7 +1019,6 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                         <div class="msg-card-assistant">
                             <div class="msg-assistant-meta">
                                 <span class="assistant-name">Career Advisor</span>
-                                <span class="assistant-tag">Verified Guidance</span>
                             </div>
                             <div class="msg-text-main ${isLimitText ? 'daily-limit-text' : ''}">${escapeHtml(message)}</div>
                             ${insightsHtml}
@@ -1147,10 +1146,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                         <div class="job-card-top">
                             <div class="job-role-title">${escapeHtml(job.title)}</div>
                             ${job.salary_range ? `
-                                <div class="job-salary-tag">
-                                    <span class="currency-symbol">&#8377;</span>
-                                    <span>${escapeHtml(job.salary_range.replace(/^\$+\s*/, ''))}</span>
-                                </div>` : ''}
+                                <div class="job-salary-tag">&#8377;&nbsp;${escapeHtml(job.salary_range.replace(/^\$+\s*/, ''))}</div>` : ''}
                         </div>
                         <div class="job-company-meta">
                             <span class="meta-item">India &middot; ${escapeHtml(job.job_type || 'Hybrid')}</span>

@@ -1,3 +1,16 @@
+
+        /* Accessible hidden element utility */
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
 :root {
             --bg-base: #06070c;
             --bg-surface: #0a0e19;
@@ -34,7 +47,7 @@
             padding: 0;
         }
 
-        /* ===== GLOBAL CUSTOM DARK SCROLLBAR (Eliminates white Windows strip) ===== */
+        /* ===== GLOBAL CUSTOM DARK SCROLLBAR (Minimalist, subtle, non-intrusive) ===== */
         html {
             scroll-behavior: smooth;
             -webkit-text-size-adjust: 100%;
@@ -43,30 +56,29 @@
             overflow-x: hidden;
             width: 100%;
             scrollbar-width: thin;
-            scrollbar-color: rgba(76, 141, 255, 0.35) #060b16;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
         }
 
         ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+            width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #060b16;
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(76, 141, 255, 0.32);
+            background: rgba(255, 255, 255, 0.16);
             border-radius: 999px;
-            border: 2px solid #060b16;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(76, 141, 255, 0.65);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         ::-webkit-scrollbar-corner {
-            background: #060b16;
+            background: transparent;
         }
 
         body {
@@ -2848,13 +2860,15 @@
         .job-salary-tag {
             display: inline-flex;
             align-items: center;
-            gap: 2px;
+            white-space: nowrap !important;
+            word-break: keep-all !important;
+            flex-shrink: 0;
             font-size: 11.5px;
             font-weight: 700;
             color: #60A5FA;
             background: rgba(31, 107, 255, 0.1);
             border: 1px solid rgba(76, 141, 255, 0.22);
-            padding: 2px 7px;
+            padding: 3px 8px;
             border-radius: 5px;
             margin-bottom: 8px;
             align-self: flex-start;
@@ -5122,3 +5136,52 @@
     animation: amber-pulse 2s infinite !important;
 }
 
+
+
+        /* Profile Modal Modern Compact Layout */
+        #profile_modal_overlay .auth-modal {
+            max-width: 520px;
+            max-height: 90vh;
+            padding: 24px 28px;
+            border-radius: 16px;
+            background: #0B1220;
+            border: 1px solid rgba(76, 141, 255, 0.22);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+        }
+
+        #profile_modal_overlay .auth-modal::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        #profile_modal_overlay .auth-modal::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+        }
+
+        #profile_modal_overlay .field-group {
+            margin-bottom: 10px;
+        }
+
+        #profile_modal_overlay .field-group label {
+            font-size: 0.73rem;
+            font-weight: 600;
+            color: #94A3B8;
+            margin-bottom: 3px;
+            letter-spacing: 0.02em;
+        }
+
+        #profile_modal_overlay .field-group input {
+            padding: 7px 11px;
+            font-size: 13.5px;
+            border-radius: 8px;
+            background: #080E1A;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            color: #F1F5F9;
+        }
+
+        #profile_modal_overlay .field-group input:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
