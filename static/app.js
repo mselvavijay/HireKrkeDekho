@@ -31,16 +31,19 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
         window.addEventListener('DOMContentLoaded', async () => {
             _restoreAdvisorContextFromCache();
-            await initializeAuth();
-            if (window.location.pathname === '/consultation') {
+            initializeAuth(); // Non-blocking background auth initialization
+
+            const isConsultation = window.location.pathname === '/consultation';
+            if (isConsultation) {
                 openConsultation();
-            }
-            if (currentUserId) {
-                const parallel = [loadSessions(), loadUserProfile()];
-                if (currentSessionId) parallel.push(loadSessionMessages(currentSessionId));
-                await Promise.allSettled(parallel);
-            } else {
-                await loadSessions();
+                if (currentUserId) {
+                    const parallel = [loadSessions(), loadUserProfile()];
+                    if (currentSessionId) parallel.push(loadSessionMessages(currentSessionId));
+                    await Promise.allSettled(parallel);
+                }
+            } else if (currentUserId) {
+                // Background profile sync for account badge on main page (does not block or load chat history)
+                loadUserProfile();
             }
         });
 

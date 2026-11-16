@@ -72,7 +72,9 @@ async def security_and_ratelimit_middleware(request: Request, call_next):
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
-    if path.startswith("/race/admin"):
+    if path.startswith("/static/"):
+        response.headers["Cache-Control"] = "public, max-age=86400, stale-while-revalidate=604800"
+    elif path.startswith("/race/admin"):
         response.headers["Cache-Control"] = "no-store"
     return response
 

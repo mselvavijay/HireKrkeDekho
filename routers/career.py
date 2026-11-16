@@ -25,6 +25,7 @@ from services.response_cache import (
 
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from database import get_db
 from models import models
@@ -123,8 +124,6 @@ def list_sessions(
     db: Session = Depends(get_db)
 ):
     """List recent conversation sessions for the authenticated candidate only."""
-    cleanup_expired_conversations(db)
-
     sessions = (
         db.query(models.ConversationSession)
         .filter(models.ConversationSession.user_id == auth_user["user_id"])
@@ -132,17 +131,27 @@ def list_sessions(
         .limit(20)
         .all()
     )
+    if not sessions:
+        return []
 
-    result = []
-    for s in sessions:
-        msg_count = db.query(models.ChatMessage).filter(models.ChatMessage.session_id == s.id).count()
-        result.append(schemas.SessionSummaryResponse(
+    # Single aggregation query for message counts instead of N+1 database roundtrips
+    session_ids = [s.id for s in sessions]
+    counts = dict(
+        db.query(models.ChatMessage.session_id, func.count(models.ChatMessage.id))
+        .filter(models.ChatMessage.session_id.in_(session_ids))
+        .group_by(models.ChatMessage.session_id)
+        .all()
+    )
+
+    return [
+        schemas.SessionSummaryResponse(
             id=s.id,
             title=s.title or "Career Discussion",
             created_at=s.created_at,
-            message_count=msg_count
-        ))
-    return result
+            message_count=counts.get(s.id, 0)
+        )
+        for s in sessions
+    ]
 
 @router.get("/sessions/{session_id}/messages")
 def get_session_messages(
