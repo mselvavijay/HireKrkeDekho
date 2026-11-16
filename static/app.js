@@ -754,19 +754,51 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             const title = job.title || 'Role';
             const guide = Array.isArray(job.prep_guide) ? job.prep_guide : [];
 
-            document.getElementById('roadmap_modal_title').textContent = 'Free 3-Week Roadmap';
+            document.getElementById('roadmap_modal_title').textContent = '3-Week Preparation Roadmap';
             document.getElementById('roadmap_modal_subtitle').textContent = title;
             const list = document.getElementById('roadmap_modal_list');
 
             if (guide.length === 0) {
-                list.innerHTML = `<li style="padding:14px 0; color:var(--text-secondary,#94a3b8);">
-                    No roadmap was generated for this role. Try starting a consultation
+                list.innerHTML = `<div class="roadmap-empty-state">
+                    No roadmap was generated for this role yet. Try starting a consultation
                     and asking: <em>"Give me a 3-week prep guide for ${escapeHtml(title)}."</em>
-                </li>`;
+                </div>`;
             } else {
                 list.innerHTML = guide.map((item, index) => {
-                    const bullets = String(item).split(/\s*[,;]\s*/).filter(Boolean);
-                    return `<li><span class="roadmap-week">Week ${index + 1}</span><ul>${bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul></li>`;
+                    // Strip any leading "Week N:" or "Week N -" redundant prefix from LLM string
+                    let cleanItem = String(item).replace(/^Week\s*\d+\s*[:\-–]\s*/i, '').trim();
+
+                    // Split into distinct milestones/sub-tasks on commas, semicolons, or " and "
+                    const rawParts = cleanItem.split(/(?:;|and|,\s*(?=[A-Za-z0-9]))/i);
+
+                    const bullets = rawParts
+                        .map(p => p.trim())
+                        .filter(p => p.length > 0)
+                        .map(p => {
+                            // Strip leftover punctuation or "and " at beginning
+                            let s = p.replace(/^and\s+/i, '').replace(/^[.,\-–]\s*/, '').trim();
+                            // Ensure proper capitalization of first letter
+                            if (s.length > 0) {
+                                s = s.charAt(0).toUpperCase() + s.slice(1);
+                            }
+                            return s;
+                        })
+                        .filter(p => p.length > 0);
+
+                    const bulletsHtml = (bullets.length > 0 ? bullets : [cleanItem])
+                        .map(b => `<li>${escapeHtml(b)}</li>`)
+                        .join('');
+
+                    return `
+                        <div class="roadmap-week-card">
+                            <div class="roadmap-card-header">
+                                <span class="roadmap-week-badge">Week ${index + 1}</span>
+                            </div>
+                            <ul class="roadmap-card-bullets">
+                                ${bulletsHtml}
+                            </ul>
+                        </div>
+                    `;
                 }).join('');
             }
             document.getElementById('roadmap_modal_overlay').classList.add('open');

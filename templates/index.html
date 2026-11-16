@@ -64,7 +64,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261116-ux-perf">
+<link rel="stylesheet" href="/static/app.css?v=20261116-roadmap-v2">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
 </head>
@@ -942,9 +942,16 @@
         </div>
     </div>
     <div class="modal-overlay roadmap-modal" id="roadmap_modal_overlay" role="dialog" aria-modal="true" aria-labelledby="roadmap_modal_title">
-        <div class="auth-modal">
-            <div class="modal-header"><div><h3 class="modal-title" id="roadmap_modal_title">Free 3-Week Roadmap</h3><p id="roadmap_modal_subtitle" style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;"></p></div><button class="btn-modal-close" onclick="closeRoadmapModal()" aria-label="Close">&times;</button></div>
-            <ol class="roadmap-list" id="roadmap_modal_list"></ol>
+        <div class="auth-modal roadmap-modal-dialog">
+            <div class="roadmap-header">
+                <div class="roadmap-header-info">
+                    <span class="roadmap-kicker">Curated Career Guide</span>
+                    <h3 class="roadmap-title" id="roadmap_modal_title">3-Week Preparation Roadmap</h3>
+                    <p class="roadmap-subtitle" id="roadmap_modal_subtitle"></p>
+                </div>
+                <button class="btn-modal-close roadmap-close" onclick="closeRoadmapModal()" aria-label="Close">&times;</button>
+            </div>
+            <div class="roadmap-grid-container" id="roadmap_modal_list"></div>
         </div>
     </div>
     <!-- Candidate Profile Modal (Opens after login and via "Update Profile & Skills") -->
@@ -1042,7 +1049,7 @@
     </div>
 
     <!-- Application Script -->
-    <script src="/static/app.js?v=20261116-ux-perf" defer></script>
+    <script src="/static/app.js?v=20261116-roadmap-v2" defer></script>
 </body>
 
     <!-- Toast Container -->
