@@ -1012,11 +1012,15 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
                 const isLimitText = message.includes('Daily limit reached');
                 row.innerHTML = `
-                    <div class="msg-sender-icon hk-bot-avatar">
+                    <div class="msg-sender-icon hk-bot-avatar" title="HireKrkeDekho AI Advisor">
                         <img src="/static/bot-logo.png" alt="HK" class="bot-logo-img">
                     </div>
                     <div class="msg-body-wrapper">
                         <div class="msg-card-assistant">
+                            <div class="msg-assistant-meta">
+                                <span class="assistant-name">Career Advisor</span>
+                                <span class="assistant-tag">Verified Guidance</span>
+                            </div>
                             <div class="msg-text-main ${isLimitText ? 'daily-limit-text' : ''}">${escapeHtml(message)}</div>
                             ${insightsHtml}
                             ${jobsHtml}
@@ -1139,27 +1143,27 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             const jid = job._registryId;
             return `
                 <div class="job-card">
-                    <div>
+                    <div class="job-card-body">
                         <div class="job-card-top">
                             <div class="job-role-title">${escapeHtml(job.title)}</div>
+                            ${job.salary_range ? `
+                                <div class="job-salary-tag">
+                                    <span class="currency-symbol">&#8377;</span>
+                                    <span>${escapeHtml(job.salary_range.replace(/^\$+\s*/, ''))}</span>
+                                </div>` : ''}
                         </div>
                         <div class="job-company-meta">
                             <span class="meta-item">India &middot; ${escapeHtml(job.job_type || 'Hybrid')}</span>
                         </div>
-                        ${job.salary_range ? `
-                            <div class="job-salary-tag">
-                                <span class="currency-symbol">&#8377;</span>
-                                <span>${escapeHtml(job.salary_range.replace(/^\$+\s*/, ''))}</span>
-                            </div>` : ''}
                         ${job.description ? `<div class="job-desc-snippet">${escapeHtml(job.description)}</div>` : ''}
                         ${skillsPills ? `<div class="job-skills-list">${skillsPills}</div>` : ''}
                     </div>
                     <div class="job-card-actions">
-                        <button type="button" class="btn-apply-job btn-roadmap"
+                        <button type="button" class="btn-job-action btn-roadmap"
                                 onclick="openRoadmapModal('${jid}')">
-                            Free 3-Week Roadmap
+                            3-Week Roadmap
                         </button>
-                        <a href="${escapeHtml(applyUrl)}" target="_blank" rel="noopener noreferrer" class="btn-apply-job">
+                        <a href="${escapeHtml(applyUrl)}" target="_blank" rel="noopener noreferrer" class="btn-job-action btn-linkedin">
                             <span>View on LinkedIn</span>
                             <svg class="icon icon-sm" viewBox="0 0 24 24">
                                 <path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
