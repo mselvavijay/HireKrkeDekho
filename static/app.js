@@ -331,7 +331,12 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
         /* ===== PROFILE MODAL ===== */
         function openProfileModal() {
-            document.getElementById('profile_modal_overlay').classList.add('open');
+            if (!requireAuthentication(openProfileModal)) return;
+            const overlay = document.getElementById('profile_modal_overlay');
+            if (overlay) overlay.classList.add('open');
+            if (currentUserId) {
+                loadUserProfile();
+            }
         }
 
         function closeProfileModal() {
@@ -358,8 +363,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 if (res.ok) {
                     const data = await res.json();
                     if (data.name) localStorage.setItem('career_bot_user_name', data.name);
+                    if (data.email) localStorage.setItem('career_bot_user_email', data.email);
+                    if (data.current_role) localStorage.setItem('career_bot_user_role', data.current_role);
+                    if (data.years_of_experience) localStorage.setItem('career_bot_user_exp', data.years_of_experience);
+                    if (data.skills) localStorage.setItem('career_bot_user_skills', data.skills);
                     renderUserAccountBadge(data);
+                    populateProfileForm(data);
                     closeProfileModal();
+                    if (typeof showToast === 'function') showToast('Profile and skills updated successfully!', 'success');
                 }
             } catch (err) {
                 console.error('Error saving profile:', err);

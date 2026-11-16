@@ -3264,7 +3264,7 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.78);
             backdrop-filter: blur(6px);
-            z-index: 200;
+            z-index: 400;
             align-items: center;
             justify-content: center;
             padding: 16px;
@@ -3461,7 +3461,9 @@
         .consultation-shell { display: none; }
         body.consultation-active,
         html:has(body.consultation-active) { overflow: hidden !important; }
-        body.consultation-active > *:not(.consultation-shell) { display: none !important; }
+        body.consultation-active > *:not(.consultation-shell):not(.modal-overlay):not(.toast-container) { display: none !important; }
+        body.consultation-active > .modal-overlay.open { display: flex !important; z-index: 400; }
+        body.consultation-active > .toast-container { display: flex !important; z-index: 500; }
         body.consultation-active .site-header { display: none; }
         body.consultation-active .consultation-shell {
             display: block;
