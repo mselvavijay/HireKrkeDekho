@@ -105,14 +105,16 @@ def get_linkedin_experience_code(exp_years: int) -> str:
     else:
         return "4,5"
 
-def build_filtered_linkedin_url(title: str, exp_years: int = 0) -> str:
+def build_filtered_linkedin_url(title: str, exp_years: int = 0, is_remote: bool = False) -> str:
     clean_title = title.split(".", 1)[-1].strip() if "." in title[:3] else title.strip()
     encoded = clean_title.replace(" ", "+")
     exp_code = get_linkedin_experience_code(exp_years)
+    remote_param = "&f_WT=2" if is_remote else ""
     # f_TPR=r604800: posted past week (7 days) strictly
     # f_E: LinkedIn experience level filter
+    # f_WT=2: Remote work type on LinkedIn
     # location=India
-    return f"https://www.linkedin.com/jobs/search/?keywords={encoded}&location=India&f_TPR=r604800&f_E={exp_code}"
+    return f"https://www.linkedin.com/jobs/search/?keywords={encoded}&location=India&f_TPR=r604800&f_E={exp_code}{remote_param}"
 
 def format_job_card(title: str, category: str = "Technology", exp_years: int = 0, index: int = 0) -> dict:
     clean_title = title.split(".", 1)[-1].strip() if "." in title[:3] else title.strip()
@@ -188,8 +190,10 @@ def sanitize_and_enrich_jobs(parsed: dict, user_profile: Optional[Dict[str, Any]
                 loc = str(j.get('location') or 'India').strip()
                 if not ('india' in loc.lower() or any(h in loc.lower() for h in ['bangalore', 'bengaluru', 'hyderabad', 'pune', 'mumbai', 'delhi', 'gurgaon', 'gurugram', 'noida', 'chennai'])):
                     continue
-                location = loc
-                job_type = "Remote" if "remote" in str(j.get("job_type", "")).lower() else "Hybrid"
+                user_requested_remote = "remote" in conversation_text.lower()
+                is_remote_job = "remote" in str(j.get("job_type", "")).lower() or user_requested_remote
+                job_type = "Remote" if is_remote_job else "Hybrid"
+                location = "India (Remote)" if is_remote_job else loc
                 salary = "5 - 9 LPA" if exp_years == 0 else ("8 - 16 LPA" if exp_years <= 3 else ("18 - 32 LPA" if exp_years <= 7 else "35 - 60 LPA"))
                 skills = j.get("skills_required") or [title]
                 desc = j.get("description") or f"Active position for {title} in India."
@@ -202,7 +206,7 @@ def sanitize_and_enrich_jobs(parsed: dict, user_profile: Optional[Dict[str, Any]
                         f"Week 3: System Design, technical mock interviews, and scenario-based problem solving."
                     ]
 
-                apply_url = build_filtered_linkedin_url(title, exp_years)
+                apply_url = build_filtered_linkedin_url(title, exp_years, is_remote=is_remote_job)
 
                 enriched_jobs.append({
                     "title": title,

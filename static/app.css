@@ -2234,13 +2234,13 @@
             width: 100%;
         }
 
-        /* 3-Column SaaS Layout: 260px Left Nav | 1fr Center Conversation | 290px Context Rail */
+        /* 3-Column SaaS Layout: 210px Left Nav | 1fr Center Conversation | 290px Context Rail */
         .workspace-frame {
             font-family: var(--consult-font);
             background: var(--consult-bg);
             color: var(--consult-text);
             display: grid;
-            grid-template-columns: 260px 1fr 290px;
+            grid-template-columns: 210px 1fr 290px;
             height: 100vh;
             min-height: 0;
             max-height: 100vh;
@@ -2490,21 +2490,22 @@
         .hk-bot-avatar {
             width: 32px;
             height: 32px;
-            border-radius: 8px;
-            background: var(--consult-surface);
-            border: 1px solid var(--consult-border);
+            border-radius: 50%;
+            background: transparent;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             overflow: hidden;
+            box-shadow: none;
         }
 
         .bot-logo-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 7px;
+            border-radius: 50%;
             display: block;
         }
 
@@ -2551,15 +2552,14 @@
             flex-direction: column;
             align-items: center;
             scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
         }
 
         .center-body-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .center-body-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
+            display: none;
+            width: 0;
+            height: 0;
         }
 
         /* 3. CENTER BODY: EMPTY STATE (Editorial, clean, generous whitespace) */
@@ -2686,7 +2686,9 @@
         .message-row.assistant .hk-bot-avatar {
             width: 30px;
             height: 30px;
-            border-radius: 7px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
             margin-top: 2px;
         }
 
@@ -5184,4 +5186,25 @@
         #profile_modal_overlay .field-group input:focus {
             border-color: #3B82F6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+
+        /* Daily Contest & Leaderboard Clean UX - Hide distracting scrollbars */
+        .ai-race-section,
+        .race-arena-container,
+        .arena-rules-card,
+        .race-modal,
+        .race-leaderboard-modal {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        .ai-race-section::-webkit-scrollbar,
+        .race-arena-container::-webkit-scrollbar,
+        .arena-rules-card::-webkit-scrollbar,
+        .race-modal::-webkit-scrollbar,
+        .race-leaderboard-modal::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
         }
