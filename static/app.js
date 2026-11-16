@@ -489,6 +489,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 const stream = document.getElementById('messages_stream');
                 stream.innerHTML = '';
 
+                _jobPageState.sessionTotal = 0;
                 messages.forEach(m => {
                     if (m.role === 'user') {
                         renderUserMessage(m.content);
@@ -499,7 +500,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                             explanation: m.explanation,
                             job_titles: m.job_titles,
                             open_jobs: m.open_jobs
-                        });
+                        }, true);
                     }
                 });
                 scrollStreamToBottom();
@@ -892,7 +893,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             updateConversationVisibility();
         }
 
-        function renderAssistantMessage(message, extra = {}) {
+        function renderAssistantMessage(message, extra = {}, isHistoryReplay = false) {
             const stream = document.getElementById('messages_stream');
             const row = document.createElement('div');
             row.className = 'message-row assistant';
@@ -915,31 +916,34 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     _jobRegistry[jid] = job;
                 });
 
-                // Reset pagination state for this new batch
+                // Reset pagination state for this batch
                 _jobPageState.allJobs      = batchJobs;
                 _jobPageState.visibleCount = 0;
                 _jobPageState.gridEl       = null;
                 _jobPageState.footerEl     = null;
-                // sessionTotal carries forward (accumulates across "Show More" presses)
 
                 const initialVisible = Math.min(JOB_PAGE_INITIAL, batchJobs.length);
                 _jobPageState.visibleCount = initialVisible;
-                _jobPageState.sessionTotal = initialVisible;
+                if (!isHistoryReplay) {
+                    _jobPageState.sessionTotal = (_jobPageState.sessionTotal || 0) + initialVisible;
+                }
 
                 const visibleNow = batchJobs.slice(0, initialVisible);
                 const cardsHtml  = visibleNow.map(job => _buildJobCardHtml(job)).join('');
 
                 const hasMore = batchJobs.length > initialVisible;
-                const overLimit = _jobPageState.sessionTotal >= JOB_PAGE_MAX;
+                const overLimit = (_jobPageState.sessionTotal || 0) >= JOB_PAGE_MAX;
                 const footerId = 'jobs_footer_' + Date.now();
 
                 let footerHtml;
                 if (extra.daily_limit_reached || extra.remaining_requests === 0) {
                     footerHtml = _buildLimitBanner();
-                } else if (!hasMore || overLimit) {
+                } else if (hasMore && !overLimit) {
+                    footerHtml = `<button type="button" class="btn-show-more-jobs" id="${footerId}" onclick="showMoreJobs('${footerId}')">Show More Openings (+2)</button>`;
+                } else if (overLimit) {
                     footerHtml = _buildLimitBanner();
                 } else {
-                    footerHtml = `<button type="button" class="btn-show-more-jobs" id="${footerId}" onclick="showMoreJobs('${footerId}')">Show More Openings (+2)</button>`;
+                    footerHtml = '';
                 }
 
                 jobsHtml = `
@@ -1121,7 +1125,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     <div class="job-card-actions">
                         <button type="button" class="btn-apply-job btn-roadmap"
                                 onclick="openRoadmapModal('${jid}')">
-                            📋 Free 3-Week Roadmap
+                            Free 3-Week Roadmap
                         </button>
                         <a href="${escapeHtml(applyUrl)}" target="_blank" rel="noopener noreferrer" class="btn-apply-job">
                             <span>View on LinkedIn</span>
