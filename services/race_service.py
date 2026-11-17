@@ -41,7 +41,15 @@ IST = timezone(timedelta(hours=5, minutes=30))
 QUESTION_SECONDS = 15
 GRACE_SECONDS = 2
 QUESTION_COUNT = 15
-THEMES = ("Python fundamentals", "SQL", "JavaScript", "Data structures", "Git and Linux")
+THEMES = (
+    "Python fundamentals",
+    "SQL",
+    "JavaScript",
+    "Data structures",
+    "Git and Linux",
+    "LLMs and Prompt Engineering",
+    "AI Agents and RAG",
+)
 
 # Question-quality windows
 AVOID_DAYS = 7
