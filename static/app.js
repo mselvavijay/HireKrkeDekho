@@ -523,7 +523,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             if (heroDate) heroDate.textContent = formattedDate;
         }
 
-        let raceQuestions = [], raceTimer = null, raceSubmissionQueue = Promise.resolve(), raceAnsweredMap = {};
+        let raceQuestions = [], raceTimer = null, raceSubmissionQueue = Promise.resolve(), raceAnsweredMap = {}, raceFinished = false;
         const raceHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUserToken || ''}` });
         async function loadRaceStatus() {
             if (!currentUserToken) return;
@@ -570,6 +570,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         }
         function closeRaceLeaderboard() { document.getElementById('race_leaderboard_overlay').classList.remove('open'); }
         function finishRace(data) {
+            if (raceFinished) return;
+            raceFinished = true;
             clearInterval(raceTimer);
             const play = document.getElementById('race_play');
             const complete = document.getElementById('race_complete');
@@ -604,6 +606,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 status.textContent = '';
                 raceSubmissionQueue = Promise.resolve();
                 raceAnsweredMap = {};
+                raceFinished = false;
                 renderRaceQuestion(data.current_question || 0);
             } catch (e) {
                 status.textContent = e.message;
@@ -659,6 +662,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             }
 
             raceSubmissionQueue = raceSubmissionQueue.catch(() => {}).then(async () => {
+                if (raceFinished && !isLast) return;
                 let attempts = 0;
                 while (attempts < 3) {
                     try {
@@ -673,7 +677,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
                         if (!r.ok) {
                             // If contest is already completed or inactive, finish contest gracefully
-                            if (data.detail && (data.detail.includes('completed') || data.detail.includes('No active contest'))) {
+                            if (data.detail && (data.detail.includes('completed') || data.detail.includes('No active contest') || data.detail.includes('already completed'))) {
                                 finishRace(data);
                                 return;
                             }
@@ -689,7 +693,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                         if (attempts >= 3) {
                             console.error('Race answer save error:', err);
                             const status = document.getElementById('race_payment_status');
-                            if (status) status.textContent = err.message || 'Error saving answer.';
+                            if (status && !raceFinished) status.textContent = err.message || 'Error saving answer.';
 
                             if (isLast) {
                                 // On the last question, verify if contest finished on server despite any packet issue
@@ -702,12 +706,12 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                                     }
                                 } catch (_) {}
 
-                                if (options) options.querySelectorAll('button').forEach(b => b.disabled = false);
+                                if (options && !raceFinished) options.querySelectorAll('button').forEach(b => b.disabled = false);
                                 delete raceAnsweredMap[questionIndex];
                             }
                             return;
                         }
-                        await new Promise(res => setTimeout(res, 300));
+                        await new Promise(res => setTimeout(res, 200));
                     }
                 }
             });
