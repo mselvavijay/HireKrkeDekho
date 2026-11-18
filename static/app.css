@@ -4641,7 +4641,19 @@
                 flex-shrink: 0;
             }
         }
-        .race-modal { width: min(640px, calc(100vw - 32px)); max-width: 640px; padding: 28px; border-radius: var(--radius-lg, 18px); }
+        .race-modal { 
+            width: min(720px, calc(100vw - 32px)); 
+            max-width: 720px; 
+            padding: 24px 28px; 
+            border-radius: var(--radius-lg, 18px); 
+            overflow: hidden !important; 
+        }
+        .race-modal:has(#race_play:not([hidden])) {
+            max-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden !important;
+        }
         .contest-topic-accent { color: #60a5fa; font-weight: 800; }
         .contest-modal-meta { margin: 6px 0 0; color: var(--text-secondary); font-size: 0.85rem; }
         .contest-brief-card {
@@ -4713,13 +4725,59 @@
             .contest-rule-item { flex-direction: row; align-items: center; gap: 10px; }
             .contest-topic-name { font-size: 1.25rem; }
         }
-        .race-progress { display:flex; align-items:center; justify-content:space-between; margin:22px 0 9px; color:#dce5ff; font-size:.82rem; font-weight:700; }
+        .race-progress { display:flex; align-items:center; justify-content:space-between; margin:14px 0 8px; color:#dce5ff; font-size:.82rem; font-weight:700; }
         #race_timer { color:#fff; font-size:1.15rem; }
-        .race-timer-track { height:6px; overflow:hidden; border-radius:99px; background:#202e4a; }
+        .race-timer-track { height:6px; overflow:hidden; border-radius:99px; background:#202e4a; margin-bottom: 4px; }
         .race-timer-track i { display:block; height:100%; width:100%; background:linear-gradient(90deg,#5b7cfa,#59d9e8); transition:width 1s linear; }
-        #race_question_text { margin:30px 0 22px; color:#fff; font-size:clamp(1.2rem, 2.2vw, 1.45rem); line-height:1.45; }
-        .race-options { display:grid; gap:12px; }
-        .race-options button { width:100%; min-height:58px; padding:17px 19px; border:1px solid #2d3d5e; border-radius:12px; background:#111d32; color:#eaf0fb; text-align:left; font:inherit; font-size:1rem; cursor:pointer; transition:background .16s ease,border-color .16s ease,transform .16s ease,opacity .16s ease; }
+        #race_question_text { 
+            margin:16px 0 16px; 
+            color:#fff; 
+            font-size:clamp(1.05rem, 1.8vw, 1.25rem); 
+            line-height:1.4; 
+            font-weight:600; 
+        }
+        .race-options { 
+            display:grid; 
+            grid-template-columns: 1fr; 
+            gap:10px; 
+        }
+        .race-options.race-options-2col {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .race-options button { 
+            width:100%; 
+            min-height:50px; 
+            padding:12px 14px; 
+            border:1px solid #2d3d5e; 
+            border-radius:10px; 
+            background:#111d32; 
+            color:#eaf0fb; 
+            text-align:left; 
+            font:inherit; 
+            font-size:.92rem; 
+            line-height:1.35;
+            cursor:pointer; 
+            display:flex;
+            align-items:flex-start;
+            gap:8px;
+            box-sizing:border-box;
+            transition:background .16s ease,border-color .16s ease,transform .16s ease,opacity .16s ease; 
+        }
+        .race-options button .opt-key {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            color:#60a5fa;
+            flex-shrink:0;
+            width:18px;
+        }
+        .race-options button .opt-text {
+            flex:1;
+            min-width:0;
+            word-break:break-word;
+        }
         .race-options button:hover:not(:disabled), .race-options button:focus-visible { border-color:#6d83ff; background:#17284a; transform:translateY(-1px); }
         .race-options button:disabled { opacity:.55; cursor:not-allowed; }
         .race-options button.race-option-selected { border-color:#7c91ff; background:#263b77; color:#fff; transform:scale(.985); opacity:1; }
@@ -4731,7 +4789,11 @@
         #race_complete h4 { margin:10px 0 7px; color:#fff; font-size:1.3rem; }
         #race_complete p { margin:0 0 20px; color:var(--text-secondary); }
         .race-complete-icon { display:grid; place-items:center; width:50px; height:50px; margin:auto; border-radius:50%; background:#173d35; color:#71e2b2; font-size:1.45rem; font-weight:900; }
-        @media (max-width:640px) { .race-modal { width:calc(100vw - 24px); max-width:calc(100vw - 24px); padding:24px 18px; } .race-options button { min-height:54px; padding:14px; font-size:.94rem; } }
+        @media (max-width:640px) { 
+            .race-modal { width:calc(100vw - 20px); max-width:calc(100vw - 20px); padding:18px 14px; } 
+            .race-options.race-options-2col { grid-template-columns: 1fr; }
+            .race-options button { min-height:46px; padding:10px 12px; font-size:.88rem; } 
+        }
         .race-leaderboard-modal { width:min(560px, calc(100vw - 24px)); max-width:560px; }
         #race_leaderboard_date { margin:5px 0 0; color:var(--text-secondary); font-size:.8rem; }
         .leaderboard-head, .leaderboard-row { display:grid; grid-template-columns:68px minmax(0,1fr) 74px 72px; gap:10px; align-items:center; }

@@ -622,7 +622,20 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             document.getElementById('race_question_count').textContent = `Question ${index + 1} of ${raceQuestions.length}`;
             document.getElementById('race_question_text').textContent = q.question;
             const options = document.getElementById('race_options');
-            options.innerHTML = q.options.map((o, i) => `<button type="button" onclick="submitRaceAnswer(${index}, ${i})">${String.fromCharCode(65 + i)}. ${escapeHtml(o)}</button>`).join('');
+            
+            // If question or options are long, or on wider screens, use 2-column x 2-row layout to fit in single viewport frame
+            const isLongQuestion = (q.question && q.question.length > 90);
+            const totalOptChars = (q.options || []).reduce((acc, opt) => acc + (opt ? opt.length : 0), 0);
+            const isLongOptionText = totalOptChars > 120 || (q.options || []).some(opt => opt && opt.length > 45);
+            
+            if (options) {
+                if (isLongQuestion || isLongOptionText) {
+                    options.classList.add('race-options-2col');
+                } else {
+                    options.classList.remove('race-options-2col');
+                }
+                options.innerHTML = q.options.map((o, i) => `<button type="button" onclick="submitRaceAnswer(${index}, ${i})"><span class="opt-key">${String.fromCharCode(65 + i)}</span><span class="opt-text">${escapeHtml(o)}</span></button>`).join('');
+            }
             requestAnimationFrame(() => play.classList.remove('race-question-entering'));
             let remaining = 17;
             clearInterval(raceTimer);
