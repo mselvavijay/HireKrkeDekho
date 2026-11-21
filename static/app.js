@@ -581,8 +581,10 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             if (play) play.hidden = true;
             if (complete) complete.hidden = false;
             if (completeText) {
-                const score = (data && typeof data.score === 'number') ? data.score : '—';
-                completeText.textContent = `Final score: ${score}/15. Rankings are published after the contest day ends.`;
+                const score = (data && typeof data.score === 'number') ? data.score : null;
+                completeText.textContent = score !== null
+                    ? `Final score: ${score}/15. Rankings are published after the contest day ends.`
+                    : 'Contest completed. Check the leaderboard for your final score!';
             }
             if (typeof refreshRaceResultCard === 'function') refreshRaceResultCard();
         }

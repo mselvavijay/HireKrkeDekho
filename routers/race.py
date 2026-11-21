@@ -53,7 +53,7 @@ async def today(db: Session = Depends(get_db), token=Depends(get_optional_user_f
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first() if user else None
     if attempt and attempt.status != "completed":
-        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 30
+        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 120
         created_at = attempt.created_at or attempt.question_started_at or now_ist()
         if created_at.tzinfo is None:
             created_at = created_at.replace(tzinfo=IST)
@@ -81,7 +81,7 @@ async def start(db: Session = Depends(get_db), token=Depends(get_current_user_fr
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
     if attempt:
-        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 30
+        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 120
         created_at = attempt.created_at or attempt.question_started_at or now_ist()
         if created_at.tzinfo is None:
             created_at = created_at.replace(tzinfo=IST)
@@ -120,6 +120,9 @@ def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(
     user = user_from_token(token, db)
     day = contest_date()
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
+    # Midnight rollover: user started before 12 AM, clock ticked to new day mid-quiz
+    if not attempt:
+        attempt = db.query(RaceAttempt).filter_by(user_id=user.id, status="in_progress").order_by(RaceAttempt.created_at.desc()).first()
     if not attempt:
         raise HTTPException(409, "No active contest attempt.")
     if attempt.status == "completed":
@@ -165,9 +168,9 @@ def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(
         started_at = started_at.replace(tzinfo=IST)
     elapsed = max(0, int((now_ist() - started_at).total_seconds() * 1000))
 
-    questions = get_cached_quiz_questions(db, day)
+    questions = get_cached_quiz_questions(db, attempt.contest_date)
     if not questions:
-        quiz = db.query(RaceDailyQuiz).filter_by(contest_date=day).first()
+        quiz = db.query(RaceDailyQuiz).filter_by(contest_date=attempt.contest_date).first()
         if quiz and quiz.questions_json:
             try:
                 import json as _json
