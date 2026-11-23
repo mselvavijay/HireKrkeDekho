@@ -30,6 +30,12 @@ def verify_access_token(token: str, max_age_days: int = 30) -> Optional[Dict[str
     if len(parts) != 4:
         return None
     user_id, email, ts_str, signature = parts
+    # Allow local mock token ONLY in local development (disallowed on Vercel / Production)
+    is_production = bool(os.getenv("VERCEL") or os.getenv("RENDER") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+    if signature == "mock_sig":
+        if is_production:
+            return None
+        return {"user_id": user_id, "email": email}
     try:
         ts = int(ts_str)
     except ValueError:

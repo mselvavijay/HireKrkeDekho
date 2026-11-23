@@ -322,7 +322,32 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
         function openAuthModal() {
             document.getElementById('auth_modal_overlay').classList.add('open');
+            // Show 1-click Dev Login button only on localhost / 127.0.0.1
+            const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+            const devBox = document.getElementById('dev_mock_login_box');
+            if (devBox) devBox.style.display = isLocal ? 'block' : 'none';
             if (googleClientId) waitForGoogleIdentity();
+        }
+
+        function devMockLogin() {
+            localStorage.setItem('career_bot_user_id', 'test-user-id');
+            localStorage.setItem('career_bot_user_name', 'Local Tester');
+            localStorage.setItem('career_bot_user_email', 'tester@example.com');
+            localStorage.setItem('career_bot_token', 'test-user-id:tester@example.com:9999999999:mock_sig');
+            currentUserId = 'test-user-id';
+            currentUserToken = 'test-user-id:tester@example.com:9999999999:mock_sig';
+            closeAuthModal();
+            updateAuthUI({
+                id: 'test-user-id',
+                name: 'Local Tester',
+                email: 'tester@example.com',
+                access_token: currentUserToken
+            });
+            if (window.location.pathname === '/consultation') {
+                location.reload();
+            } else {
+                openConsultation();
+            }
         }
 
         function closeAuthModal() {

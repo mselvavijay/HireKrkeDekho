@@ -1,4 +1,7 @@
-﻿import os
+import os
+# Disable SQLAlchemy C-extensions to avoid Windows Application Control / AppLocker DLL blocks
+os.environ["DISABLE_SQLALCHEMY_CEXT"] = "1"
+
 from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, Response
