@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Platform Pages -->
   <url>
     <loc>https://hirekrkedekho.in/</loc>
     <changefreq>daily</changefreq>
@@ -8,12 +9,75 @@
   <url>
     <loc>https://hirekrkedekho.in/consultation</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://hirekrkedekho.in/privacy-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
-</urlset>
 
+  <!-- High-Volume Role & City Calibration Hubs (/jobs/{slug}) -->
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/python-backend-developer-bangalore</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/fastapi-developer-pune</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/junior-ml-engineer-hyderabad</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/data-analyst-gurgaon</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/fullstack-react-node-bangalore</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/devops-aws-engineer-mumbai</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/jobs/remote-software-engineer-india</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 3-Week Technical Roadmaps (/roadmap/{slug}) -->
+  <url>
+    <loc>https://hirekrkedekho.in/roadmap/backend-python-fastapi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/roadmap/machine-learning-engineer-india</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/roadmap/data-analyst-sql-python</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/roadmap/frontend-react-nextjs</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hirekrkedekho.in/roadmap/system-design-fresher-to-mid</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

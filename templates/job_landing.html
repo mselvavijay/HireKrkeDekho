@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="{{ page.meta_desc }}">
+    <link rel="canonical" href="https://hirekrkedekho.in/jobs/{{ slug }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hirekrkedekho.in/jobs/{{ slug }}" />
+    <meta property="og:title" content="{{ page.title }}" />
+    <meta property="og:description" content="{{ page.meta_desc }}" />
+    <meta property="og:image" content="https://hirekrkedekho.in/static/og-image.png" />
+    <title>{{ page.title }} | HireKrkeDekho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/app.css?v=20261124-perf-v1">
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+    <style>
+        .landing-wrap {
+            max-width: 1140px;
+            margin: 40px auto 80px;
+            padding: 0 24px;
+        }
+        .landing-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .landing-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: #60a5fa;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+        .landing-title {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            margin-bottom: 16px;
+        }
+        .landing-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 780px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .landing-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 32px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .landing-grid { grid-template-columns: 1fr; }
+            .landing-title { font-size: 2rem; }
+        }
+        .landing-card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .landing-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+        .spec-table tr {
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .spec-table tr:last-child { border-bottom: none; }
+        .spec-table td {
+            padding: 12px 0;
+            font-size: 0.95rem;
+        }
+        .spec-label {
+            color: var(--text-secondary);
+            width: 38%;
+            font-weight: 500;
+        }
+        .spec-val {
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .chips-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0 24px;
+        }
+        .chip-badge {
+            background: rgba(59, 130, 246, 0.16);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            color: #93c5fd;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+        .roadmap-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .roadmap-item {
+            display: flex;
+            gap: 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .roadmap-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1f6bff;
+            color: #ffffff;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .landing-cta-box {
+            text-align: center;
+            background: linear-gradient(180deg, rgba(30, 58, 138, 0.3) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.45);
+            border-radius: 16px;
+            padding: 32px 24px;
+        }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #1f6bff, #3b82f6);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 14px 32px;
+            border-radius: 10px;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(31, 107, 255, 0.5);
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            margin-top: 16px;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(31, 107, 255, 0.65);
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .breadcrumb a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <a href="/" class="brand-logo" aria-label="HireKrkeDekho Home">
+            <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" height="28" style="vertical-align: middle;">
+        </a>
+        <div style="display:flex; gap:16px; align-items:center;">
+            <a href="/consultation" class="btn-primary-hero" style="padding: 8px 18px; font-size: 0.88rem; text-decoration:none;">Launch Advisor</a>
+            <a href="/#ai_race" class="btn-primary-hero" style="padding: 8px 18px; font-size: 0.88rem; text-decoration:none; background:#10b981;">Daily Contest</a>
+        </div>
+    </header>
+
+    <main class="landing-wrap">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span>/</span>
+            <a href="/#how_it_works">Jobs by City</a>
+            <span>/</span>
+            <span style="color:#ffffff;">{{ page.city }}</span>
+        </nav>
+
+        <header class="landing-header">
+            <div class="landing-pill">{{ page.city }} · {{ page.openings_count }} Openings</div>
+            <h1 class="landing-title">{{ page.title }}</h1>
+            <p class="landing-subtitle">{{ page.meta_desc }}</p>
+        </header>
+
+        <div class="landing-grid">
+            <!-- Left: Calibrated Job Criteria & Roadmap -->
+            <div style="display:flex; flex-direction:column; gap:24px;">
+                <article class="landing-card">
+                    <h3>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        Role Calibration Criteria
+                    </h3>
+                    <table class="spec-table">
+                        <tr>
+                            <td class="spec-label">Target Role</td>
+                            <td class="spec-val">{{ page.role_name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-label">Location</td>
+                            <td class="spec-val">{{ page.city }}</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-label">Expected Salary</td>
+                            <td class="spec-val" style="color:#10b981;">{{ page.salary_band }}</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-label">Seniority Bracket</td>
+                            <td class="spec-val">{{ page.experience }}</td>
+                        </tr>
+                        <tr>
+                            <td class="spec-label">Degree Criteria</td>
+                            <td class="spec-val">{{ page.degree }}</td>
+                        </tr>
+                    </table>
+
+                    <h4 style="font-size: 0.95rem; color:#94a3b8; margin: 16px 0 8px;">Mandatory Technical Stack</h4>
+                    <div class="chips-list">
+                        {% for skill in page.skills %}
+                        <span class="chip-badge">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </article>
+
+                <article class="landing-card">
+                    <h3>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        3-Week Interview Preparation Roadmap
+                    </h3>
+                    <div class="roadmap-list">
+                        <div class="roadmap-item">
+                            <div class="roadmap-dot">1</div>
+                            <div>
+                                <div style="font-weight:700; color:#ffffff; margin-bottom:4px;">Week 1: Core Fundamentals</div>
+                                <div style="font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">{{ page.roadmap_week1 }}</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-item">
+                            <div class="roadmap-dot">2</div>
+                            <div>
+                                <div style="font-weight:700; color:#ffffff; margin-bottom:4px;">Week 2: Advanced Projects & Architecture</div>
+                                <div style="font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">{{ page.roadmap_week2 }}</div>
+                            </div>
+                        </div>
+                        <div class="roadmap-item">
+                            <div class="roadmap-dot">3</div>
+                            <div>
+                                <div style="font-weight:700; color:#ffffff; margin-bottom:4px;">Week 3: Mock Rounds & System Benchmarks</div>
+                                <div style="font-size:0.9rem; color:var(--text-secondary); line-height:1.5;">{{ page.roadmap_week3 }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Right: Action & Community Widget -->
+            <div style="display:flex; flex-direction:column; gap:24px;">
+                <div class="landing-cta-box">
+                    <img src="/static/avatar-find-jobs-v3.webp" alt="AI Advisor" width="220" style="max-width:100%; height:auto; margin:0 auto 16px; display:block;">
+                    <h3 style="font-size: 1.3rem; color:#ffffff; margin-bottom:8px;">Ready to Calibrate Your Profile?</h3>
+                    <p style="font-size: 0.9rem; color:var(--text-secondary); line-height:1.5;">
+                        Connect directly with our career intelligence model. Get matched to live openings in {{ page.city }} without keyword guesswork.
+                    </p>
+                    <a href="/consultation?role={{ page.role_name|urlencode }}&city={{ page.city|urlencode }}" class="cta-btn">
+                        <span>Find Your Next Job</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <div class="landing-card" style="text-align:center;">
+                    <h4 style="color:#ffffff; font-size:1.1rem; margin-bottom:12px;">Hiring at Top Tech Hubs</h4>
+                    <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:16px;">
+                        Actively matching engineers with verified salary brackets across India:
+                    </p>
+                    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px;">
+                        {% for comp in page.top_companies %}
+                        <span style="background:rgba(255,255,255,0.06); padding:6px 14px; border-radius:6px; font-size:0.85rem; color:#f1f5f9; font-weight:600;">{{ comp }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="landing-card" style="text-align:center; background:rgba(16, 185, 129, 0.08); border-color:rgba(16, 185, 129, 0.3);">
+                    <h4 style="color:#34d399; font-size:1.1rem; margin-bottom:8px;">Daily Tech Skill Benchmark</h4>
+                    <p style="font-size:0.88rem; color:var(--text-secondary); margin-bottom:16px;">
+                        Take today's 15-question engineering contest. Prove your speed and claim your spot on the live leaderboard.
+                    </p>
+                    <a href="/#ai_race" class="cta-btn" style="background:#10b981; box-shadow:0 8px 24px rgba(16,185,129,0.4);">
+                        Enter Today's Contest
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer" style="padding:40px 24px; text-align:center; border-top:1px solid rgba(255,255,255,0.08); margin-top:80px; color:#64748b; font-size:0.88rem;">
+        <p>&copy; 2026 HireKrkeDekho. India's Next-Gen AI Career Calibration Platform.</p>
+        <p style="margin-top:8px;">
+            <a href="/" style="color:#60a5fa; text-decoration:none;">Home</a> &nbsp;·&nbsp;
+            <a href="/consultation" style="color:#60a5fa; text-decoration:none;">AI Advisor</a> &nbsp;·&nbsp;
+            <a href="/#ai_race" style="color:#60a5fa; text-decoration:none;">Daily Contest</a> &nbsp;·&nbsp;
+            <a href="/privacy-policy" style="color:#60a5fa; text-decoration:none;">Privacy Policy</a>
+        </p>
+    </footer>
+</body>
+</html>

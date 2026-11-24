@@ -8,9 +8,23 @@
 - [Daily Tech Contest](https://hirekrkedekho.in/#ai_race): 15 rapid-fire technical challenges with 15-second countdowns and live leaderboards.
 - [Privacy Policy](https://hirekrkedekho.in/privacy-policy): Platform data security and candidate privacy commitments.
 
+## City & Role Calibration Hubs (/jobs)
+- [Python Backend Developer in Bangalore](https://hirekrkedekho.in/jobs/python-backend-developer-bangalore): Verified roles (₹8–16 LPA), required skills, and interview milestones.
+- [FastAPI Developer in Pune](https://hirekrkedekho.in/jobs/fastapi-developer-pune): Openings (₹7–14 LPA) and async backend preparation.
+- [Junior ML Engineer in Hyderabad](https://hirekrkedekho.in/jobs/junior-ml-engineer-hyderabad): Machine learning roles (₹10–18 LPA) across Hyderabad tech companies.
+- [Data Analyst in Gurgaon](https://hirekrkedekho.in/jobs/data-analyst-gurgaon): Analytics roles (₹6–12 LPA) requiring SQL, Python, and PowerBI.
+- [Full Stack React & Node in Bangalore](https://hirekrkedekho.in/jobs/fullstack-react-node-bangalore): MERN stack developer positions (₹9–20 LPA).
+- [DevOps & AWS Cloud Engineer in Mumbai](https://hirekrkedekho.in/jobs/devops-aws-engineer-mumbai): Cloud infrastructure openings (₹8–17 LPA).
+- [Remote Software Engineer in India](https://hirekrkedekho.in/jobs/remote-software-engineer-india): Pan-India high-paying remote roles (₹10–25 LPA).
+
+## 3-Week Technical Roadmaps (/roadmap)
+- [Python & FastAPI Backend Roadmap](https://hirekrkedekho.in/roadmap/backend-python-fastapi): 3-week async backend interview guide.
+- [Machine Learning Engineer Roadmap](https://hirekrkedekho.in/roadmap/machine-learning-engineer-india): 3-week math, PyTorch, and deployment roadmap.
+- [Data Analyst Preparation Roadmap](https://hirekrkedekho.in/roadmap/data-analyst-sql-python): 3-week SQL, EDA, and business metrics roadmap.
+- [Modern Frontend React 19 Roadmap](https://hirekrkedekho.in/roadmap/frontend-react-nextjs): 3-week React, Next.js, and machine coding guide.
+- [System Design Roadmap](https://hirekrkedekho.in/roadmap/system-design-fresher-to-mid): 3-week HLD, LLD, and scalable systems roadmap.
+
 ## Core Capabilities
-- **Tri-Factor Matching Engine**: Calibrates career recommendations and real-time open roles across three dimensions: Degree, Years of Experience, and Core Technical Stack.
-- **AI Career Advisor**: Conversational advisor providing structured role analysis, salary bands (LPA), required skills, and tailored 3-week preparation guides for Indian tech hubs (Bangalore, Hyderabad, Pune, Gurgaon, Noida, Mumbai).
+- **Tri-Factor Matching Engine**: Calibrates career recommendations across Degree, Years of Experience, and Core Technical Stack.
+- **AI Career Advisor**: Conversational advisor providing structured role analysis, salary bands (LPA), and tailored 3-week preparation guides for Indian tech hubs.
 - **Daily AI Race**: Daily 15-question rapid-fire technical benchmarking contest testing algorithms, data structures, and system design with server-timed anti-cheat and live leaderboards.
-
-

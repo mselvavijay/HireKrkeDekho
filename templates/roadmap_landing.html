@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="{{ page.meta_desc }}">
+    <link rel="canonical" href="https://hirekrkedekho.in/roadmap/{{ slug }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://hirekrkedekho.in/roadmap/{{ slug }}" />
+    <meta property="og:title" content="{{ page.title }}" />
+    <meta property="og:description" content="{{ page.meta_desc }}" />
+    <meta property="og:image" content="https://hirekrkedekho.in/static/og-image.png" />
+    <title>{{ page.title }} | HireKrkeDekho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/app.css?v=20261124-perf-v1">
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+    <style>
+        .roadmap-page-wrap {
+            max-width: 1080px;
+            margin: 40px auto 80px;
+            padding: 0 24px;
+        }
+        .roadmap-hero {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+        .pill-track {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+        .page-title {
+            font-size: 2.7rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            margin-bottom: 16px;
+        }
+        .page-desc {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 760px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .meta-strip {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 24px 0 0;
+            flex-wrap: wrap;
+        }
+        .meta-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #f1f5f9;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            position: relative;
+            margin: 48px 0;
+        }
+        .timeline-card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            border-radius: 16px;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            transition: border-color 0.2s ease;
+        }
+        .timeline-card:hover {
+            border-color: rgba(59, 130, 246, 0.55);
+        }
+        @media (max-width: 700px) {
+            .timeline-card { grid-template-columns: 1fr; gap: 16px; }
+            .page-title { font-size: 2rem; }
+        }
+        .week-badge {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(31, 107, 255, 0.25), rgba(59, 130, 246, 0.08));
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            flex-shrink: 0;
+        }
+        .week-num {
+            font-size: 1.6rem;
+            font-weight: 800;
+            line-height: 1;
+            color: #60a5fa;
+        }
+        .week-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.05em;
+        }
+        .week-content h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .week-content p {
+            font-size: 0.98rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin: 0;
+        }
+        .cta-banner {
+            background: linear-gradient(180deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.45);
+            border-radius: 20px;
+            padding: 44px 32px;
+            text-align: center;
+            margin-top: 56px;
+        }
+        .cta-banner h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+        .cta-btn-main {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #1f6bff, #3b82f6);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 15px 36px;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 10px 28px rgba(31, 107, 255, 0.5);
+            font-size: 1.05rem;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+        .cta-btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 36px rgba(31, 107, 255, 0.65);
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a href="/" class="brand-logo" aria-label="HireKrkeDekho Home">
+            <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" height="28" style="vertical-align: middle;">
+        </a>
+        <div style="display:flex; gap:16px; align-items:center;">
+            <a href="/consultation" class="btn-primary-hero" style="padding: 8px 18px; font-size: 0.88rem; text-decoration:none;">AI Advisor</a>
+            <a href="/#ai_race" class="btn-primary-hero" style="padding: 8px 18px; font-size: 0.88rem; text-decoration:none; background:#10b981;">Daily Contest</a>
+        </div>
+    </header>
+
+    <main class="roadmap-page-wrap">
+        <nav style="display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--text-secondary); margin-bottom:24px;" aria-label="Breadcrumb">
+            <a href="/" style="color:#60a5fa; text-decoration:none;">Home</a>
+            <span>/</span>
+            <a href="/#how_it_works" style="color:#60a5fa; text-decoration:none;">Roadmaps</a>
+            <span>/</span>
+            <span style="color:#ffffff;">{{ page.track_name }}</span>
+        </nav>
+
+        <header class="roadmap-hero">
+            <div class="pill-track">{{ page.duration }} · {{ page.target_level }}</div>
+            <h1 class="page-title">{{ page.title }}</h1>
+            <p class="page-desc">{{ page.meta_desc }}</p>
+
+            <div class="meta-strip">
+                <div class="meta-stat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>Timeline: {{ page.duration }}</span>
+                </div>
+                <div class="meta-stat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <span>Target: {{ page.target_level }}</span>
+                </div>
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:24px;">
+                {% for skill in page.skills %}
+                <span style="background:rgba(59,130,246,0.16); border:1px solid rgba(59,130,246,0.35); color:#93c5fd; padding:6px 14px; border-radius:999px; font-size:0.88rem; font-weight:600;">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </header>
+
+        <div class="timeline-container">
+            <!-- Week 1 -->
+            <article class="timeline-card">
+                <div class="week-badge">
+                    <span class="week-num">01</span>
+                    <span class="week-label">Week</span>
+                </div>
+                <div class="week-content">
+                    <h3>{{ page.week1_title }}</h3>
+                    <p>{{ page.week1_desc }}</p>
+                </div>
+            </article>
+
+            <!-- Week 2 -->
+            <article class="timeline-card">
+                <div class="week-badge">
+                    <span class="week-num">02</span>
+                    <span class="week-label">Week</span>
+                </div>
+                <div class="week-content">
+                    <h3>{{ page.week2_title }}</h3>
+                    <p>{{ page.week2_desc }}</p>
+                </div>
+            </article>
+
+            <!-- Week 3 -->
+            <article class="timeline-card">
+                <div class="week-badge">
+                    <span class="week-num">03</span>
+                    <span class="week-label">Week</span>
+                </div>
+                <div class="week-content">
+                    <h3>{{ page.week3_title }}</h3>
+                    <p>{{ page.week3_desc }}</p>
+                </div>
+            </article>
+        </div>
+
+        <section class="cta-banner">
+            <h2>Ready to Test Your Real Speed?</h2>
+            <p style="font-size:1.05rem; color:var(--text-secondary); max-width:640px; margin:0 auto; line-height:1.6;">
+                Take today's 15-question engineering contest. Test your algorithms, data structures, and architecture speed with live leaderboards.
+            </p>
+            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+                <a href="/#ai_race" class="cta-btn-main">
+                    <span>Enter Today's Contest</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="/consultation" class="cta-btn-main" style="background:transparent; border:1px solid rgba(59,130,246,0.5); box-shadow:none;">
+                    <span>Talk to AI Advisor</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" style="padding:40px 24px; text-align:center; border-top:1px solid rgba(255,255,255,0.08); margin-top:80px; color:#64748b; font-size:0.88rem;">
+        <p>&copy; 2026 HireKrkeDekho. India's Next-Gen AI Career Calibration Platform.</p>
+        <p style="margin-top:8px;">
+            <a href="/" style="color:#60a5fa; text-decoration:none;">Home</a> &nbsp;·&nbsp;
+            <a href="/consultation" style="color:#60a5fa; text-decoration:none;">AI Advisor</a> &nbsp;·&nbsp;
+            <a href="/#ai_race" style="color:#60a5fa; text-decoration:none;">Daily Contest</a> &nbsp;·&nbsp;
+            <a href="/privacy-policy" style="color:#60a5fa; text-decoration:none;">Privacy Policy</a>
+        </p>
+    </footer>
+</body>
+</html>

@@ -3,11 +3,13 @@ import os
 os.environ["DISABLE_SQLALCHEMY_CEXT"] = "1"
 
 from pathlib import Path
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, Response
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import HTMLResponse, Response, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from database import engine, Base, init_db
 from routers import career, auth, race
+from data.seo_catalog import JOB_PAGES, ROADMAP_PAGES
 
 import time
 from collections import defaultdict
@@ -87,6 +89,7 @@ BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 STATIC_DIR = BASE_DIR / "static"
 INDEX_HTML_PATH = TEMPLATES_DIR / "index.html"
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 if STATIC_DIR.exists():
     try:
@@ -120,6 +123,20 @@ def consultation():
 def privacy_policy_page():
     path = TEMPLATES_DIR / "privacy_policy.html"
     return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
+
+@app.get("/jobs/{slug}", response_class=HTMLResponse)
+def job_landing_page(request: Request, slug: str):
+    page_data = JOB_PAGES.get(slug)
+    if not page_data:
+        raise HTTPException(status_code=404, detail="Role page not found")
+    return templates.TemplateResponse("job_landing.html", {"request": request, "page": page_data, "slug": slug})
+
+@app.get("/roadmap/{slug}", response_class=HTMLResponse)
+def roadmap_landing_page(request: Request, slug: str):
+    page_data = ROADMAP_PAGES.get(slug)
+    if not page_data:
+        raise HTTPException(status_code=404, detail="Roadmap page not found")
+    return templates.TemplateResponse("roadmap_landing.html", {"request": request, "page": page_data, "slug": slug})
 
 @app.get("/google8fd8ddad5942b8be.html", response_class=HTMLResponse)
 def google_verification():
