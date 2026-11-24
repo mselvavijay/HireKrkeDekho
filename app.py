@@ -129,14 +129,14 @@ def job_landing_page(request: Request, slug: str):
     page_data = JOB_PAGES.get(slug)
     if not page_data:
         raise HTTPException(status_code=404, detail="Role page not found")
-    return templates.TemplateResponse("job_landing.html", {"request": request, "page": page_data, "slug": slug})
+    return templates.TemplateResponse(request=request, name="job_landing.html", context={"page": page_data, "slug": slug})
 
 @app.get("/roadmap/{slug}", response_class=HTMLResponse)
 def roadmap_landing_page(request: Request, slug: str):
     page_data = ROADMAP_PAGES.get(slug)
     if not page_data:
         raise HTTPException(status_code=404, detail="Roadmap page not found")
-    return templates.TemplateResponse("roadmap_landing.html", {"request": request, "page": page_data, "slug": slug})
+    return templates.TemplateResponse(request=request, name="roadmap_landing.html", context={"page": page_data, "slug": slug})
 
 @app.get("/google8fd8ddad5942b8be.html", response_class=HTMLResponse)
 def google_verification():
