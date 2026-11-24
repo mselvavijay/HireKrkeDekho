@@ -130,6 +130,10 @@ def bing_verification():
     path = BASE_DIR / "BingSiteAuth.xml"
     return Response(content=path.read_text(encoding="utf-8"), media_type="application/xml")
 
+@app.get("/f40ca366b5ce4040a8b48c61604b0760.txt", response_class=Response)
+def indexnow_key():
+    return Response(content="f40ca366b5ce4040a8b48c61604b0760", media_type="text/plain")
+
 @app.get("/robots.txt", response_class=Response)
 def robots_txt():
     path = STATIC_DIR / "robots.txt"
