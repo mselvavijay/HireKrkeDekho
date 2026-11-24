@@ -1398,9 +1398,17 @@
 
         .how-grid {
             display: grid;
-            grid-template-columns: 5fr auto 7fr;
-            gap: 24px;
+            grid-template-columns: 1fr auto 1.15fr auto 0.9fr;
+            gap: 16px;
             align-items: stretch;
+        }
+
+        .how-arrow:nth-of-type(1) {
+            grid-column: 2;
+        }
+
+        .how-arrow:nth-of-type(2) {
+            grid-column: 4;
         }
 
         .how-card {
@@ -1447,39 +1455,108 @@
             margin: 0;
         }
 
-        .btn-find-jobs-cta {
-            display: inline-flex;
+        /* ── Column 3 Action Card & Character Illustration ── */
+        .how-action-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #1d4ed8 0%, #1F6BFF 50%, #3b82f6 100%);
+            text-align: center;
+            background: linear-gradient(180deg, rgba(30, 58, 138, 0.25) 0%, rgba(15, 23, 42, 0.6) 100%) !important;
+            border: 1px solid rgba(59, 130, 246, 0.45) !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-character-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .how-character-illustration {
+            width: 130px;
+            height: 135px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: characterFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes characterFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .character-guide-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 8px 20px rgba(59, 130, 246, 0.3));
+        }
+
+        .tablet-glow-rect {
+            animation: tabletPulse 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes tabletPulse {
+            0% { stroke: #60a5fa; filter: drop-shadow(0 0 4px rgba(96, 165, 250, 0.4)); }
+            100% { stroke: #38bdf8; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8)); }
+        }
+
+        .pulse-point {
+            animation: pointPulse 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pointPulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .how-action-prompt {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .how-action-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: #60a5fa;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .how-action-title {
+            font-size: 1.15rem;
+            font-weight: 700;
             color: #ffffff;
-            font-size: 0.88rem;
-            font-weight: 600;
-            padding: 8px 16px;
-            min-height: 38px;
-            border-radius: 999px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 16px rgba(31, 107, 255, 0.35);
+            margin: 0;
         }
 
-        .btn-find-jobs-cta:hover {
-            transform: translateY(-1px);
-            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-            box-shadow: 0 8px 24px rgba(31, 107, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.4);
+        .how-action-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin: 0;
+            max-width: 260px;
         }
 
-        .btn-find-jobs-cta .icon {
-            width: 15px;
-            height: 15px;
-            transition: transform 0.2s ease;
+        .btn-find-jobs-standalone {
+            width: 100%;
+            max-width: 250px;
+            padding: 13px 22px;
+            font-size: 0.98rem;
+            margin-top: 4px;
+            box-shadow: 0 8px 24px rgba(31, 107, 255, 0.5) !important;
         }
 
-        .btn-find-jobs-cta:hover .icon {
-            transform: translateX(3px);
+        .how-action-sub {
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin-top: 2px;
         }
 
         /* ── Left Card: You tell us ── */
@@ -1799,6 +1876,24 @@
         }
 
         /* ── Responsive Breakpoints ── */
+        @media (max-width: 1024px) {
+            .how-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .how-arrow {
+                grid-column: 1 !important;
+                justify-self: center;
+                transform: rotate(90deg);
+                margin: -4px 0;
+            }
+
+            .how-action-card {
+                padding: 32px 24px;
+            }
+        }
+
         @media (max-width: 768px) {
             .how-head {
                 text-align: center;
@@ -1810,14 +1905,14 @@
 
             .how-grid {
                 grid-template-columns: 1fr;
-                gap: 24px;
+                gap: 18px;
             }
 
             .how-arrow {
-                grid-column: 1;
+                grid-column: 1 !important;
                 justify-self: center;
                 transform: rotate(90deg);
-                margin: 0;
+                margin: -6px 0;
             }
 
             .how-role-header {
@@ -1836,6 +1931,17 @@
                 flex-direction: row;
                 align-items: flex-start;
                 text-align: left;
+                gap: 16px;
+                padding: 8px 0;
+            }
+
+            .how-step-connector {
+                width: 2px;
+                height: 24px;
+                flex: none;
+                margin: 0 0 0 13px;
+            }
+        }
                 gap: 16px;
                 padding: 8px 0;
             }
