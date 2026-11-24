@@ -1644,18 +1644,25 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+            white-space: nowrap;
         }
 
         .how-step-week {
             font-size: 13px;
             font-weight: 600;
             color: #ffffff;
+            white-space: nowrap;
+            overflow-wrap: normal;
+            word-break: keep-all;
         }
 
         .how-step-desc {
             font-size: 14px;
             color: var(--text-secondary);
             line-height: 1.4;
+            white-space: nowrap;
+            overflow-wrap: normal;
+            word-break: keep-all;
         }
 
         .how-step-connector {
