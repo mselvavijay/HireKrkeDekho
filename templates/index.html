@@ -60,12 +60,15 @@
     }
     </script>
     <title>HireKrkeDekho | AI Career Advisor & Tech Skill Contest</title>
+    <!-- Preload critical LCP image for mobile & desktop with responsive WebP -->
+    <link rel="preload" as="image" href="/static/hirekrkedekho-hero-3d-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" as="image" href="/static/hirekrkedekho-hero-3d-clean.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261124-force-3col-v3">
+<link rel="stylesheet" href="/static/app.css?v=20261124-perf-v1">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
 </head>
@@ -164,7 +167,11 @@
 
                             <!-- 3D Team Avatar Centerpiece -->
                             <div class="avatar-3d-bobbing">
-                                <img src="/static/hirekrkedekho-hero-3d-clean.png" alt="HireKrkeDekho Tech Candidate Community" class="hero-3d-avatar-img" width="1040" height="690" loading="eager">
+                                <picture>
+                                    <source media="(max-width: 768px)" srcset="/static/hirekrkedekho-hero-3d-mobile.webp" type="image/webp">
+                                    <source srcset="/static/hirekrkedekho-hero-3d-clean.webp" type="image/webp">
+                                    <img src="/static/hirekrkedekho-hero-3d-clean.png" alt="HireKrkeDekho Tech Candidate Community" class="hero-3d-avatar-img" width="1040" height="690" fetchpriority="high" decoding="async">
+                                </picture>
                             </div>
 
                             <!-- Bottom-Left Floating Badge: Join Daily Contest (No placement claims) -->
@@ -669,7 +676,10 @@
             <article class="how-card how-action-card" aria-label="Find your next job">
                 <div class="how-character-container">
                     <div class="how-avatar-display" onclick="openConsultation()" role="button" tabindex="0" aria-label="Open Career Consultation" onkeydown="if(event.key==='Enter'||event.key===' ')openConsultation()">
-                        <img src="/static/avatar-find-jobs-v3.png?v=20261124" alt="AI Career Guide pointing to Find your next job" class="how-avatar-img" loading="lazy" />
+                        <picture>
+                            <source srcset="/static/avatar-find-jobs-v3.webp?v=20261124" type="image/webp">
+                            <img src="/static/avatar-find-jobs-v3.png?v=20261124" alt="AI Career Guide pointing to Find your next job" class="how-avatar-img" loading="lazy" decoding="async" width="510" height="361" />
+                        </picture>
                     </div>
 
                     <div class="how-action-prompt">
