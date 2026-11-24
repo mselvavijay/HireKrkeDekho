@@ -64,7 +64,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261124-3col-guide">
+<link rel="stylesheet" href="/static/app.css?v=20261124-3d-avatar-cta">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
 </head>
@@ -656,45 +656,11 @@
                 </ol>
             </article>
 
-            <!-- Column 3 (or Arrow + Column 3): Centered Animated Character & Find Your Next Job CTA -->
-            <div class="how-arrow" aria-hidden="true">
-                <div class="how-arrow-badge">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </div>
-            </div>
-
-            <article class="how-card how-action-card" aria-label="Take Action">
+            <!-- Column 3: 3D Guide Character with Tablet & Find Your Next Job CTA -->
+            <article class="how-card how-action-card" aria-label="Find your next job">
                 <div class="how-character-container">
-                    <!-- Tech Guide Character holding an interactive glowing tablet -->
-                    <div class="how-character-illustration" aria-hidden="true">
-                        <svg class="character-guide-svg" viewBox="0 0 160 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Character Head & Hair -->
-                            <circle cx="80" cy="46" r="26" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
-                            <!-- Face -->
-                            <circle cx="80" cy="48" r="20" fill="#fde047" opacity="0.92"/>
-                            <!-- Glasses / Tech Visor -->
-                            <rect x="66" y="42" width="28" height="9" rx="4" fill="#0f172a" stroke="#60a5fa" stroke-width="1.5"/>
-                            <circle cx="73" cy="46.5" r="2" fill="#38bdf8"/>
-                            <circle cx="87" cy="46.5" r="2" fill="#38bdf8"/>
-                            <!-- Smile -->
-                            <path d="M76 56c2 2 6 2 8 0" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round"/>
-                            <!-- Modern Hoodie Body -->
-                            <path d="M46 112c0-26 14-38 34-38s34 12 34 38v10H46v-10z" fill="#1e3a8a" stroke="#3b82f6" stroke-width="2"/>
-                            <path d="M72 74l8 18 8-18" stroke="#60a5fa" stroke-width="2"/>
-                            <!-- Arms holding tablet up -->
-                            <path d="M46 102c-4 12 4 24 16 28" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
-                            <path d="M114 102c4 12-4 24-16 28" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/>
-                            <!-- Glowing Tablet Frame -->
-                            <rect x="42" y="118" width="76" height="46" rx="6" fill="#0f172a" stroke="#60a5fa" stroke-width="2.2" class="tablet-glow-rect"/>
-                            <!-- Tablet Screen Content (Simulated matching roles & target arrow) -->
-                            <rect x="48" y="124" width="64" height="6" rx="3" fill="#3b82f6" opacity="0.85"/>
-                            <rect x="48" y="134" width="42" height="4" rx="2" fill="#93c5fd" opacity="0.6"/>
-                            <rect x="48" y="142" width="50" height="4" rx="2" fill="#10b981" opacity="0.75"/>
-                            <circle cx="98" cy="144" r="5" fill="#38bdf8" class="pulse-point"/>
-                            <path d="M96 144l4-2v4z" fill="#0f172a"/>
-                        </svg>
+                    <div class="how-avatar-display" onclick="openConsultation()" role="button" tabindex="0" aria-label="Open Career Consultation" onkeydown="if(event.key==='Enter'||event.key===' ')openConsultation()">
+                        <img src="/static/avatar-find-jobs.png" alt="AI Career Guide pointing to Find your next job" class="how-avatar-img" loading="lazy" />
                     </div>
 
                     <div class="how-action-prompt">
