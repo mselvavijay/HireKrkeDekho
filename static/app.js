@@ -31,6 +31,20 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
         window.addEventListener('DOMContentLoaded', async () => {
             _restoreAdvisorContextFromCache();
+
+            // Instant synchronous session restoration from localStorage (No delay / flicker)
+            const storedName = localStorage.getItem('career_bot_user_name');
+            const storedEmail = localStorage.getItem('career_bot_user_email');
+            const storedPic = localStorage.getItem('career_bot_user_pic');
+            if (currentUserId && (storedName || storedEmail)) {
+                renderUserAccountBadge({
+                    id: currentUserId,
+                    name: storedName || 'Candidate',
+                    email: storedEmail || '',
+                    picture_url: storedPic || ''
+                });
+            }
+
             initializeAuth(); // Non-blocking background auth initialization
 
             const isConsultation = window.location.pathname === '/consultation';
@@ -764,7 +778,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 }
             });
         }
-        function openRaceModal() { if (!requireAuthentication(openRaceModal)) return; document.getElementById('race_modal_overlay').classList.add('open'); loadRaceStatus(); }
+        function openRaceModal() { 
+            if (!currentUserId || !currentUserToken) {
+                requireAuthentication(openRaceModal); 
+                return; 
+            }
+            document.getElementById('race_modal_overlay').classList.add('open'); 
+            loadRaceStatus(); 
+        }
         function closeRaceModal() { clearInterval(raceTimer); document.getElementById('race_modal_overlay').classList.remove('open'); }        function openPremiumModal() {
             if (!requireAuthentication(openPremiumModal)) return;
             document.getElementById('premium_modal_overlay').classList.add('open');
