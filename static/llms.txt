@@ -8,8 +8,8 @@
 - **Daily AI Race**: Daily 15-question rapid-fire technical benchmarking contest testing algorithms, data structures, and system design with server-timed anti-cheat and live leaderboards.
 
 ## Key URLs
-- Home & Platform Overview: https://hirekrkedekho.vercel.app/
-- AI Career Advisor: https://hirekrkedekho.vercel.app/consultation
-- Daily Tech Contest: https://hirekrkedekho.vercel.app/#ai_race
-- Privacy Policy: https://hirekrkedekho.vercel.app/privacy-policy
+- Home & Platform Overview: https://hirekrkedekho.in/
+- AI Career Advisor: https://hirekrkedekho.in/consultation
+- Daily Tech Contest: https://hirekrkedekho.in/#ai_race
+- Privacy Policy: https://hirekrkedekho.in/privacy-policy
 

@@ -24,6 +24,8 @@ app = FastAPI(title="CareerBot AI - Executive Talent & Career Intelligence")
 
 # 1. CORS Middleware - restrict to production domain and local development
 ALLOWED_ORIGINS = [
+    "https://hirekrkedekho.in",
+    "https://www.hirekrkedekho.in",
     "https://hirekrkedekho.vercel.app",
     "https://hirekrkedekho.com",
     "http://localhost:8000",

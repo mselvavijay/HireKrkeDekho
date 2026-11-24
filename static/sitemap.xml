@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://hirekrkedekho.vercel.app/</loc>
+    <loc>https://hirekrkedekho.in/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://hirekrkedekho.vercel.app/consultation</loc>
+    <loc>https://hirekrkedekho.in/consultation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://hirekrkedekho.vercel.app/privacy-policy</loc>
+    <loc>https://hirekrkedekho.in/privacy-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>

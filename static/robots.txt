@@ -7,4 +7,4 @@ Disallow: /race/admin
 Disallow: /auth/
 Disallow: /api/
 
-Sitemap: https://hirekrkedekho.vercel.app/sitemap.xml
+Sitemap: https://hirekrkedekho.in/sitemap.xml
