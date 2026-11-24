@@ -64,7 +64,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261124-whitespace-fix">
+<link rel="stylesheet" href="/static/app.css?v=20261124-find-jobs-cta">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
 </head>
@@ -556,7 +556,15 @@
             </div>
 
             <article class="how-card how-output" aria-labelledby="how-out">
-                <h3 id="how-out">What we offer</h3>
+                <div class="how-card-top-bar">
+                    <h3 id="how-out">What we offer</h3>
+                    <button class="btn-find-jobs-cta" onclick="openConsultation()" aria-label="Find your next job">
+                        <span>Find your next job</span>
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
 
                 <p class="how-label">Job openings to explore</p>
                 <ul class="how-roles">
@@ -666,13 +674,13 @@
         </div>
 
         <div class="how-cta">
-            <button class="btn-primary-hero" onclick="openConsultation()" aria-label="Try it with your profile">
-                <span>Try it with your profile</span>
+            <button class="btn-primary-hero btn-how-bottom-cta" onclick="openConsultation()" aria-label="Find your next job with your profile">
+                <span>Find your next job</span>
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
-            
+            <p>100% free · Instant 3-week roadmap and salary calibration for India</p>
         </div>
     </section>
 
