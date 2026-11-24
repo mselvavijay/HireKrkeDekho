@@ -1645,12 +1645,12 @@
 
         /* ── Arrow Badge ── */
         .how-arrow {
-            grid-column: 2;
             align-self: center;
             display: flex;
             justify-content: center;
             align-items: center;
             user-select: none;
+            flex-shrink: 0;
         }
 
         .how-arrow-badge {
@@ -1865,14 +1865,13 @@
         }
 
         /* ── Responsive Breakpoints ── */
-        @media (max-width: 1024px) {
+        @media (max-width: 860px) {
             .how-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
 
             .how-arrow {
-                grid-column: 1 !important;
                 justify-self: center;
                 transform: rotate(90deg);
                 margin: -4px 0;
