@@ -53,14 +53,22 @@ async def today(db: Session = Depends(get_db), token=Depends(get_optional_user_f
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first() if user else None
     if attempt and attempt.status != "completed":
-        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 120
-        created_at = attempt.created_at or attempt.question_started_at or now_ist()
-        if created_at.tzinfo is None:
-            created_at = created_at.replace(tzinfo=IST)
-        if (now_ist() - created_at).total_seconds() > max_sec:
-            attempt.status = "completed"
-            attempt.completed_at = now_ist()
+        # If the attempt never recorded a single answer (e.g. auth failed, closed window before Q1),
+        # allow candidate to restart cleanly rather than locking them out with 0.
+        has_answers = db.query(RaceAnswer).filter_by(attempt_id=attempt.id).first() is not None
+        if not has_answers and attempt.current_question == 0:
+            db.delete(attempt)
             db.commit()
+            attempt = None
+        else:
+            max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 120
+            created_at = attempt.created_at or attempt.question_started_at or now_ist()
+            if created_at.tzinfo is None:
+                created_at = created_at.replace(tzinfo=IST)
+            if (now_ist() - created_at).total_seconds() > max_sec:
+                attempt.status = "completed"
+                attempt.completed_at = now_ist()
+                db.commit()
     return {
         "contest_date": day,
         "theme": quiz.theme,
@@ -81,16 +89,23 @@ async def start(db: Session = Depends(get_db), token=Depends(get_current_user_fr
         raise HTTPException(status_code=503, detail="Quiz not ready, try again soon.")
     attempt = db.query(RaceAttempt).filter_by(contest_date=day, user_id=user.id).first()
     if attempt:
-        max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 120
-        created_at = attempt.created_at or attempt.question_started_at or now_ist()
-        if created_at.tzinfo is None:
-            created_at = created_at.replace(tzinfo=IST)
-        if attempt.status == "completed" or (now_ist() - created_at).total_seconds() > max_sec or attempt.current_question >= 15:
-            if attempt.status != "completed":
-                attempt.status = "completed"
-                attempt.completed_at = now_ist()
-                db.commit()
-            raise HTTPException(409, "You have already completed todays contest.")
+        # If previous attempt had 0 answers and was aborted before answering anything, allow restart
+        has_answers = db.query(RaceAnswer).filter_by(attempt_id=attempt.id).first() is not None
+        if not has_answers and attempt.current_question == 0:
+            db.delete(attempt)
+            db.commit()
+            attempt = None
+        else:
+            max_sec = (QUESTION_SECONDS + GRACE_SECONDS) * 15 + 120
+            created_at = attempt.created_at or attempt.question_started_at or now_ist()
+            if created_at.tzinfo is None:
+                created_at = created_at.replace(tzinfo=IST)
+            if attempt.status == "completed" or (now_ist() - created_at).total_seconds() > max_sec or attempt.current_question >= 15:
+                if attempt.status != "completed":
+                    attempt.status = "completed"
+                    attempt.completed_at = now_ist()
+                    db.commit()
+                raise HTTPException(409, "You have already completed todays contest.")
     if not attempt:
         name = public_name(getattr(user, "display_name", None) or (user.email or "").split("@")[0])
         attempt = RaceAttempt(contest_date=day, user_id=user.id, display_name=name, status="in_progress", current_question=0, question_started_at=now_ist())

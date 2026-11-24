@@ -621,6 +621,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             try {
                 const r = await fetch('/race/start', { method: 'POST', headers: raceHeaders() });
                 const data = await r.json();
+                if (r.status === 401) {
+                    // Stored token is expired/invalid; clear stale credentials and re-open Google login
+                    localStorage.removeItem('career_bot_token');
+                    currentUserToken = null;
+                    status.textContent = "Session expired. Please sign in with Google to continue.";
+                    requireAuthentication(startRaceAttempt);
+                    return;
+                }
                 if (r.status === 409) {
                     if (startBtn) { startBtn.disabled = true; startBtn.textContent = 'Already completed today!'; }
                     status.textContent = data.detail || "You have already completed today's contest. Come back tomorrow!";
