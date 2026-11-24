@@ -1935,17 +1935,6 @@
                 margin: 0 0 0 13px;
             }
         }
-                gap: 16px;
-                padding: 8px 0;
-            }
-
-            .how-step-connector {
-                width: 2px;
-                height: 24px;
-                flex: none;
-                margin: 0 0 0 13px;
-            }
-        }
 
         @media (max-width: 400px) {
             #how_it_works.how {
