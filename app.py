@@ -124,6 +124,21 @@ def privacy_policy_page():
     path = TEMPLATES_DIR / "privacy_policy.html"
     return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
 
+@app.get("/about", response_class=HTMLResponse)
+def about_page():
+    path = TEMPLATES_DIR / "about.html"
+    return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
+
+@app.get("/contact", response_class=HTMLResponse)
+def contact_page():
+    path = TEMPLATES_DIR / "contact.html"
+    return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
+
+@app.get("/terms", response_class=HTMLResponse)
+def terms_page():
+    path = TEMPLATES_DIR / "terms.html"
+    return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
+
 @app.get("/jobs/{slug}", response_class=HTMLResponse)
 def job_landing_page(request: Request, slug: str):
     page_data = JOB_PAGES.get(slug)

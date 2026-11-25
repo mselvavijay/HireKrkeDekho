@@ -1,7 +1,12 @@
 User-agent: *
 Allow: /
 Allow: /consultation
+Allow: /about
+Allow: /contact
 Allow: /privacy-policy
+Allow: /terms
+Allow: /jobs/
+Allow: /roadmap/
 Allow: /llms.txt
 Disallow: /race/admin
 Disallow: /auth/

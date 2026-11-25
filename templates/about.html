@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="About HireKrkeDekho — Discover our mission to empower candidates with transparent career calibration, AI-guided advisory, and competitive skill benchmarking." />
+    <meta name="robots" content="index, follow" />
+    <title>About Us — HireKrkeDekho</title>
+    <link rel="icon" href="/static/hirekrkedekho-logo.png" type="image/png" />
+    <style>
+        :root {
+            --bg: #070d18;
+            --surface: rgba(15, 22, 40, 0.85);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hi: rgba(99, 102, 241, 0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #6366f1;
+            --accent-soft: rgba(99, 102, 241, 0.12);
+            --cyan: #22d3ee;
+            --gold: #fbbf24;
+            --radius: 14px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.65;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(7, 13, 24, 0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.88rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+        }
+
+        .main-container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #818cf8;
+            background: var(--accent-soft);
+            border: 1px solid var(--border-hi);
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f1f5f9 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .value-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .value-item h3 {
+            font-size: 0.98rem;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .value-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 24px;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            background: rgba(7, 13, 24, 0.9);
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 8px;
+            transition: color 0.15s ease;
+        }
+
+        footer a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo-wrap">
+            <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" height="26">
+        </a>
+        <nav class="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/about" class="nav-link active">About</a>
+            <a href="/contact" class="nav-link">Contact</a>
+            <a href="/privacy-policy" class="nav-link">Privacy</a>
+            <a href="/terms" class="nav-link">Terms</a>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="page-badge">About HireKrkeDekho</div>
+        <h1>Empowering Careers Through Objective AI Intelligence</h1>
+        <p class="subtitle">We built HireKrkeDekho to bring clarity, transparency, and actionable roadmap strategies to job seekers across India and beyond.</p>
+
+        <section class="card">
+            <h2>Our Mission</h2>
+            <p>The modern engineering hiring landscape is congested with keyword gatekeepers, opaque resume screening algorithms, and high-noise job boards that leave qualified candidates guessing what hiring managers actually want.</p>
+            <p><strong>HireKrkeDekho</strong> was founded with a clear thesis: candidates should have access to the exact same diagnostic intelligence that top tech recruiters use. We provide real-time role calibration, structured 3-week learning roadmaps, and daily competitive technical assessments so developers can prove their competence with empirical evidence, not buzzwords.</p>
+        </section>
+
+        <section class="card">
+            <h2>What We Provide</h2>
+            <div class="values-grid">
+                <div class="value-item">
+                    <h3>🎯 AI Career Advisory</h3>
+                    <p>Interactive career consultation engine that maps your specific background, skills, and goals against real-time market hiring requirements.</p>
+                </div>
+                <div class="value-item">
+                    <h3>🗺️ 3-Week Technical Roadmaps</h3>
+                    <p>Actionable, week-by-week technical blueprints to take you from foundational understanding to interview-ready production confidence.</p>
+                </div>
+                <div class="value-item">
+                    <h3>⚡ Daily Technical Contest (AI Race)</h3>
+                    <p>A server-timed, 15-question daily tournament covering core concepts in Python, SQL, Cloud, System Design, and Modern AI Engineering.</p>
+                </div>
+                <div class="value-item">
+                    <h3>🔒 Privacy by Design</h3>
+                    <p>No behavioral tracking cookies, no selling of personal data, and automatic 30-day data retention cleanups to safeguard your career journey.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Our Editorial & Quality Standards</h2>
+            <p>Every role insight, roadmap milestone, and technical contest question hosted on HireKrkeDekho is curated and verified against production standards and current industry benchmarks. We do not aggregate unverified third-party scrapings or publish speculative salary data without verification.</p>
+            <p>Have questions, feedback, or partnerships? Reach our team anytime via our <a href="/contact" style="color:#818cf8;">Contact Page</a> or write directly to <a href="mailto:hirekrkedekho@gmail.com" style="color:#818cf8;">hirekrkedekho@gmail.com</a>.</p>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 HireKrkeDekho &bull;
+        <a href="/">Home</a> &bull;
+        <a href="/about">About</a> &bull;
+        <a href="/contact">Contact</a> &bull;
+        <a href="/privacy-policy">Privacy Policy</a> &bull;
+        <a href="/terms">Terms of Service</a>
+    </footer>
+</body>
+</html>
