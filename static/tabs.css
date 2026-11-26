@@ -29,10 +29,15 @@
     color: var(--text-secondary);
     font-size: 0.88rem; font-weight: 600; font-family: inherit;
     padding: 10px 22px; border-radius: 14px;
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     white-space: nowrap;
 }
-.tabs-pill:hover { color: var(--text-primary); }
+.tabs-pill:hover {
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
 .tabs-pill.active {
     background: var(--surface, rgba(15,22,40,0.9));
     color: var(--accent);

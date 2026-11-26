@@ -123,44 +123,79 @@
 
         /* Board table */
         .board-wrap {
+            background: transparent;
+        }
+        /* Podium (Top 3) */
+        .podium {
+            display: grid; grid-template-columns: 1fr 1.12fr 1fr;
+            gap: 12px; align-items: end; margin-bottom: 20px;
+            padding: 18px 12px 0;
+            background: radial-gradient(ellipse 80% 70% at 50% 20%, rgba(99,102,241,0.22), rgba(15,22,40,0.6) 70%);
+            border: 1px solid var(--border); border-radius: 18px;
+        }
+        .podium-slot {
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .podium-avatar {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.1rem; color: #fff;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            box-shadow: 0 6px 18px rgba(99,102,241,0.35);
+            margin-bottom: 8px; position: relative;
+        }
+        .podium-slot.p1 .podium-avatar {
+            width: 58px; height: 58px; font-size: 1.25rem;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            box-shadow: 0 8px 24px rgba(251,191,36,0.35);
+        }
+        .podium-name {
+            font-size: 0.82rem; font-weight: 700; color: var(--text-primary);
+            max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .podium-score { font-size: 0.75rem; color: #a5b4fc; margin: 2px 0 10px; font-weight: 600; }
+        .podium-pedestal {
+            width: 100%; border-radius: 12px 12px 0 0;
+            background: linear-gradient(180deg, rgba(99,102,241,0.38), rgba(99,102,241,0.08));
+            border: 1px solid rgba(99,102,241,0.35); border-bottom: none;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 900; color: rgba(255,255,255,0.9);
+        }
+        .podium-slot.p1 .podium-pedestal { height: 96px; background: linear-gradient(180deg, rgba(129,140,248,0.55), rgba(99,102,241,0.12)); }
+        .podium-slot.p2 .podium-pedestal { height: 72px; }
+        .podium-slot.p3 .podium-pedestal { height: 56px; }
+        .podium-slot.is-you .podium-name { color: #fbbf24; }
+
+        /* Ranks 4-10 list */
+        .rank-list { display: flex; flex-direction: column; gap: 8px; }
+        .rank-row {
+            display: flex; align-items: center; gap: 12px;
             background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius); overflow: hidden;
+            border-radius: 12px; padding: 11px 14px;
+            transition: background 0.15s, border-color 0.15s;
         }
-        .board { width: 100%; border-collapse: collapse; }
-        .board thead th {
-            text-align: left; padding: 12px 14px;
-            font-size: 0.75rem; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 0.06em;
-            border-bottom: 1px solid var(--border);
+        .rank-row:hover { background: rgba(255,255,255,0.04); border-color: rgba(99,102,241,0.3); }
+        .rank-row.is-you { background: rgba(99,102,241,0.16); border-color: rgba(99,102,241,0.5); }
+        .rank-num { width: 26px; font-weight: 800; font-size: 0.92rem; color: var(--text-secondary); text-align: center; }
+        .row-avatar {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.35);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem; color: #c7d2fe; flex-shrink: 0;
         }
-        .board tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-        .board tbody tr:last-child { border-bottom: none; }
-        .board tbody tr:hover { background: rgba(255,255,255,0.03); }
-        .board tbody tr.is-you { background: rgba(99,102,241,0.14); }
-        .board td { padding: 13px 14px; vertical-align: middle; }
-
-        .rank-badge {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 30px; height: 30px; border-radius: 50%;
-            font-weight: 700; font-size: 0.85rem;
-            background: rgba(255,255,255,0.06); color: var(--text-secondary);
-        }
-        .rank-badge.gold   { background: rgba(251,191,36,0.15); color: var(--gold); }
-        .rank-badge.silver { background: rgba(148,163,184,0.15); color: var(--silver); }
-        .rank-badge.bronze { background: rgba(205,124,62,0.15); color: var(--bronze); }
-
-        .player-name { font-weight: 600; }
+        .row-info { flex: 1; min-width: 0; }
+        .player-name { font-weight: 600; font-size: 0.92rem; }
         .you-tag {
             margin-left: 8px; font-size: 0.7rem; font-weight: 700;
             background: rgba(99,102,241,0.28); color: #c7d2fe;
             border-radius: 4px; padding: 2px 6px;
         }
         .score-pill {
-            display: inline-block; padding: 2px 10px; border-radius: 20px;
-            font-weight: 700; font-size: 0.88rem;
+            display: inline-block; padding: 3px 10px; border-radius: 20px;
+            font-weight: 700; font-size: 0.84rem;
             background: rgba(99,102,241,0.15); color: #a5b4fc;
         }
-        .time-col { color: var(--text-secondary); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+        .time-col { color: var(--text-secondary); font-size: 0.82rem; font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
         .empty-state { text-align: center; padding: 44px 20px; color: var(--text-secondary); }
 
         footer {
@@ -353,22 +388,38 @@
             wrap.innerHTML = `<div class="empty-state">No completed attempts on ${esc(d.contest_date)}.</div>`;
             return;
         }
-        const medals = ["gold", "silver", "bronze"];
-        const rows = d.entries.map((e, i) => {
-            const medal = i < 3 ? medals[i] : "";
-            const secs = (e.total_time_ms / 1000).toFixed(1);
-            return `<tr class="${e.is_you ? "is-you" : ""}">
-                <td><span class="rank-badge ${medal}">${e.rank}</span></td>
-                <td class="player-name">${esc(e.display_name)}${e.is_you ? '<span class="you-tag">YOU</span>' : ""}</td>
-                <td><span class="score-pill">${e.score}/15</span></td>
-                <td class="time-col">${secs}s</td>
-            </tr>`;
-        }).join("");
+        const top3 = d.entries.slice(0, 3);
+        const rest = d.entries.slice(3, 10);
+        const podiumOrder = [top3[1], top3[0], top3[2]].filter(Boolean);
+        const podiumCls = (e) => e.rank === 1 ? "p1" : (e.rank === 2 ? "p2" : "p3");
+        const initial = (name) => esc((name || "P").trim().charAt(0).toUpperCase());
 
-        wrap.innerHTML = `<table class="board">
-            <thead><tr><th>Rank</th><th>Participant</th><th>Score</th><th>Time</th></tr></thead>
-            <tbody>${rows}</tbody>
-        </table>`;
+        const podiumHtml = `<div class="podium">
+            ${podiumOrder.map(e => `
+                <div class="podium-slot ${podiumCls(e)} ${e.is_you ? "is-you" : ""}">
+                    <div class="podium-avatar">${initial(e.display_name)}</div>
+                    <div class="podium-name">${esc(e.display_name)}${e.is_you ? " (You)" : ""}</div>
+                    <div class="podium-score">${e.score}/15 · ${(e.total_time_ms / 1000).toFixed(0)}s</div>
+                    <div class="podium-pedestal">${e.rank}</div>
+                </div>
+            `).join("")}
+        </div>`;
+
+        const listHtml = `<div class="rank-list">
+            ${rest.map(e => `
+                <div class="rank-row ${e.is_you ? "is-you" : ""}">
+                    <div class="rank-num">${e.rank}</div>
+                    <div class="row-avatar">${initial(e.display_name)}</div>
+                    <div class="row-info">
+                        <span class="player-name">${esc(e.display_name)}</span>${e.is_you ? '<span class="you-tag">YOU</span>' : ""}
+                    </div>
+                    <span class="score-pill">${e.score}/15</span>
+                    <span class="time-col">${(e.total_time_ms / 1000).toFixed(1)}s</span>
+                </div>
+            `).join("")}
+        </div>`;
+
+        wrap.innerHTML = podiumHtml + listHtml;
     }
 
     tabsEl.innerHTML = days.map((d, i) =>

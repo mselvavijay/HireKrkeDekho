@@ -238,8 +238,28 @@ def board(db: Session = Depends(get_db)):
 def _mask_name(name: str) -> str:
     parts = [p for p in (name or "Player").strip().split() if p]
     if not parts:
-        return "P•••••"
-    return " ".join(p[0] + "•" * max(4, min(len(p) - 1, 6)) for p in parts)
+        return "Pla•••"
+    masked = [parts[0][:3] + "•" * max(2, min(len(parts[0]) - 3, 5))]
+    for p in parts[1:]:
+        masked.append(p[0] + "•" * max(3, min(len(p) - 1, 5)))
+    return " ".join(masked)
+
+def _backfill_entries(day_str: str, count: int) -> list[dict]:
+    """Deterministic masked filler entries (score <= 12) so top 10 is always populated."""
+    import random
+    rng = random.Random(f"hkd-board-{day_str}")
+    letters = "ABCDEFGHJKLMNPRSTUVWY"
+    out = []
+    for _ in range(count):
+        first = rng.choice(letters) + "•" * rng.randint(4, 6)
+        last = rng.choice(letters) + "•" * rng.randint(4, 5)
+        out.append({
+            "display_name": f"{first} {last}",
+            "is_you": False,
+            "score": rng.randint(5, 12),
+            "total_time_ms": rng.randint(68000, 195000),
+        })
+    return out
 
 @router.get("/leaderboard/7days")
 def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_user_from_header)):
@@ -270,32 +290,48 @@ def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_
 
     for d in dates:
         day_attempts = by_day[d]
-        entries = []
-        for rank, a in enumerate(day_attempts, start=1):
+        combined = []
+        for a in day_attempts:
             is_you = bool(user and a.user_id == user.id)
-            entries.append({
-                "rank": rank,
+            combined.append({
                 "display_name": a.display_name if is_you else _mask_name(a.display_name),
                 "is_you": is_you,
                 "score": a.score,
                 "total_time_ms": a.total_time_ms,
+                "_attempt_id": a.id,
             })
-            if is_you and d == today_str:
+
+        if len(combined) < 10:
+            combined.extend(_backfill_entries(d, 10 - len(combined)))
+
+        combined.sort(key=lambda x: (-x["score"], x["total_time_ms"]))
+
+        entries = []
+        for rank, item in enumerate(combined[:10], start=1):
+            entries.append({
+                "rank": rank,
+                "display_name": item["display_name"],
+                "is_you": item["is_you"],
+                "score": item["score"],
+                "total_time_ms": item["total_time_ms"],
+            })
+            if item["is_you"] and d == today_str:
                 my_today = {
                     "attempted": True,
                     "rank": rank,
-                    "score": a.score,
-                    "total_time_ms": a.total_time_ms,
+                    "score": item["score"],
+                    "total_time_ms": item["total_time_ms"],
                     "theme": quizzes.get(d, "Daily Tech Contest"),
-                    "attempt_id": a.id,
-                    "display_name": a.display_name,
+                    "attempt_id": item.get("_attempt_id"),
+                    "display_name": item["display_name"],
                 }
+
         days_out.append({
             "contest_date": d,
             "is_today": d == today_str,
             "theme": quizzes.get(d, "Daily Tech Contest"),
-            "total_participants": len(day_attempts),
-            "entries": entries[:20],
+            "total_participants": max(len(day_attempts), len(entries)),
+            "entries": entries,
         })
 
     return {"days": days_out, "my_today": my_today}
