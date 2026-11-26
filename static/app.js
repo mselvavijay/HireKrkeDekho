@@ -675,12 +675,12 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     const entryBtn = document.getElementById('race_entry_btn');
                     const entryLabel = document.getElementById('race_entry_btn_label');
                     const standingsBtn = document.querySelector('.btn-race-standings');
-                    if (entryLabel) entryLabel.textContent = 'Enter Daily Contest';
+                    if (entryLabel) entryLabel.textContent = "View today's leaderboard";
                     if (entryBtn) {
                         entryBtn.classList.remove('cta-shimmer');
                         entryBtn.onclick = () => {
-                            trackRaceEvent('contest_cta_clicked', { completed: true });
-                            openRaceModal();
+                            trackRaceEvent('leaderboard_cta_clicked', { completed: true });
+                            window.open('/race/leaderboard/page', '_blank', 'noopener,noreferrer');
                         };
                     }
                     if (standingsBtn) standingsBtn.hidden = true;
@@ -739,7 +739,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                         window._raceLastTime = secs;
                         window._raceLastTopic = mine.theme || window._raceLastTopic || 'Daily Contest';
                         completeText.textContent = mine.rank
-                            ? `🏆 Rank #${mine.rank} — ${mine.score}/15 in ${secs}s! Challenge a friend to beat your score.`
+                            ? `🏆 Rank #${mine.rank} — ${mine.score}/15 in ${secs}s.`
                             : `Saved: ${mine.score}/15 in ${secs}s. Ranking update is pending — check the leaderboard shortly.`;
                         trackRaceEvent('rank_revealed', { rank: mine.rank, score: mine.score });
                     }

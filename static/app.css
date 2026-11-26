@@ -5137,6 +5137,10 @@
         #race_complete { padding:22px 0 6px; text-align:center; }
         #race_complete h4 { margin:10px 0 7px; color:#fff; font-size:1.3rem; }
         #race_complete p { margin:0 0 20px; color:var(--text-secondary); }
+        .race-complete-actions { display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:12px; }
+        .race-complete-actions .btn-primary-action { width:100%; text-decoration:none; }
+        .race-challenge-btn { background:transparent; border:0; color:#93c5fd; font:inherit; font-size:.88rem; font-weight:600; cursor:pointer; padding:4px 8px; }
+        .race-challenge-btn:hover { color:#fff; text-decoration:underline; }
         .race-complete-icon { display:grid; place-items:center; width:50px; height:50px; margin:auto; border-radius:50%; background:#173d35; color:#71e2b2; font-size:1.45rem; font-weight:900; }
         @media (max-width:640px) { 
             .race-modal { width:calc(100vw - 20px); max-width:calc(100vw - 20px); padding:18px 14px; } 
