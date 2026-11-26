@@ -32,13 +32,33 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         window.addEventListener('DOMContentLoaded', async () => {
             _restoreAdvisorContextFromCache();
 
-            // Upper nav pill tabs active state
-            document.querySelectorAll('#site_nav_links .tabs-pill').forEach(link => {
-                link.addEventListener('click', () => {
-                    document.querySelectorAll('#site_nav_links .tabs-pill').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
+            // Upper nav sliding pill indicator
+            const navEl = document.getElementById('site_nav_links');
+            const indicator = navEl?.querySelector('.nav-pill-indicator');
+            const moveNavPill = (el) => {
+                if (!indicator || !el) return;
+                indicator.style.width = el.offsetWidth + 'px';
+                indicator.style.transform = `translateX(${el.offsetLeft}px)`;
+            };
+            if (navEl && indicator) {
+                const pills = navEl.querySelectorAll('.tabs-pill');
+                const getActive = () => navEl.querySelector('.tabs-pill.active') || pills[0];
+                moveNavPill(getActive());
+                pills.forEach(link => {
+                    link.addEventListener('mouseenter', () => moveNavPill(link));
+                    link.addEventListener('focus', () => moveNavPill(link));
+                    link.addEventListener('click', () => {
+                        pills.forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                        moveNavPill(link);
+                    });
                 });
-            });
+                navEl.addEventListener('mouseleave', () => moveNavPill(getActive()));
+                navEl.addEventListener('focusout', (e) => {
+                    if (!navEl.contains(e.relatedTarget)) moveNavPill(getActive());
+                });
+                window.addEventListener('resize', () => moveNavPill(getActive()));
+            }
 
             // Instant synchronous session restoration from localStorage (No delay / flicker)
             const storedName = localStorage.getItem('career_bot_user_name');

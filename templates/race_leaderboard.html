@@ -31,7 +31,7 @@
             color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             min-height: 100vh;
-            padding: 0 0 60px;
+            padding: 0 0 110px;
         }
         nav {
             display: flex; align-items: center; justify-content: space-between;
@@ -236,7 +236,6 @@
 <main>
     <div class="page-header">
         <h1>🏆 Daily Tech Race Leaderboard</h1>
-        <p class="subtitle">Last 7 days of rankings · Participant identities are masked for privacy</p>
     </div>
 
     <!-- Friend Challenge Banner (shown when ?challenge=... is present) -->
@@ -282,7 +281,7 @@
 
 <div class="sticky-cta" id="sticky-cta">
     <span>Ready to see where you rank?</span>
-    <a class="btn btn-primary cta-pulse" id="btn-sticky-find-rank" href="/?from=leaderboard#ai_race">Find My Rank</a>
+    <a class="btn btn-primary cta-pulse" id="btn-sticky-find-rank" href="/?from=leaderboard#ai_race">Give Today&apos;s Contest</a>
 </div>
 
 <script>
@@ -381,7 +380,7 @@
         const d = days[idx];
         if (!d) return;
         document.getElementById("day-topic").textContent = `${d.contest_date} · ${d.theme}`;
-        document.getElementById("day-count").textContent = `${d.total_participants} participant${d.total_participants === 1 ? "" : "s"}`;
+        document.getElementById("day-count").textContent = "Top 10 participants";
 
         const wrap = document.getElementById("board-wrap");
         if (!d.entries.length) {
