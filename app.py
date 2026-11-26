@@ -4,7 +4,7 @@ os.environ["DISABLE_SQLALCHEMY_CEXT"] = "1"
 
 from pathlib import Path
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import HTMLResponse, Response, JSONResponse
+from fastapi.responses import HTMLResponse, Response, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from database import engine, Base, init_db
@@ -54,6 +54,12 @@ RATE_LIMITS = {
 
 @app.middleware("http")
 async def security_and_ratelimit_middleware(request: Request, call_next):
+    if request.headers.get("host", "").split(":")[0].lower() == "hirekrkedekho.in":
+        target = f"https://www.hirekrkedekho.in{request.url.path}"
+        if request.url.query:
+            target += f"?{request.url.query}"
+        return RedirectResponse(target, status_code=301)
+
     client_ip = request.headers.get("x-forwarded-for", request.client.host if request.client else "unknown").split(",")[0].strip()
     path = request.url.path
 

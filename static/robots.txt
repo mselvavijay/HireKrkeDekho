@@ -12,4 +12,4 @@ Disallow: /race/admin
 Disallow: /auth/
 Disallow: /api/
 
-Sitemap: https://hirekrkedekho.in/sitemap.xml
+Sitemap: https://www.hirekrkedekho.in/sitemap.xml
