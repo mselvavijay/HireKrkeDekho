@@ -301,9 +301,6 @@ def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_
                 "_attempt_id": a.id,
             })
 
-        if len(combined) < 10:
-            combined.extend(_backfill_entries(d, 10 - len(combined)))
-
         combined.sort(key=lambda x: (-x["score"], x["total_time_ms"]))
 
         entries = []
@@ -330,7 +327,7 @@ def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_
             "contest_date": d,
             "is_today": d == today_str,
             "theme": quizzes.get(d, "Daily Tech Contest"),
-            "total_participants": max(len(day_attempts), len(entries)),
+            "total_participants": len(day_attempts),
             "entries": entries,
         })
 

@@ -219,7 +219,7 @@
         /* Keep standings factual and calm: table first, decoration second. */
         .page-header { text-align:left; margin-bottom:20px; }
         .page-header h1 { font-size:1.65rem; }
-        .cta-card { background:transparent; border:0; border-radius:0; border-bottom:1px solid var(--border); padding:0 0 20px; }
+        .cta-card { background:rgba(15,22,40,.55); border:1px solid var(--border); border-radius:10px; padding:18px 20px; }
         .cta-card h2 { font-size:1rem; }
         .cta-pulse { animation:none; }
         .day-tab, .topic-pill { border-radius:6px; }
@@ -232,6 +232,12 @@
         .rank-num { text-align:left; color:#818cf8; }
         .score-pill { background:transparent; color:var(--text-primary); padding:0; }
         .sticky-cta { background:rgba(7,13,24,.98); box-shadow:none; }
+        .podium { display:grid; background:transparent; border:0; border-bottom:1px solid var(--border); border-radius:0; padding:0 8px 16px; margin-bottom:10px; }
+        .podium-avatar { width:38px; height:38px; border-radius:50%; background:rgba(99,102,241,.18); box-shadow:none; font-size:.9rem; }
+        .podium-slot.p1 .podium-avatar { width:46px; height:46px; font-size:1rem; background:rgba(251,191,36,.16); box-shadow:none; }
+        .podium-score { color:var(--text-secondary); margin:2px 0 8px; }
+        .podium-pedestal, .podium-slot.p1 .podium-pedestal { height:32px; background:transparent; border:0; color:var(--text-secondary); font-size:.9rem; }
+        .podium-slot.p1 .podium-name { color:#fbbf24; }
         @media (prefers-reduced-motion: reduce) {
             *, .cta-pulse { animation: none !important; transition: none !important; }
         }
@@ -366,18 +372,20 @@
         ctaHead.textContent = "Made It to the Leaderboard? Challenge a Friend!";
         ctaSub.textContent = `Your rank: #${myToday.rank} · ${myToday.score}/15 in ${secs}s. Share your result and come back tomorrow for the next contest!`;
         ctaActions.innerHTML = `
-            <button class="btn btn-primary" id="btn-challenge-copy">Challenge Your Friend</button>
-            <button class="btn btn-wa" id="btn-challenge-wa">📲 WhatsApp</button>
+            <button class="btn btn-primary" id="btn-challenge-copy">Share challenge</button>
+            <button class="btn btn-wa" id="btn-challenge-wa">WhatsApp</button>
         `;
-        document.getElementById("btn-challenge-copy").onclick = async () => {
-            trackLbEvent("challenge_friend_clicked", { method: "copy" });
-            try {
-                await navigator.clipboard.writeText(challengeMsg);
-                trackLbEvent("challenge_link_copied");
+        document.getElementById("btn-challenge-copy").onclick = () => {
+            trackLbEvent("challenge_friend_clicked", { method: "share" });
+            if (navigator.share) {
+                navigator.share({ title: "HireKrkeDekho Daily Contest", text: challengeMsg, url: challengeUrl }).catch(() => {});
+                return;
+            }
+            navigator.clipboard.writeText(challengeMsg).then(() => {
                 const toast = document.getElementById("copy-toast");
                 toast.classList.add("show");
                 setTimeout(() => toast.classList.remove("show"), 3000);
-            } catch {}
+            }).catch(() => {});
         };
         document.getElementById("btn-challenge-wa").onclick = () => {
             trackLbEvent("challenge_friend_clicked", { method: "whatsapp" });
@@ -435,7 +443,7 @@
             `).join("")}
         </div>`;
 
-        wrap.innerHTML = listHtml;
+        wrap.innerHTML = top3.length ? podiumHtml + listHtml : listHtml;
     }
 
     tabsEl.innerHTML = days.map((d, i) =>
