@@ -4,6 +4,7 @@ from datetime import datetime, timezone, timedelta
 from collections import defaultdict
 import time
 from fastapi import APIRouter, Depends, HTTPException, Request, Header
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -233,6 +234,62 @@ def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(
 @router.get("/leaderboard")
 def board(db: Session = Depends(get_db)):
     return {"contest_date": contest_date(), "entries": leaderboard(db, contest_date())}
+
+@router.get("/leaderboard/page", response_class=HTMLResponse)
+def leaderboard_page():
+    from fastapi.responses import HTMLResponse
+    path = __import__("pathlib").Path(__file__).parent.parent / "templates" / "race_leaderboard.html"
+    return HTMLResponse(path.read_text(encoding="utf-8"))
+
+@router.get("/share-card")
+def share_card(name: str = "player", score: int = 0, total: int = 15,
+               time_s: int = 0, rank: int = 0, theme: str = "Tech"):
+    """Dynamic OG share image as SVG. Linked from share URLs so WhatsApp/LinkedIn preview shows score."""
+    from fastapi.responses import Response
+    safe = lambda s: str(s).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace('"',"&quot;")[:40]
+    pct = int(score / max(total, 1) * 100)
+    bar_w = int(pct * 3.6)  # out of 360px
+    rank_txt = f"Rank #{rank}" if rank else ""
+    time_txt = f"{time_s}s" if time_s else ""
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="600" height="314" viewBox="0 0 600 314">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070d18"/>
+      <stop offset="100%" stop-color="#0f1628"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="314" fill="url(#bg)" rx="16"/>
+  <rect x="0" y="0" width="600" height="4" fill="url(#bar)" rx="2"/>
+  <!-- Logo text -->
+  <text x="30" y="44" font-family="system-ui,sans-serif" font-size="13" fill="#6366f1" font-weight="700">HIREKRKEDEKHO</text>
+  <text x="30" y="66" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">Daily Tech Race</text>
+  <!-- Topic pill -->
+  <rect x="460" y="28" width="{min(len(safe(theme))*8+16,140)}" height="24" rx="12" fill="rgba(99,102,241,0.15)"/>
+  <text x="468" y="45" font-family="system-ui,sans-serif" font-size="11" fill="#818cf8">{safe(theme)}</text>
+  <!-- Trophy -->
+  <text x="30" y="130" font-size="48">🏆</text>
+  <!-- Name -->
+  <text x="96" y="108" font-family="system-ui,sans-serif" font-size="22" font-weight="800" fill="#f1f5f9">{safe(name)}</text>
+  <text x="96" y="132" font-family="system-ui,sans-serif" font-size="14" fill="#94a3b8">scored on today&apos;s race</text>
+  <!-- Big score -->
+  <text x="30" y="195" font-family="system-ui,sans-serif" font-size="62" font-weight="900" fill="#f1f5f9">{score}</text>
+  <text x="110" y="195" font-family="system-ui,sans-serif" font-size="28" font-weight="400" fill="#64748b">/ {total}</text>
+  <!-- Rank & time -->
+  <text x="200" y="175" font-family="system-ui,sans-serif" font-size="14" fill="#6366f1" font-weight="700">{safe(rank_txt)}</text>
+  <text x="200" y="198" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">{safe(time_txt)}</text>
+  <!-- Progress bar -->
+  <rect x="30" y="222" width="360" height="8" rx="4" fill="rgba(255,255,255,0.08)"/>
+  <rect x="30" y="222" width="{bar_w}" height="8" rx="4" fill="url(#bar)"/>
+  <!-- CTA -->
+  <text x="30" y="268" font-family="system-ui,sans-serif" font-size="16" fill="#94a3b8">Can you beat me? 👉</text>
+  <text x="30" y="292" font-family="system-ui,sans-serif" font-size="14" fill="#6366f1" font-weight="600">hirekrkedekho.in</text>
+</svg>"""
+    return Response(content=svg, media_type="image/svg+xml",
+                    headers={"Cache-Control": "public, max-age=3600"})
 
 @router.get("/winner/latest")
 def latest_winner(db: Session = Depends(get_db), token=Depends(get_optional_user_from_header)):

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Leaderboard — HireKrkeDekho AI Race</title>
+    <meta name="description" content="Top players on today's HireKrkeDekho Daily Tech Race. Can you beat the leaderboard?" />
+    <meta name="robots" content="index, follow" />
+    <!-- OG for sharing -->
+    <meta property="og:title" content="HireKrkeDekho Daily Tech Race — Leaderboard 🏆" />
+    <meta property="og:description" content="Top coders battling it out today. Can you crack the leaderboard?" />
+    <meta property="og:image" content="https://hirekrkedekho.in/static/hirekrkedekho-logo.png" />
+    <meta property="og:url" content="https://hirekrkedekho.in/race/leaderboard" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/static/hirekrkedekho-logo.png" type="image/png" />
+    <style>
+        :root {
+            --bg: #070d18;
+            --surface: rgba(15, 22, 40, 0.9);
+            --border: rgba(255,255,255,0.08);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --gold: #fbbf24;
+            --silver: #94a3b8;
+            --bronze: #cd7c3e;
+            --radius: 14px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            min-height: 100vh;
+            padding: 0 0 60px;
+        }
+        nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(7,13,24,0.95);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .nav-logo img { height: 32px; border-radius: 6px; }
+        .nav-logo span { font-weight: 700; font-size: 1rem; color: var(--text-primary); }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        main { max-width: 700px; margin: 0 auto; padding: 32px 16px; }
+
+        .page-header { text-align: center; margin-bottom: 36px; }
+        .page-header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+        .page-header .subtitle { color: var(--text-secondary); margin-top: 8px; font-size: 0.95rem; }
+        .contest-date {
+            display: inline-block; margin-top: 12px;
+            background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 20px; padding: 4px 14px; font-size: 0.82rem; color: #818cf8;
+        }
+
+        /* Yesterday's winner banner */
+        .winner-banner {
+            background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(251,191,36,0.04));
+            border: 1px solid rgba(251,191,36,0.3);
+            border-radius: var(--radius); padding: 18px 20px;
+            margin-bottom: 28px; display: flex; align-items: center; gap: 14px;
+        }
+        .winner-banner .trophy { font-size: 2rem; }
+        .winner-banner .info { flex: 1; }
+        .winner-banner .label { font-size: 0.75rem; color: #d97706; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+        .winner-banner .name { font-size: 1.1rem; font-weight: 700; color: #fbbf24; margin-top: 2px; }
+        .winner-banner .detail { font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px; }
+        .winner-banner.hidden { display: none; }
+
+        /* Your rank card */
+        .your-rank-card {
+            background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25);
+            border-radius: var(--radius); padding: 14px 20px;
+            margin-bottom: 24px; display:flex; align-items:center; justify-content:space-between;
+        }
+        .your-rank-card.hidden { display: none; }
+        .your-rank-card .label { font-size: 0.82rem; color: #818cf8; }
+        .your-rank-card .rank-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+
+        /* Leaderboard table */
+        .board { width: 100%; border-collapse: collapse; }
+        .board thead th {
+            text-align: left; padding: 10px 14px;
+            font-size: 0.75rem; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: 0.06em;
+            border-bottom: 1px solid var(--border);
+        }
+        .board tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+        .board tbody tr:hover { background: rgba(255,255,255,0.03); }
+        .board tbody tr.is-you { background: rgba(99,102,241,0.07); }
+        .board td { padding: 14px; vertical-align: middle; }
+
+        .rank-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; border-radius: 50%;
+            font-weight: 700; font-size: 0.9rem;
+            background: rgba(255,255,255,0.06); color: var(--text-secondary);
+        }
+        .rank-badge.gold   { background: rgba(251,191,36,0.15); color: var(--gold); }
+        .rank-badge.silver { background: rgba(148,163,184,0.15); color: var(--silver); }
+        .rank-badge.bronze { background: rgba(205,124,62,0.15); color: var(--bronze); }
+
+        .player-name { font-weight: 600; }
+        .you-tag {
+            margin-left: 8px; font-size: 0.7rem; font-weight: 600;
+            background: rgba(99,102,241,0.2); color: #818cf8;
+            border-radius: 4px; padding: 1px 6px;
+        }
+        .score-pill {
+            display: inline-block; padding: 2px 10px; border-radius: 20px;
+            font-weight: 700; font-size: 0.9rem;
+            background: rgba(99,102,241,0.15); color: #a5b4fc;
+        }
+        .time-col { color: var(--text-secondary); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+
+        .empty-state { text-align: center; padding: 48px 24px; color: var(--text-secondary); }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+        /* Share button */
+        .share-row { display: flex; justify-content: center; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 22px; border-radius: 8px; font-size: 0.9rem;
+            font-weight: 600; cursor: pointer; border: none; text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-wa { background: #25d366; color: #fff; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+
+        .play-cta { text-align: center; margin-top: 36px; }
+        .play-cta a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+        footer {
+            text-align: center; color: var(--text-secondary);
+            font-size: 0.8rem; padding: 24px 0 0; margin-top: 48px;
+            border-top: 1px solid var(--border);
+        }
+        footer a { color: var(--text-secondary); text-decoration: none; margin: 0 6px; }
+        footer a:hover { color: var(--text-primary); }
+    </style>
+</head>
+<body>
+<nav>
+    <a class="nav-logo" href="/">
+        <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" />
+        <span>HireKrkeDekho</span>
+    </a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+    </div>
+</nav>
+
+<main>
+    <div class="page-header">
+        <h1>🏆 Daily Leaderboard</h1>
+        <p class="subtitle">Top players in today's AI Tech Race</p>
+        <span class="contest-date" id="contest-date">Loading…</span>
+    </div>
+
+    <!-- Yesterday's winner -->
+    <div class="winner-banner hidden" id="winner-banner">
+        <div class="trophy">🥇</div>
+        <div class="info">
+            <div class="label">Yesterday's Champion</div>
+            <div class="name" id="winner-name">—</div>
+            <div class="detail" id="winner-detail"></div>
+        </div>
+    </div>
+
+    <!-- Your rank (shown if logged in and completed) -->
+    <div class="your-rank-card hidden" id="your-rank-card">
+        <div>
+            <div class="label">Your rank today</div>
+            <div class="rank-num" id="your-rank-num">—</div>
+        </div>
+        <div style="text-align:right">
+            <div class="label">Your score</div>
+            <div class="rank-num" id="your-score-num" style="color:#a5b4fc">—</div>
+        </div>
+    </div>
+
+    <!-- Board -->
+    <div id="board-wrap">
+        <div class="empty-state">
+            <div class="icon">⏳</div>
+            <div>Loading leaderboard…</div>
+        </div>
+    </div>
+
+    <!-- Share row -->
+    <div class="share-row" id="share-row" style="display:none">
+        <button class="btn btn-wa" id="btn-share-wa">📲 Share on WhatsApp</button>
+        <button class="btn btn-outline" id="btn-copy-link">🔗 Copy link</button>
+    </div>
+
+    <div class="play-cta">
+        <p style="color:var(--text-secondary);margin-bottom:8px">Haven't played yet today?</p>
+        <a href="/">Play Today's Race →</a>
+    </div>
+</main>
+
+<footer>
+    &copy; 2026 HireKrkeDekho &bull;
+    <a href="/">Home</a> &bull;
+    <a href="/about">About</a> &bull;
+    <a href="/privacy-policy">Privacy Policy</a> &bull;
+    <a href="/terms">Terms</a>
+</footer>
+
+<script>
+(async function () {
+    const TOKEN_KEY = "hkd_auth_token";
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    // ── Fetch today's leaderboard ──────────────────────────────────────────
+    let board = [], theme = "", contestDate = "";
+    try {
+        const headers = token ? { Authorization: "Bearer " + token } : {};
+        const r = await fetch("/race/today", { headers });
+        if (r.ok) {
+            const data = await r.json();
+            board = data.leaderboard || [];
+            theme = data.theme || "";
+            contestDate = data.contest_date || "";
+            document.getElementById("contest-date").textContent =
+                contestDate + (theme ? " · " + theme : "");
+        }
+    } catch {}
+
+    // ── Fetch yesterday's winner ───────────────────────────────────────────
+    try {
+        const r = await fetch("/race/winner/latest");
+        if (r.ok) {
+            const data = await r.json();
+            if (data.winner) {
+                const w = data.winner;
+                document.getElementById("winner-name").textContent = w.display_name;
+                const secs = Math.round((w.total_time_ms || 0) / 1000);
+                document.getElementById("winner-detail").textContent =
+                    `Score: ${w.score}/15  ·  Time: ${secs}s  ·  ${w.contest_date}`;
+                document.getElementById("winner-banner").classList.remove("hidden");
+            }
+        }
+    } catch {}
+
+    // ── Render table ──────────────────────────────────────────────────────
+    const wrap = document.getElementById("board-wrap");
+    if (!board.length) {
+        wrap.innerHTML = `<div class="empty-state"><div class="icon">🌅</div>
+            <div>No completions yet today.<br>Be the first on the board!</div></div>`;
+        return;
+    }
+
+    // Figure out if logged-in user is in the board
+    let myEmail = null;
+    let myRank = null, myScore = null;
+    if (token) {
+        try {
+            const r = await fetch("/race/today", { headers: { Authorization: "Bearer " + token } });
+            if (r.ok) { const d = await r.json(); myEmail = d.user_email; }
+        } catch {}
+    }
+
+    const medalClass = ["gold", "silver", "bronze"];
+
+    const rows = board.map((entry, i) => {
+        const isYou = false; // display_name match not reliable; keep simple
+        const medal = i < 3 ? medalClass[i] : "";
+        const secs = (entry.total_time_ms / 1000).toFixed(1);
+        return `<tr${isYou ? ' class="is-you"' : ""}>
+            <td><span class="rank-badge ${medal}">${entry.rank}</span></td>
+            <td class="player-name">${escHtml(entry.display_name)}${isYou ? '<span class="you-tag">YOU</span>' : ""}</td>
+            <td><span class="score-pill">${entry.score}/15</span></td>
+            <td class="time-col">${secs}s</td>
+        </tr>`;
+    }).join("");
+
+    wrap.innerHTML = `<table class="board">
+        <thead><tr>
+            <th>#</th><th>Player</th><th>Score</th><th>Time</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+    </table>`;
+
+    // Show share row
+    document.getElementById("share-row").style.display = "flex";
+
+    // ── Share buttons ──────────────────────────────────────────────────────
+    const shareUrl = "https://hirekrkedekho.in/race/leaderboard";
+    const top = board[0];
+    const waText = encodeURIComponent(
+        `🏆 HireKrkeDekho Daily Tech Race — Leaderboard\n` +
+        `Today's topic: ${theme}\n` +
+        `#1: ${top.display_name} scored ${top.score}/15 in ${(top.total_time_ms/1000).toFixed(0)}s\n` +
+        `Can you beat them? 👉 ${shareUrl}`
+    );
+    document.getElementById("btn-share-wa").onclick = () =>
+        window.open("https://wa.me/?text=" + waText, "_blank");
+
+    document.getElementById("btn-copy-link").onclick = async () => {
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            document.getElementById("btn-copy-link").textContent = "✅ Copied!";
+            setTimeout(() => { document.getElementById("btn-copy-link").textContent = "🔗 Copy link"; }, 2000);
+        } catch {}
+    };
+
+    function escHtml(s) {
+        return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+})();
+</script>
+</body>
+</html>

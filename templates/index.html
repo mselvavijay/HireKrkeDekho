@@ -69,6 +69,7 @@
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 <link rel="stylesheet" href="/static/app.css?v=20261124-perf-v1">
+<link rel="stylesheet" href="/static/tabs.css?v=20261126-v1">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
 </head>
@@ -82,11 +83,11 @@
             <img class="brand-wordmark" src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" width="220" height="36">
         </a>
 
-        <nav class="nav-links" id="site_nav_links">
-            <a href="#how_it_works" class="nav-link" onclick="closeSiteMobileNav()">Tri-Factor Matching</a>
-            <a href="#ai_race" class="nav-link" onclick="closeSiteMobileNav()">Daily Contest</a>
-            <a href="#about_section" class="nav-link" onclick="closeSiteMobileNav()">About</a>
-            
+        <nav class="nav-links tabs-pill-list" id="site_nav_links" aria-label="Primary navigation">
+            <a href="#how_it_works" class="nav-link tabs-pill active" onclick="closeSiteMobileNav()">Tri-Factor Matching</a>
+            <a href="#ai_race" class="nav-link tabs-pill" onclick="closeSiteMobileNav()">Daily Contest</a>
+            <a href="#about_section" class="nav-link tabs-pill" onclick="closeSiteMobileNav()">About</a>
+            <a href="/careers" class="nav-link tabs-pill" onclick="closeSiteMobileNav()">Careers</a>
         </nav>
 
         <div class="header-actions">
@@ -842,6 +843,7 @@
                 <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; display:flex; gap:12px; flex-wrap:wrap;">
                     <a href="/about" style="color:var(--text-secondary); text-decoration:none;">About</a>
                     <a href="/contact" style="color:var(--text-secondary); text-decoration:none;">Contact</a>
+                    <a href="/careers" style="color:var(--text-secondary); text-decoration:none;">Careers</a>
                     <a href="/privacy-policy" style="color:var(--text-secondary); text-decoration:none;">Privacy Policy</a>
                     <a href="/terms" style="color:var(--text-secondary); text-decoration:none;">Terms of Service</a>
                 </p>
@@ -915,7 +917,7 @@
                 <button class="btn-primary-action" id="race_start_btn" type="button" onclick="startRaceAttempt()">Continue to contest</button>
             </div>
             <div id="race_play" hidden><div class="race-progress"><span id="race_question_count">Question 1 of 15</span><strong id="race_timer">17</strong></div><div class="race-timer-track"><i id="race_timer_bar"></i></div><h4 id="race_question_text"></h4><div id="race_options" class="race-options"></div></div>
-            <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><button class="btn-primary-action" type="button" onclick="showRaceLeaderboard()">View today&apos;s leaderboard</button></div>
+            <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px"><button class="btn-primary-action" type="button" onclick="showRaceLeaderboard()">View today&apos;s leaderboard</button><button class="btn-secondary-hero" type="button" id="race_share_wa_btn" onclick="shareRaceResultWA()" style="background:#25d366;color:#fff;border:none">📲 Beat my score</button><a class="btn-secondary-hero" href="/race/leaderboard" target="_blank" style="text-decoration:none">🏆 Full Leaderboard</a></div></div>
             <p id="race_payment_status" class="race-status"></p>
         </div>
     </div>    <div class="modal-overlay" id="race_leaderboard_overlay" role="dialog" aria-modal="true" aria-labelledby="race_leaderboard_title">

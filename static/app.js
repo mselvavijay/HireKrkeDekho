@@ -32,6 +32,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         window.addEventListener('DOMContentLoaded', async () => {
             _restoreAdvisorContextFromCache();
 
+            // Upper nav pill tabs active state
+            document.querySelectorAll('#site_nav_links .tabs-pill').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelectorAll('#site_nav_links .tabs-pill').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+
             // Instant synchronous session restoration from localStorage (No delay / flicker)
             const storedName = localStorage.getItem('career_bot_user_name');
             const storedEmail = localStorage.getItem('career_bot_user_email');
@@ -619,13 +627,24 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             if (status) status.textContent = '';
             if (play) play.hidden = true;
             if (complete) complete.hidden = false;
+            const score = (data && typeof data.score === 'number') ? data.score : null;
             if (completeText) {
-                const score = (data && typeof data.score === 'number') ? data.score : null;
                 completeText.textContent = score !== null
                     ? `Final score: ${score}/15. Rankings are published after the contest day ends.`
                     : 'Contest completed. Check the leaderboard for your final score!';
             }
+            // Store score for share button
+            if (score !== null) window._raceLastScore = score;
             if (typeof refreshRaceResultCard === 'function') refreshRaceResultCard();
+        }
+
+        function shareRaceResultWA() {
+            const score = typeof window._raceLastScore === 'number' ? window._raceLastScore : '?';
+            const leaderboardUrl = 'https://hirekrkedekho.in/race/leaderboard/page';
+            const text = encodeURIComponent(
+                `🏆 I scored ${score}/15 on HireKrkeDekho's Daily Tech Race!\nCan you beat me? 👇\n${leaderboardUrl}`
+            );
+            window.open('https://wa.me/?text=' + text, '_blank');
         }
 
         async function startRaceAttempt() {

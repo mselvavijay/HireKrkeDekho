@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Careers — HireKrkeDekho</title>
+    <meta name="description" content="Join the HireKrkeDekho team. We're building the future of engineering career calibration in India. Apply now." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://hirekrkedekho.in/careers" />
+    <meta property="og:title" content="Careers at HireKrkeDekho" />
+    <meta property="og:description" content="Help us build the future of engineering hiring in India. We're hiring builders, marketers, and growth hackers." />
+    <meta property="og:url" content="https://hirekrkedekho.in/careers" />
+    <link rel="icon" href="/static/hirekrkedekho-logo.png" type="image/png" />
+    <style>
+        :root {
+            --bg: #070d18;
+            --surface: rgba(15, 22, 40, 0.85);
+            --border: rgba(255,255,255,0.08);
+            --border-hi: rgba(99,102,241,0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #6366f1;
+            --accent-soft: rgba(99,102,241,0.12);
+            --radius: 14px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.65;
+            min-height: 100vh;
+        }
+        nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 24px; border-bottom: 1px solid var(--border);
+            background: rgba(7,13,24,0.95); position: sticky; top: 0; z-index: 10;
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-logo img { height: 32px; border-radius: 6px; }
+        .nav-logo span { font-weight: 700; font-size: 1rem; color: var(--text-primary); }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.15s; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.active { color: var(--accent); }
+
+        /* Hero */
+        .hero {
+            text-align: center; padding: 80px 24px 60px;
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(99,102,241,0.1) 0%, transparent 70%);
+        }
+        .hero-badge {
+            display: inline-block; padding: 5px 16px; border-radius: 20px;
+            background: var(--accent-soft); border: 1px solid var(--border-hi);
+            color: #818cf8; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem); font-weight: 800;
+            letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 20px;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero p {
+            color: var(--text-secondary); font-size: 1.05rem; max-width: 560px;
+            margin: 0 auto 32px;
+        }
+        .hero-apply-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent); color: #fff; font-weight: 700;
+            padding: 14px 32px; border-radius: 10px; text-decoration: none;
+            font-size: 1rem; transition: opacity 0.15s; box-shadow: 0 4px 24px rgba(99,102,241,0.3);
+        }
+        .hero-apply-btn:hover { opacity: 0.88; }
+
+        /* Why section */
+        main { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; }
+        .section-title {
+            font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .section-sub { color: var(--text-secondary); margin-bottom: 32px; font-size: 0.95rem; }
+
+        /* Perks grid */
+        .perks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 60px; }
+        .perk-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 22px;
+        }
+        .perk-icon { font-size: 1.6rem; margin-bottom: 10px; }
+        .perk-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+        .perk-desc { color: var(--text-secondary); font-size: 0.85rem; }
+
+        /* Open roles */
+        .roles-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 60px; }
+        .role-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; flex-wrap: wrap;
+            transition: border-color 0.15s;
+        }
+        .role-card:hover { border-color: var(--border-hi); }
+        .role-info { flex: 1; }
+        .role-title { font-weight: 700; font-size: 1rem; }
+        .role-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+        .role-tag {
+            font-size: 0.75rem; padding: 2px 10px; border-radius: 20px;
+            background: var(--accent-soft); color: #818cf8; border: 1px solid var(--border-hi);
+        }
+        .role-tag.remote { background: rgba(34,197,94,0.1); color: #4ade80; border-color: rgba(34,197,94,0.25); }
+        .role-tag.intern { background: rgba(251,191,36,0.1); color: #fbbf24; border-color: rgba(251,191,36,0.25); }
+        .apply-role-btn {
+            white-space: nowrap; padding: 9px 20px; border-radius: 8px;
+            background: var(--accent); color: #fff; text-decoration: none;
+            font-weight: 600; font-size: 0.85rem; transition: opacity 0.15s;
+        }
+        .apply-role-btn:hover { opacity: 0.85; }
+
+        /* Application form embed */
+        .form-section {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); overflow: hidden;
+        }
+        .form-section-header { padding: 24px 28px 0; }
+        .form-section-header h2 { font-size: 1.3rem; font-weight: 700; }
+        .form-section-header p { color: var(--text-secondary); font-size: 0.9rem; margin-top: 6px; margin-bottom: 20px; }
+        .form-frame-wrap { position: relative; width: 100%; }
+        iframe.gform {
+            width: 100%; height: 820px; border: none; display: block;
+        }
+
+        footer {
+            text-align: center; color: var(--text-secondary);
+            font-size: 0.8rem; padding: 24px 20px;
+            border-top: 1px solid var(--border); margin-top: 0;
+        }
+        footer a { color: var(--text-secondary); text-decoration: none; margin: 0 6px; }
+        footer a:hover { color: var(--text-primary); }
+
+        @media (max-width: 600px) {
+            .hero { padding: 60px 20px 40px; }
+            .role-card { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a class="nav-logo" href="/">
+        <img src="/static/hirekrkedekho-logo.png" alt="HireKrkeDekho" />
+        <span>HireKrkeDekho</span>
+    </a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/careers" class="active">Careers</a>
+    </div>
+</nav>
+
+<div class="hero">
+    <div class="hero-badge">We're hiring 🚀</div>
+    <h1>Build the future of<br/><span>engineering hiring</span> in India</h1>
+    <p>We're a small, ambitious team making job discovery fair and merit-based for Indian engineers. If that excites you, we want to hear from you.</p>
+    <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="hero-apply-btn">
+        Apply Now →
+    </a>
+</div>
+
+<main>
+
+    <!-- Perks -->
+    <div style="margin-bottom:16px">
+        <h2 class="section-title">Why join us?</h2>
+        <p class="section-sub">We're small, so your work ships fast and your impact is real.</p>
+    </div>
+    <div class="perks-grid">
+        <div class="perk-card">
+            <div class="perk-icon">⚡</div>
+            <div class="perk-title">Move fast</div>
+            <div class="perk-desc">Ship features used by real engineers within days of joining. No bureaucracy.</div>
+        </div>
+        <div class="perk-card">
+            <div class="perk-icon">🧠</div>
+            <div class="perk-title">Learn daily</div>
+            <div class="perk-desc">Work at the intersection of AI, product, and growth. Every role teaches you something new.</div>
+        </div>
+        <div class="perk-card">
+            <div class="perk-icon">🏆</div>
+            <div class="perk-title">Own your work</div>
+            <div class="perk-desc">Interns and contributors get real ownership, not busywork. Your name ships with the code.</div>
+        </div>
+        <div class="perk-card">
+            <div class="perk-icon">📜</div>
+            <div class="perk-title">Certificate & LOR</div>
+            <div class="perk-desc">Letter of Recommendation + Completion Certificate for all internship completions.</div>
+        </div>
+        <div class="perk-card">
+            <div class="perk-icon">🌐</div>
+            <div class="perk-title">Remote-first</div>
+            <div class="perk-desc">Work from anywhere in India. Async-friendly culture with async standups.</div>
+        </div>
+        <div class="perk-card">
+            <div class="perk-icon">📈</div>
+            <div class="perk-title">Grow with us</div>
+            <div class="perk-desc">Early team members get the most growth. The company's trajectory is yours.</div>
+        </div>
+    </div>
+
+    <!-- Open Roles -->
+    <h2 class="section-title">Open positions</h2>
+    <p class="section-sub">All roles are remote and open to candidates across India.</p>
+    <div class="roles-list">
+        <div class="role-card">
+            <div class="role-info">
+                <div class="role-title">AI Product Marketing Intern</div>
+                <div class="role-tags">
+                    <span class="role-tag intern">Internship</span>
+                    <span class="role-tag remote">Remote</span>
+                    <span class="role-tag">Marketing</span>
+                    <span class="role-tag">AI</span>
+                </div>
+            </div>
+            <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="apply-role-btn">Apply</a>
+        </div>
+        <div class="role-card">
+            <div class="role-info">
+                <div class="role-title">Growth Associate Intern</div>
+                <div class="role-tags">
+                    <span class="role-tag intern">Internship</span>
+                    <span class="role-tag remote">Remote</span>
+                    <span class="role-tag">Growth</span>
+                    <span class="role-tag">Analytics</span>
+                </div>
+            </div>
+            <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="apply-role-btn">Apply</a>
+        </div>
+        <div class="role-card">
+            <div class="role-info">
+                <div class="role-title">AI Product Engineering Intern</div>
+                <div class="role-tags">
+                    <span class="role-tag intern">Internship</span>
+                    <span class="role-tag remote">Remote</span>
+                    <span class="role-tag">Python</span>
+                    <span class="role-tag">FastAPI</span>
+                </div>
+            </div>
+            <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="apply-role-btn">Apply</a>
+        </div>
+        <div class="role-card">
+            <div class="role-info">
+                <div class="role-title">Content & Community Intern</div>
+                <div class="role-tags">
+                    <span class="role-tag intern">Internship</span>
+                    <span class="role-tag remote">Remote</span>
+                    <span class="role-tag">Content</span>
+                    <span class="role-tag">Community</span>
+                </div>
+            </div>
+            <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="apply-role-btn">Apply</a>
+        </div>
+    </div>
+
+    <!-- Google Form embed -->
+    <div class="form-section">
+        <div class="form-section-header">
+            <h2>Apply now</h2>
+            <p>Fill in the form below or <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">open it in a new tab</a>.</p>
+        </div>
+        <div class="form-frame-wrap">
+            <iframe
+                class="gform"
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdOmBg_RFybdy5a6/viewform?embedded=true"
+                title="HireKrkeDekho Careers Application"
+                loading="lazy"
+                allowfullscreen
+            >Loading application form…</iframe>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    &copy; 2026 HireKrkeDekho &bull;
+    <a href="/">Home</a> &bull;
+    <a href="/about">About</a> &bull;
+    <a href="/contact">Contact</a> &bull;
+    <a href="/privacy-policy">Privacy Policy</a> &bull;
+    <a href="/terms">Terms</a>
+</footer>
+
+</body>
+</html>

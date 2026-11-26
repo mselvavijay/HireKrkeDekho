@@ -113,6 +113,16 @@ def race_admin():
     path = TEMPLATES_DIR / "race_admin.html"
     return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
 
+@app.get("/race/leaderboard/page", response_class=HTMLResponse)
+def race_leaderboard_page():
+    path = TEMPLATES_DIR / "race_leaderboard.html"
+    return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
+
+@app.get("/careers", response_class=HTMLResponse)
+def careers_page():
+    path = TEMPLATES_DIR / "careers.html"
+    return HTMLResponse(content=path.read_text(encoding="utf-8"), status_code=200)
+
 @app.get("/consultation", response_class=HTMLResponse)
 def consultation():
     if INDEX_HTML_PATH.exists():
