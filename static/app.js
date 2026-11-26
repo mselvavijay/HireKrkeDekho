@@ -61,6 +61,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 window.addEventListener('resize', () => moveNavPill(getActive()));
             }
 
+            // Scroll-shrink header
+            const hdr = document.querySelector('.site-header');
+            if (hdr) {
+                const onScroll = () => hdr.classList.toggle('scrolled', window.scrollY > 40);
+                window.addEventListener('scroll', onScroll, { passive: true });
+                onScroll();
+            }
+
             // Instant synchronous session restoration from localStorage (No delay / flicker)
             const storedName = localStorage.getItem('career_bot_user_name');
             const storedEmail = localStorage.getItem('career_bot_user_email');

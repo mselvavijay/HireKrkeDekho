@@ -22,17 +22,65 @@
     margin: 0 auto 36px;
 }
 .site-header {
-    position: sticky; top: 0; z-index: 100;
+    position: sticky !important; top: 0 !important; z-index: 100 !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    background: rgba(7, 13, 24, 0.9) !important;
+    backdrop-filter: blur(16px) !important;
+    transition: padding 0.3s ease, background 0.3s ease !important;
 }
+/* Scroll-shrink: header compacts when user scrolls down */
+.site-header.scrolled {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    background: rgba(7, 13, 24, 0.97) !important;
+}
+.site-header.scrolled .brand-wordmark {
+    height: 28px !important;
+    transition: height 0.3s ease !important;
+}
+.site-header.scrolled .tabs-pill {
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+.service-card {
+    padding: 16px 18px !important;
+    min-height: 0 !important;
+    gap: 8px !important;
+    justify-content: flex-start !important;
+}
+.service-card-top {
+    margin-bottom: 10px !important;
+}
+.service-card-title {
+    margin-bottom: 0 !important;
+    font-size: 1rem !important;
+}
+.service-card-footer {
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+}
+.service-icon-box {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+}
+.hero-services-grid {
+    margin-bottom: 24px !important;
+    gap: 14px !important;
+}
+/* Strip the visible rounded box from the nav pill list */
 #site_nav_links,
-.site-header .tabs-pill-list {
+.site-header .tabs-pill-list,
+.site-header nav.nav-links {
     margin: 0 !important;
     position: relative !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
-    gap: 4px !important;
+    border-radius: 0 !important;
+    gap: 2px !important;
 }
 .nav-pill-indicator {
     position: absolute; top: 0; left: 0; height: 100%;
