@@ -43,7 +43,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             if (navEl && indicator) {
                 const pills = navEl.querySelectorAll('.tabs-pill');
                 const getActive = () => navEl.querySelector('.tabs-pill.active') || pills[0];
-                moveNavPill(getActive());
+                requestAnimationFrame(() => moveNavPill(getActive()));
+                window.addEventListener('load', () => moveNavPill(getActive()));
                 pills.forEach(link => {
                     link.addEventListener('mouseenter', () => moveNavPill(link));
                     link.addEventListener('focus', () => moveNavPill(link));
