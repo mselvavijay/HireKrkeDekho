@@ -763,7 +763,7 @@
                 <button class="btn-primary-action" id="race_start_btn" type="button" onclick="startRaceAttempt()">Continue to contest</button>
             </div>
             <div id="race_play" hidden><div class="race-progress"><span id="race_question_count">Question 1 of 15</span><strong id="race_timer">17</strong></div><div class="race-timer-track"><i id="race_timer_bar"></i></div><h4 id="race_question_text"></h4><div id="race_options" class="race-options"></div></div>
-            <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px"><a class="btn-primary-action" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" style="text-decoration:none">View today&apos;s leaderboard</a><button class="btn-secondary-hero" type="button" id="race_share_wa_btn" onclick="shareRaceResultWA()" style="background:#25d366;color:#fff;border:none">📲 Beat my score</button><a class="btn-secondary-hero" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" style="text-decoration:none">🏆 Full Leaderboard</a></div></div>
+            <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px"><a class="btn-primary-action" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" style="text-decoration:none">View today&apos;s leaderboard</a><button class="btn-secondary-hero" type="button" id="race_share_wa_btn" onclick="shareRaceResult()" style="background:#25d366;color:#fff;border:none">Challenge a friend</button></div></div>
             <p id="race_payment_status" class="race-status"></p>
         </div>
     </div>    <div class="modal-overlay" id="race_leaderboard_overlay" role="dialog" aria-modal="true" aria-labelledby="race_leaderboard_title">
@@ -902,7 +902,7 @@
     </div>
 
     <!-- Application Script -->
-    <script src="/static/app.js?v=20261126-nav-leaderboard-v3" defer></script>
+    <script src="/static/app.js?v=20261126-race-share-v1" defer></script>
 </body>
 
     <!-- Toast Container -->

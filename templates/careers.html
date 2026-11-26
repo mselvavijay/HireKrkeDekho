@@ -129,6 +129,12 @@
             width: 100%; height: 820px; border: none; display: block;
         }
 
+        .work-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:0 0 60px; }
+        .work-step { padding:20px 0; border-top:1px solid var(--border); }
+        .work-step strong { display:block; color:var(--accent); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
+        .work-step h3 { font-size:1rem; margin-bottom:6px; }
+        .work-step p { color:var(--text-secondary); font-size:.88rem; }
+
         footer {
             text-align: center; color: var(--text-secondary);
             font-size: 0.8rem; padding: 24px 20px;
@@ -140,6 +146,7 @@
         @media (max-width: 600px) {
             .hero { padding: 60px 20px 40px; }
             .role-card { flex-direction: column; align-items: flex-start; }
+            .work-grid { grid-template-columns:1fr; gap:0; }
         }
     </style>
 </head>
@@ -253,6 +260,22 @@
             <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="apply-role-btn">Apply</a>
         </div>
     </div>
+
+    <section style="margin-bottom:60px">
+        <h2 class="section-title">What working here looks like</h2>
+        <p class="section-sub">A simple operating model for people who want to learn by shipping.</p>
+        <div class="work-grid">
+            <article class="work-step"><strong>01 · Start</strong><h3>Pick a real problem</h3><p>Each role begins with a practical area of ownership tied to product, growth, or community.</p></article>
+            <article class="work-step"><strong>02 · Build</strong><h3>Share progress early</h3><p>Work in small iterations, get feedback, and improve the work before it becomes a large project.</p></article>
+            <article class="work-step"><strong>03 · Show</strong><h3>Leave with proof</h3><p>Strong work becomes part of your portfolio, alongside the experience you gain with the team.</p></article>
+        </div>
+    </section>
+
+    <section style="margin-bottom:20px">
+        <h2 class="section-title">Before you apply</h2>
+        <p class="section-sub">Tell us what you have made, learned, or improved. A polished resume helps, but curiosity and a clear point of view matter more.</p>
+        <a href="https://forms.gle/WQeBMgG9RFybdy5a6" target="_blank" rel="noopener noreferrer" class="hero-apply-btn">Start your application →</a>
+    </section>
 
 </main>
 

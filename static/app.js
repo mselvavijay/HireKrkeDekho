@@ -657,6 +657,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 const r = await fetch('/race/today', {headers: raceHeaders()});
                 const data = await r.json();
                 if (!r.ok) return;
+                window._raceLastTopic = data.theme || 'Daily Contest';
                 const label = document.getElementById('race_seat_status');
                 if (label) label.textContent = `${data.theme} · ${data.question_count} questions · ${data.seconds_per_question}s each`;
                 const inlineTopic = document.getElementById('race_modal_topic_inline');
@@ -733,6 +734,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     if (mine && mine.attempted && completeText) {
                         const secs = Math.round((mine.total_time_ms || 0) / 1000);
                         window._raceLastScore = mine.score;
+                        window._raceLastTime = secs;
+                        window._raceLastTopic = mine.theme || window._raceLastTopic || 'Daily Contest';
                         completeText.textContent = mine.rank
                             ? `🏆 Rank #${mine.rank} — ${mine.score}/15 in ${secs}s! Challenge a friend to beat your score.`
                             : `Saved: ${mine.score}/15 in ${secs}s. Ranking update is pending — check the leaderboard shortly.`;
@@ -743,13 +746,17 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             loadRaceStatus();
         }
 
-        function shareRaceResultWA() {
+        function shareRaceResult() {
             const score = typeof window._raceLastScore === 'number' ? window._raceLastScore : '?';
-            const leaderboardUrl = 'https://hirekrkedekho.in/race/leaderboard/page';
-            const text = encodeURIComponent(
-                `🏆 I scored ${score}/15 on HireKrkeDekho's Daily Tech Race!\nCan you beat me? 👇\n${leaderboardUrl}`
-            );
-            window.open('https://wa.me/?text=' + text, '_blank');
+            const time = typeof window._raceLastTime === 'number' ? ` in ${window._raceLastTime}s` : '';
+            const topic = window._raceLastTopic || 'Daily Contest';
+            const url = 'https://hirekrkedekho.in/#ai_race';
+            const text = `🏆 I scored ${score}/15${time} in HireKrkeDekho's ${topic} contest. Can you beat me?`;
+            if (navigator.share) {
+                navigator.share({ title: 'HireKrkeDekho Daily Contest', text, url }).catch(() => {});
+                return;
+            }
+            window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n${url}`)}`, '_blank');
         }
 
         async function startRaceAttempt() {

@@ -216,6 +216,22 @@
         }
         .sticky-cta.hidden { display: none; }
         .sticky-cta span { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; }
+        /* Keep standings factual and calm: table first, decoration second. */
+        .page-header { text-align:left; margin-bottom:20px; }
+        .page-header h1 { font-size:1.65rem; }
+        .cta-card { background:transparent; border:0; border-radius:0; border-bottom:1px solid var(--border); padding:0 0 20px; }
+        .cta-card h2 { font-size:1rem; }
+        .cta-pulse { animation:none; }
+        .day-tab, .topic-pill { border-radius:6px; }
+        .day-tab.active { background:rgba(99,102,241,.12); }
+        .rank-list { gap:0; border-top:1px solid var(--border); }
+        .rank-row { border:0; border-bottom:1px solid var(--border); border-radius:0; padding:13px 8px; background:transparent; }
+        .rank-row:hover { background:rgba(255,255,255,.025); border-color:var(--border); }
+        .rank-row.is-you { background:rgba(99,102,241,.08); border-color:var(--border); }
+        .row-avatar { display:none; }
+        .rank-num { text-align:left; color:#818cf8; }
+        .score-pill { background:transparent; color:var(--text-primary); padding:0; }
+        .sticky-cta { background:rgba(7,13,24,.98); box-shadow:none; }
         @media (prefers-reduced-motion: reduce) {
             *, .cta-pulse { animation: none !important; transition: none !important; }
         }
@@ -235,7 +251,8 @@
 
 <main>
     <div class="page-header">
-        <h1>🏆 Daily Tech Race Leaderboard</h1>
+        <h1>Daily Contest standings</h1>
+        <p class="subtitle">Scores are ranked by accuracy, then completion time.</p>
     </div>
 
     <!-- Friend Challenge Banner (shown when ?challenge=... is present) -->
@@ -418,7 +435,7 @@
             `).join("")}
         </div>`;
 
-        wrap.innerHTML = podiumHtml + listHtml;
+        wrap.innerHTML = listHtml;
     }
 
     tabsEl.innerHTML = days.map((d, i) =>
