@@ -238,6 +238,15 @@
         .podium-score { color:var(--text-secondary); margin:2px 0 8px; }
         .podium-pedestal, .podium-slot.p1 .podium-pedestal { height:32px; background:transparent; border:0; color:var(--text-secondary); font-size:.9rem; }
         .podium-slot.p1 .podium-name { color:#fbbf24; }
+        .benchmark-tag { margin-left:6px; color:var(--text-muted); font-size:.68rem; font-weight:600; }
+        .rank-table-head { display:grid; grid-template-columns:38px 1fr auto 54px; gap:8px; padding:10px 8px; color:var(--text-muted); border-bottom:1px solid var(--border); font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+        .rank-table-head span:nth-child(3), .rank-table-head span:nth-child(4) { text-align:right; }
+        .rank-row { display:grid; grid-template-columns:38px 1fr auto 54px; gap:8px; }
+        .rank-row:nth-child(even) { background:rgba(255,255,255,.015); }
+        .rank-row:first-of-type { border-top:0; }
+        .player-name { letter-spacing:-.01em; }
+        footer { margin-top:28px; padding:16px 0 8px; }
+        @media (max-width:480px) { .rank-table-head, .rank-row { grid-template-columns:32px 1fr auto 46px; } .rank-table-head { font-size:.64rem; } .rank-row { padding:12px 4px; } }
         @media (prefers-reduced-motion: reduce) {
             *, .cta-pulse { animation: none !important; transition: none !important; }
         }
@@ -373,7 +382,6 @@
         ctaSub.textContent = `Your rank: #${myToday.rank} · ${myToday.score}/15 in ${secs}s. Share your result and come back tomorrow for the next contest!`;
         ctaActions.innerHTML = `
             <button class="btn btn-primary" id="btn-challenge-copy">Share challenge</button>
-            <button class="btn btn-wa" id="btn-challenge-wa">WhatsApp</button>
         `;
         document.getElementById("btn-challenge-copy").onclick = () => {
             trackLbEvent("challenge_friend_clicked", { method: "share" });
@@ -386,10 +394,6 @@
                 toast.classList.add("show");
                 setTimeout(() => toast.classList.remove("show"), 3000);
             }).catch(() => {});
-        };
-        document.getElementById("btn-challenge-wa").onclick = () => {
-            trackLbEvent("challenge_friend_clicked", { method: "whatsapp" });
-            window.open("https://wa.me/?text=" + encodeURIComponent(challengeMsg), "_blank");
         };
     }
 
@@ -405,7 +409,7 @@
         const d = days[idx];
         if (!d) return;
         document.getElementById("day-topic").textContent = `${d.contest_date} · ${d.theme}`;
-        document.getElementById("day-count").textContent = "Top 10 participants";
+        document.getElementById("day-count").textContent = `${d.total_participants} verified participant${d.total_participants === 1 ? "" : "s"}`;
 
         const wrap = document.getElementById("board-wrap");
         if (!d.entries.length) {
@@ -422,20 +426,20 @@
             ${podiumOrder.map(e => `
                 <div class="podium-slot ${podiumCls(e)} ${e.is_you ? "is-you" : ""}">
                     <div class="podium-avatar">${initial(e.display_name)}</div>
-                    <div class="podium-name">${esc(e.display_name)}${e.is_you ? " (You)" : ""}</div>
+                    <div class="podium-name">${esc(e.display_name)}${e.is_you ? " (You)" : ""}${e.is_placeholder ? '<span class="benchmark-tag">Benchmark</span>' : ""}</div>
                     <div class="podium-score">${e.score}/15 · ${(e.total_time_ms / 1000).toFixed(0)}s</div>
                     <div class="podium-pedestal">${e.rank}</div>
                 </div>
             `).join("")}
         </div>`;
 
-        const listHtml = `<div class="rank-list">
+        const listHtml = `<div class="rank-list"><div class="rank-table-head"><span>Rank</span><span>Candidate</span><span>Score</span><span>Time</span></div>
             ${rest.map(e => `
                 <div class="rank-row ${e.is_you ? "is-you" : ""}">
                     <div class="rank-num">${e.rank}</div>
                     <div class="row-avatar">${initial(e.display_name)}</div>
                     <div class="row-info">
-                        <span class="player-name">${esc(e.display_name)}</span>${e.is_you ? '<span class="you-tag">YOU</span>' : ""}
+                        <span class="player-name">${esc(e.display_name)}</span>${e.is_you ? '<span class="you-tag">YOU</span>' : ""}${e.is_placeholder ? '<span class="benchmark-tag">Benchmark</span>' : ""}
                     </div>
                     <span class="score-pill">${e.score}/15</span>
                     <span class="time-col">${(e.total_time_ms / 1000).toFixed(1)}s</span>

@@ -674,14 +674,16 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     const startBtn = document.getElementById('race_start_btn');
                     const entryBtn = document.getElementById('race_entry_btn');
                     const entryLabel = document.getElementById('race_entry_btn_label');
-                    if (entryLabel) entryLabel.textContent = 'View My Rank';
+                    const standingsBtn = document.querySelector('.btn-race-standings');
+                    if (entryLabel) entryLabel.textContent = 'Enter Daily Contest';
                     if (entryBtn) {
                         entryBtn.classList.remove('cta-shimmer');
                         entryBtn.onclick = () => {
-                            trackRaceEvent('leaderboard_cta_clicked', { completed: true });
-                            window.open('/race/leaderboard/page', '_blank', 'noopener,noreferrer');
+                            trackRaceEvent('contest_cta_clicked', { completed: true });
+                            openRaceModal();
                         };
                     }
+                    if (standingsBtn) standingsBtn.hidden = true;
                     if (intro) intro.hidden = true;
                     if (play) play.hidden = true;
                     if (complete) complete.hidden = false;

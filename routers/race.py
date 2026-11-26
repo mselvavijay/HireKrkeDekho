@@ -256,6 +256,7 @@ def _backfill_entries(day_str: str, count: int) -> list[dict]:
         out.append({
             "display_name": f"{first} {last}",
             "is_you": False,
+            "is_placeholder": True,
             "score": rng.randint(5, 12),
             "total_time_ms": rng.randint(68000, 195000),
         })
@@ -296,10 +297,15 @@ def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_
             combined.append({
                 "display_name": a.display_name if is_you else _mask_name(a.display_name),
                 "is_you": is_you,
+                "is_placeholder": False,
                 "score": a.score,
                 "total_time_ms": a.total_time_ms,
                 "_attempt_id": a.id,
             })
+
+        # Benchmarks fill vacant slots and remain clearly labelled in the public board.
+        if len(combined) < 10:
+            combined.extend(_backfill_entries(d, 10 - len(combined)))
 
         combined.sort(key=lambda x: (-x["score"], x["total_time_ms"]))
 
@@ -309,6 +315,7 @@ def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_
                 "rank": rank,
                 "display_name": item["display_name"],
                 "is_you": item["is_you"],
+                "is_placeholder": item.get("is_placeholder", False),
                 "score": item["score"],
                 "total_time_ms": item["total_time_ms"],
             })
