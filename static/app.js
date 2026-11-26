@@ -42,6 +42,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             };
             if (navEl && indicator) {
                 const pills = navEl.querySelectorAll('.tabs-pill');
+                const savedHref = sessionStorage.getItem('hkd_active_nav');
+                const savedPill = [...pills].find(link => link.getAttribute('href') === savedHref);
+                if (savedPill) {
+                    pills.forEach(link => link.classList.toggle('active', link === savedPill));
+                }
+                if (sessionStorage.getItem('hkd_nav_locked') === '1' && window.location.hash) {
+                    document.querySelector('.site-header')?.classList.add('nav-locked');
+                }
                 const getActive = () => navEl.querySelector('.tabs-pill.active') || pills[0];
                 requestAnimationFrame(() => moveNavPill(getActive()));
                 window.addEventListener('load', () => moveNavPill(getActive()));
@@ -51,6 +59,9 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     link.addEventListener('click', () => {
                         pills.forEach(l => l.classList.remove('active'));
                         link.classList.add('active');
+                        sessionStorage.setItem('hkd_active_nav', link.getAttribute('href'));
+                        sessionStorage.setItem('hkd_nav_locked', '1');
+                        document.querySelector('.site-header')?.classList.add('nav-locked');
                         moveNavPill(link);
                     });
                 });
@@ -619,6 +630,27 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
         let raceQuestions = [], raceTimer = null, raceSubmissionQueue = Promise.resolve(), raceAnsweredMap = {}, raceFinished = false;
         const raceHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUserToken || ''}` });
+        const simulatedLeaderboard = [
+            ['Aarav Sharma', 14], ['Priya Nair', 13], ['Rohan Mehta', 12], ['Ananya Iyer', 11], ['Kavya Singh', 10], ['Vikram Rao', 9]
+        ];
+        const simulatedEntrants = [['Neha Kapoor', 12], ['Arjun Reddy', 13], ['Ishita Das', 11]];
+        const simulatedScoreChanges = [8, 10, 12, 9, 13, 11, 14, 7];
+        let simulatedScoreIndex = 0;
+        function renderMovingLeaderboard() {
+            const rows = document.getElementById('moving_leaderboard_rows');
+            if (!rows) return;
+            rows.innerHTML = simulatedLeaderboard.slice(0, 6).map(([name, score], index) => `<div class="moving-leaderboard-row" style="animation-delay:${index * 55}ms"><b>#${index + 1}</b><span>${name}</span><em>${score}/15</em></div>`).join('');
+        }
+        function rotateMovingLeaderboard() {
+            const climber = simulatedEntrants.length ? simulatedEntrants.shift() : simulatedLeaderboard.pop();
+            if (climber) climber[1] = simulatedScoreChanges[simulatedScoreIndex++ % simulatedScoreChanges.length];
+            simulatedLeaderboard.push(climber);
+            simulatedLeaderboard.sort((a, b) => b[1] - a[1]);
+            renderMovingLeaderboard();
+            document.querySelector('.moving-leaderboard-row')?.classList.add('rank-moving');
+        }
+        renderMovingLeaderboard();
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(rotateMovingLeaderboard, 4200);
         async function loadRaceStatus() {
             if (!currentUserToken) return;
             try {

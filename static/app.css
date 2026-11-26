@@ -1861,6 +1861,160 @@
                 scroll-margin-top: 84px !important;
             }
 
+            .how-head {
+                margin-bottom: 20px;
+            }
+
+            .how-head h2 {
+                font-size: 1.7rem;
+                margin-bottom: 6px;
+            }
+
+            .how-grid {
+                grid-template-columns: minmax(0, 1fr) 76px minmax(0, 1.08fr) 76px minmax(0, .9fr);
+                gap: 20px;
+            }
+
+            .how-card {
+                padding: 18px 0;
+                border: 0 !important;
+                border-radius: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                justify-content: center;
+            }
+
+            .how-arrow {
+                padding: 0 12px;
+            }
+
+            .how-card h3 {
+                margin-bottom: 10px;
+            }
+
+            .how-label {
+                margin: 0 0 8px;
+            }
+
+            .how-roles {
+                gap: 8px;
+            }
+
+            .how-role-card {
+                gap: 12px;
+                padding: 10px 24px 10px 0;
+                border: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, .1);
+                border-radius: 0;
+                background: transparent;
+            }
+
+            .how-roles li:last-child .how-role-card { border-bottom: 0; }
+
+            .how-card-subtext {
+                font-size: 12px;
+            }
+
+            .how-role-info {
+                gap: 5px;
+            }
+
+            .how-avatar-img {
+                max-height: 135px;
+            }
+
+            .how-character-container {
+                gap: 8px;
+                min-height: 100%;
+            }
+
+            .how-action-desc {
+                display: block;
+            }
+
+            .how-action-card {
+                justify-content: center;
+            }
+
+            .btn-find-jobs-standalone {
+                max-width: 220px;
+                padding: 11px 18px;
+            }
+
+            /* A short repeating visual path: profile checks → matches → action. */
+            .how-input .how-role-card {
+                position: relative;
+            }
+
+            .how-input .how-role-card::after {
+                content: '✓';
+                position: absolute;
+                top: 50%;
+                right: 0;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                background: #22c55e;
+                color: #07111f;
+                font-size: 11px;
+                font-weight: 800;
+                opacity: 0;
+                transform: translateY(-50%) scale(.5);
+                animation: how-check 8s ease-in-out infinite;
+            }
+
+            .how-input .how-roles li:nth-child(2) .how-role-card::after { animation-delay: .8s; }
+            .how-input .how-roles li:nth-child(3) .how-role-card::after { animation-delay: 1.6s; }
+
+            .how-arrow-badge {
+                position: relative;
+                overflow: visible;
+            }
+
+            .how-arrow-badge::after {
+                content: '✦';
+                position: absolute;
+                color: #bfdbfe;
+                font-size: 18px;
+                opacity: 0;
+                animation: how-spark 8s ease-in-out infinite;
+            }
+
+            .how-arrow-to-offer .how-arrow-badge { animation: how-arrow-pulse 8s ease-in-out infinite; animation-delay: 2.5s; }
+            .how-arrow-to-offer .how-arrow-badge::after { animation-delay: 2.5s; }
+            .how-output { animation: how-offer-glow 8s ease-in-out infinite; animation-delay: 3.1s; }
+            .how-arrow-to-cta .how-arrow-badge { animation: how-arrow-pulse 8s ease-in-out infinite; animation-delay: 4.7s; }
+            .how-arrow-to-cta .how-arrow-badge::after { animation-delay: 4.7s; }
+            .btn-find-jobs-standalone { animation: how-cta-pulse 8s ease-in-out infinite; animation-delay: 5.3s; }
+
+            @keyframes how-check {
+                0%, 8%, 100% { opacity: 0; transform: translateY(-50%) scale(.5); }
+                3%, 6% { opacity: 1; transform: translateY(-50%) scale(1); }
+            }
+
+            @keyframes how-arrow-pulse {
+                0%, 100% { box-shadow: none; transform: translateX(0); }
+                3%, 7% { box-shadow: 0 0 0 7px rgba(59, 130, 246, .12), 0 0 20px rgba(96, 165, 250, .9); transform: translateX(4px); }
+            }
+
+            @keyframes how-spark {
+                0%, 100% { opacity: 0; transform: translate(-10px, 8px) scale(.4); }
+                4% { opacity: 1; transform: translate(12px, -12px) scale(1); }
+                8% { opacity: 0; transform: translate(20px, -20px) scale(.4); }
+            }
+
+            @keyframes how-offer-glow {
+                0%, 100% { transform: translateY(0); filter: brightness(1); }
+                4%, 14% { transform: translateY(-2px); filter: brightness(1.12); }
+            }
+
+            @keyframes how-cta-pulse {
+                0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(31, 107, 255, .5); }
+                4%, 12% { transform: scale(1.04); box-shadow: 0 0 0 7px rgba(59, 130, 246, .18), 0 10px 28px rgba(59, 130, 246, .8); }
+            }
+
             .ai-race-section {
                 margin: 0 auto;
                 padding: 0 24px;
@@ -1950,6 +2104,16 @@
 
             .how-input-content dd.how-val {
                 font-size: 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .how-input .how-role-card::after,
+            .how-arrow-badge,
+            .how-arrow-badge::after,
+            .how-output,
+            .btn-find-jobs-standalone {
+                animation: none !important;
             }
         }
 
@@ -2108,6 +2272,42 @@
             color: #94a3b8;
             font-size: 0.82rem;
             font-weight: 500;
+        }
+
+        .moving-leaderboard { padding: 22px; border: 1px solid rgba(76,141,255,.3); border-radius: 16px; background: rgba(7,14,30,.7); }
+        .moving-leaderboard-head { display:flex; justify-content:space-between; color:#60a5fa; font-size:.7rem; font-weight:700; letter-spacing:.08em; }
+        .moving-leaderboard-head small { color:#94a3b8; letter-spacing:0; font-weight:500; }
+        .moving-leaderboard h3 { margin:12px 0 6px; color:#fff; font-size:1.1rem; }
+        .moving-leaderboard p { margin:0 0 14px; color:#94a3b8; font-size:.85rem; line-height:1.45; }
+        .moving-leaderboard-rows { display:grid; gap:7px; }
+        .moving-leaderboard-row { display:grid; grid-template-columns:34px 1fr auto; gap:8px; align-items:center; padding:10px; border-radius:9px; background:rgba(255,255,255,.04); color:#e2e8f0; transition:transform .55s ease, background .55s ease; }
+        .moving-leaderboard-row b { color:#60a5fa; } .moving-leaderboard-row em { color:#cbd5e1; font-style:normal; font-size:.82rem; }
+        .moving-leaderboard-row.rank-moving { transform:translateY(-3px); background:rgba(31,107,255,.18); }
+
+        /* Daily contest is a full-background competition feed, not a boxed briefing. */
+        .ai-race-section { max-width:1280px; margin:72px auto; }
+        .race-arena-container { background:transparent; border:0; box-shadow:none; backdrop-filter:none; padding:20px 0; overflow:visible; }
+        .race-arena-container::before { left:0; right:0; opacity:.65; }
+        .race-arena-2col { grid-template-columns:minmax(0,.8fr) minmax(380px,1.2fr); gap:64px; align-items:start; }
+        .race-spec-row { display:none; }
+        .moving-leaderboard { padding:0; border:0; border-radius:0; background:transparent; }
+        .moving-leaderboard-head { border-bottom:1px solid rgba(76,141,255,.25); padding-bottom:12px; }
+        .moving-leaderboard h3 { font-size:clamp(1.25rem,2vw,1.65rem); margin-top:18px; }
+        .moving-leaderboard-rows { gap:9px; }
+        .moving-leaderboard-row { min-height:56px; border:1px solid rgba(76,141,255,.16); background:linear-gradient(90deg,rgba(15,25,46,.88),rgba(7,14,30,.45)); animation:leaderboard-enter .6s cubic-bezier(.22,1,.36,1) both; }
+        .moving-leaderboard-row:first-child { border-color:rgba(96,165,250,.55); background:linear-gradient(90deg,rgba(31,107,255,.25),rgba(7,14,30,.45)); }
+        @keyframes leaderboard-enter { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+        @media (max-width:960px) { .race-arena-2col { grid-template-columns:1fr; gap:32px; } }
+
+        .how-role-meta { text-align:right; display:flex; flex-direction:column; align-items:flex-end; }
+
+        @media (max-width: 640px) {
+            .ai-race-section { padding:0 14px; }
+            .race-arena-container { padding:28px 18px; }
+            .race-actions-row > * { width:100%; text-align:center; justify-content:center; }
+            .how-role-header { align-items:flex-start; }
+            .how-role-meta { text-align:left; align-items:flex-start; }
         }
 
         /* Arena Rules Grid */

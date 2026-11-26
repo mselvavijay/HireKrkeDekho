@@ -34,7 +34,7 @@
 .site-header.scrolled {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-    background: rgba(7, 13, 24, 0.97) !important;
+    background: transparent !important;
 }
 .site-header.scrolled .brand-wordmark {
     height: 28px !important;
@@ -43,6 +43,27 @@
 .site-header.scrolled .tabs-pill {
     padding-top: 7px !important;
     padding-bottom: 7px !important;
+}
+
+@media (min-width: 1025px) {
+    .site-header.nav-locked {
+        position: fixed !important;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 48px;
+        grid-template-columns: 1fr !important;
+        justify-items: center;
+    }
+
+    .site-header.nav-locked .header-brand,
+    .site-header.nav-locked .header-actions {
+        display: none;
+    }
+
+    .site-header.nav-locked #site_nav_links {
+        justify-self: center;
+    }
 }
 .service-card {
     padding: 16px 18px !important;
@@ -84,13 +105,16 @@
     gap: 2px !important;
 }
 .nav-pill-indicator {
-    position: absolute; top: 0; left: 0; height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
     border-radius: 14px;
-    background: var(--surface, rgba(15,22,40,0.9));
-    border: 1px solid rgba(99,102,241,0.35);
-    box-shadow: 0 1px 8px rgba(0,0,0,0.3);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    pointer-events: none; z-index: 0;
+    background: linear-gradient(135deg, #1f6bff, #3b82f6);
+    box-shadow: 0 6px 18px rgba(31, 107, 255, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 0;
 }
 .tabs-pill {
     position: relative; z-index: 1;
@@ -106,7 +130,34 @@
     outline: none;
 }
 .tabs-pill.active {
-    color: var(--accent);
+    color: #ffffff;
+}
+
+@media (max-width: 1024px) {
+    .site-header .nav-pill-indicator {
+        display: none;
+    }
+}
+
+/* Header controls sit directly on the page background. */
+.site-header .btn-google-auth,
+.site-header .user-account-badge,
+.site-header .site-mobile-menu-toggle {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.site-header .btn-google-auth {
+    color: var(--text-primary);
+}
+
+.site-header .btn-google-auth:hover,
+.site-header .user-account-badge:hover,
+.site-header .site-mobile-menu-toggle:hover {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* Panel */
