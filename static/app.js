@@ -561,6 +561,24 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
 
 
 
+        function trackRaceEvent(eventName, params = {}) {
+            try {
+                if (typeof window.gtag === 'function') {
+                    window.gtag('event', eventName, {
+                        from_leaderboard: sessionStorage.getItem('hkd_lb_ref') === '1',
+                        ...params
+                    });
+                }
+            } catch {}
+        }
+
+        if (window.location.search.includes('from=leaderboard')) {
+            sessionStorage.setItem('hkd_lb_ref', '1');
+        }
+        if (document.getElementById('ai_race')) {
+            trackRaceEvent('daily_contest_page_viewed');
+        }
+
         function refreshRaceResultCard() {
             const date = document.getElementById('race_result_date');
             if (!date) return;
@@ -592,10 +610,20 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     const complete = document.getElementById('race_complete');
                     const completeText = document.getElementById('race_complete_text');
                     const startBtn = document.getElementById('race_start_btn');
+                    const entryBtn = document.getElementById('race_entry_btn');
+                    const entryLabel = document.getElementById('race_entry_btn_label');
+                    if (entryLabel) entryLabel.textContent = 'View My Rank';
+                    if (entryBtn) {
+                        entryBtn.classList.remove('cta-shimmer');
+                        entryBtn.onclick = () => {
+                            trackRaceEvent('leaderboard_cta_clicked', { completed: true });
+                            window.open('/race/leaderboard/page', '_blank', 'noopener,noreferrer');
+                        };
+                    }
                     if (intro) intro.hidden = true;
                     if (play) play.hidden = true;
                     if (complete) complete.hidden = false;
-                    if (completeText) completeText.textContent = "You've already completed today's contest. Check out the leaderboard or come back tomorrow!";
+                    if (completeText) completeText.textContent = "You've already completed today's contest. View your rank or come back tomorrow for the next contest!";
                     if (startBtn) { startBtn.disabled = true; startBtn.textContent = "Contest Completed Today"; }
                 }
             } catch (e) { console.error('Unable to load race status', e); }
@@ -616,10 +644,11 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             } catch (error) { rows.innerHTML = `<p class="race-status">${escapeHtml(error.message)}</p>`; }
         }
         function closeRaceLeaderboard() { document.getElementById('race_leaderboard_overlay').classList.remove('open'); }
-        function finishRace(data) {
+        async function finishRace(data) {
             if (raceFinished) return;
             raceFinished = true;
             clearInterval(raceTimer);
+            trackRaceEvent('contest_submitted');
             const play = document.getElementById('race_play');
             const complete = document.getElementById('race_complete');
             const completeText = document.getElementById('race_complete_text');
@@ -628,14 +657,29 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             if (play) play.hidden = true;
             if (complete) complete.hidden = false;
             const score = (data && typeof data.score === 'number') ? data.score : null;
+            if (score !== null) window._raceLastScore = score;
             if (completeText) {
                 completeText.textContent = score !== null
-                    ? `Final score: ${score}/15. Rankings are published after the contest day ends.`
-                    : 'Contest completed. Check the leaderboard for your final score!';
+                    ? `Final score: ${score}/15 — Calculating your leaderboard rank…`
+                    : 'Contest submitted — Calculating your leaderboard rank…';
             }
-            // Store score for share button
-            if (score !== null) window._raceLastScore = score;
             if (typeof refreshRaceResultCard === 'function') refreshRaceResultCard();
+            try {
+                const r = await fetch('/race/leaderboard/7days', { headers: raceHeaders() });
+                if (r.ok) {
+                    const lb = await r.json();
+                    const mine = lb.my_today;
+                    if (mine && mine.attempted && completeText) {
+                        const secs = Math.round((mine.total_time_ms || 0) / 1000);
+                        window._raceLastScore = mine.score;
+                        completeText.textContent = mine.rank
+                            ? `🏆 Rank #${mine.rank} — ${mine.score}/15 in ${secs}s! Challenge a friend to beat your score.`
+                            : `Saved: ${mine.score}/15 in ${secs}s. Ranking update is pending — check the leaderboard shortly.`;
+                        trackRaceEvent('rank_revealed', { rank: mine.rank, score: mine.score });
+                    }
+                }
+            } catch {}
+            loadRaceStatus();
         }
 
         function shareRaceResultWA() {
@@ -668,6 +712,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     return;
                 }
                 if (!r.ok) throw new Error(data.detail || 'Unable to start the contest.');
+                trackRaceEvent('contest_started');
                 raceQuestions = data.questions;
                 document.getElementById('race_intro').hidden = true;
                 document.getElementById('race_play').hidden = false;

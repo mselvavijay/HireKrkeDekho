@@ -723,14 +723,15 @@
                         </div>
                     </div>
 
+                    <p class="race-arena-copy" style="margin-bottom:10px;">Your next leaderboard position starts here.</p>
                     <div class="race-actions-row">
-                        <button class="btn-primary-hero btn-race-start" type="button" onclick="openRaceModal()" aria-label="Enter Daily Contest">
-                            <span>Enter Contest</span>
+                        <button id="race_entry_btn" class="btn-primary-hero btn-race-start cta-shimmer" type="button" onclick="trackRaceEvent('contest_cta_clicked'); openRaceModal()" aria-label="Take Today's Contest">
+                            <span id="race_entry_btn_label">Take Today&apos;s Contest</span>
                             <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
-                        <button class="btn-secondary-hero btn-race-standings" type="button" onclick="showRaceLeaderboard()" aria-label="View Leaderboard">
-                            <span>Leaderboard</span>
-                        </button>
+                        <a class="btn-secondary-hero btn-race-standings" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" onclick="trackRaceEvent('leaderboard_cta_clicked')" aria-label="View Leaderboard" style="text-decoration:none">
+                            <span>View Leaderboard</span>
+                        </a>
                         <span class="race-seat-label" id="race_seat_status"></span>
                         <span id="race_contest_date" hidden>Today</span>
                     </div>
@@ -917,7 +918,7 @@
                 <button class="btn-primary-action" id="race_start_btn" type="button" onclick="startRaceAttempt()">Continue to contest</button>
             </div>
             <div id="race_play" hidden><div class="race-progress"><span id="race_question_count">Question 1 of 15</span><strong id="race_timer">17</strong></div><div class="race-timer-track"><i id="race_timer_bar"></i></div><h4 id="race_question_text"></h4><div id="race_options" class="race-options"></div></div>
-            <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px"><button class="btn-primary-action" type="button" onclick="showRaceLeaderboard()">View today&apos;s leaderboard</button><button class="btn-secondary-hero" type="button" id="race_share_wa_btn" onclick="shareRaceResultWA()" style="background:#25d366;color:#fff;border:none">📲 Beat my score</button><a class="btn-secondary-hero" href="/race/leaderboard" target="_blank" style="text-decoration:none">🏆 Full Leaderboard</a></div></div>
+            <div id="race_complete" hidden><div class="race-complete-icon">✓</div><h4>Race complete</h4><p id="race_complete_text"></p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px"><a class="btn-primary-action" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" style="text-decoration:none">View today&apos;s leaderboard</a><button class="btn-secondary-hero" type="button" id="race_share_wa_btn" onclick="shareRaceResultWA()" style="background:#25d366;color:#fff;border:none">📲 Beat my score</button><a class="btn-secondary-hero" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" style="text-decoration:none">🏆 Full Leaderboard</a></div></div>
             <p id="race_payment_status" class="race-status"></p>
         </div>
     </div>    <div class="modal-overlay" id="race_leaderboard_overlay" role="dialog" aria-modal="true" aria-labelledby="race_leaderboard_title">

@@ -235,6 +235,95 @@ def answer(payload: AnswerRequest, db: Session = Depends(get_db), token=Depends(
 def board(db: Session = Depends(get_db)):
     return {"contest_date": contest_date(), "entries": leaderboard(db, contest_date())}
 
+def _mask_name(name: str) -> str:
+    parts = [p for p in (name or "Player").strip().split() if p]
+    if not parts:
+        return "P•••••"
+    return " ".join(p[0] + "•" * max(4, min(len(p) - 1, 6)) for p in parts)
+
+@router.get("/leaderboard/7days")
+def leaderboard_7days(db: Session = Depends(get_db), token=Depends(get_optional_user_from_header)):
+    user = user_from_token(token, db) if token else None
+    today = now_ist().date()
+    dates = [(today - timedelta(days=i)).isoformat() for i in range(7)]
+    cutoff = dates[-1]
+
+    quizzes = {
+        q.contest_date: q.theme
+        for q in db.query(RaceDailyQuiz).filter(RaceDailyQuiz.contest_date >= cutoff).all()
+    }
+    attempts = (
+        db.query(RaceAttempt)
+        .filter(RaceAttempt.contest_date >= cutoff, RaceAttempt.status == "completed")
+        .order_by(RaceAttempt.contest_date.desc(), RaceAttempt.score.desc(), RaceAttempt.total_time_ms.asc(), RaceAttempt.completed_at.asc())
+        .all()
+    )
+
+    by_day = {d: [] for d in dates}
+    for a in attempts:
+        if a.contest_date in by_day:
+            by_day[a.contest_date].append(a)
+
+    days_out = []
+    my_today = {"attempted": False}
+    today_str = today.isoformat()
+
+    for d in dates:
+        day_attempts = by_day[d]
+        entries = []
+        for rank, a in enumerate(day_attempts, start=1):
+            is_you = bool(user and a.user_id == user.id)
+            entries.append({
+                "rank": rank,
+                "display_name": a.display_name if is_you else _mask_name(a.display_name),
+                "is_you": is_you,
+                "score": a.score,
+                "total_time_ms": a.total_time_ms,
+            })
+            if is_you and d == today_str:
+                my_today = {
+                    "attempted": True,
+                    "rank": rank,
+                    "score": a.score,
+                    "total_time_ms": a.total_time_ms,
+                    "theme": quizzes.get(d, "Daily Tech Contest"),
+                    "attempt_id": a.id,
+                    "display_name": a.display_name,
+                }
+        days_out.append({
+            "contest_date": d,
+            "is_today": d == today_str,
+            "theme": quizzes.get(d, "Daily Tech Contest"),
+            "total_participants": len(day_attempts),
+            "entries": entries[:20],
+        })
+
+    return {"days": days_out, "my_today": my_today}
+
+@router.get("/challenge/{attempt_id}")
+def get_challenge(attempt_id: str, db: Session = Depends(get_db)):
+    attempt = db.query(RaceAttempt).filter_by(id=attempt_id, status="completed").first()
+    if not attempt:
+        raise HTTPException(404, "Challenge not found or expired.")
+    quiz = db.query(RaceDailyQuiz).filter_by(contest_date=attempt.contest_date).first()
+    day_attempts = (
+        db.query(RaceAttempt)
+        .filter_by(contest_date=attempt.contest_date, status="completed")
+        .order_by(RaceAttempt.score.desc(), RaceAttempt.total_time_ms.asc(), RaceAttempt.completed_at.asc())
+        .all()
+    )
+    rank = next((i + 1 for i, a in enumerate(day_attempts) if a.id == attempt.id), None)
+    return {
+        "attempt_id": attempt.id,
+        "challenger_name": _mask_name(attempt.display_name),
+        "score": attempt.score,
+        "total_time_ms": attempt.total_time_ms,
+        "rank": rank,
+        "contest_date": attempt.contest_date,
+        "is_today": attempt.contest_date == contest_date(),
+        "theme": quiz.theme if quiz else "Daily Tech Contest",
+    }
+
 @router.get("/leaderboard/page", response_class=HTMLResponse)
 def leaderboard_page():
     from fastapi.responses import HTMLResponse
