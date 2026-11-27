@@ -41,14 +41,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 sessionStorage.removeItem('hkd_nav_locked');
                 headerEl?.classList.remove('nav-locked');
             };
-            const releaseNavLockAboveTarget = () => {
-                if (!headerEl?.classList.contains('nav-locked')) return;
-                const targetSelector = sessionStorage.getItem('hkd_active_nav');
-                if (!lockableNavTargets.has(targetSelector)) return clearNavLock();
-                const target = document.querySelector(targetSelector);
-                if (!target) return clearNavLock();
-                const landingTop = target.getBoundingClientRect().top + window.scrollY - 84;
-                if (window.scrollY < landingTop) clearNavLock();
+            const releaseNavLockOnManualScroll = () => {
+                if (headerEl?.classList.contains('nav-locked')) clearNavLock();
             };
             const moveNavPill = (el) => {
                 if (!indicator || !el) return;
@@ -90,7 +84,13 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     if (!navEl.contains(e.relatedTarget)) moveNavPill(getActive());
                 });
                 window.addEventListener('resize', () => moveNavPill(getActive()));
-                window.addEventListener('scroll', releaseNavLockAboveTarget, { passive: true });
+                window.addEventListener('wheel', releaseNavLockOnManualScroll, { passive: true });
+                window.addEventListener('touchstart', releaseNavLockOnManualScroll, { passive: true });
+                window.addEventListener('keydown', (event) => {
+                    if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '].includes(event.key)) {
+                        releaseNavLockOnManualScroll();
+                    }
+                });
             }
 
             // Scroll-shrink header

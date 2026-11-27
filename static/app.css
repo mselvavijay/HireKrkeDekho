@@ -2215,9 +2215,9 @@
 
         .race-arena-points {
             display: grid;
-            gap: 14px;
-            margin: 4px 0 32px;
-            padding: 4px 0;
+            gap: 18px;
+            margin: 18px 0 38px;
+            padding: 2px 0;
             list-style: none;
             color: #cbd5e1;
             font-size: 0.96rem;
@@ -2228,7 +2228,7 @@
             display: flex;
             align-items: center;
             gap: 9px;
-            min-height: 24px;
+            min-height: 28px;
         }
 
         .race-arena-points li::before {
@@ -2238,6 +2238,41 @@
             flex: 0 0 6px;
             border-radius: 50%;
             background: #4c8dff;
+        }
+
+        .race-desktop-rules-grid {
+            display: none;
+        }
+
+        @media (min-width: 901px) {
+            .race-desktop-rules-grid {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+                margin-top: 28px;
+                max-width: 520px;
+            }
+
+            .race-rule-mini-card {
+                background: rgba(15, 23, 42, 0.55);
+                border: 1px solid rgba(59, 130, 246, 0.22);
+                border-radius: 12px;
+                padding: 14px 16px;
+            }
+
+            .race-rule-mini-title {
+                font-size: 0.88rem;
+                font-weight: 700;
+                color: #e2e8f0;
+                margin-bottom: 4px;
+            }
+
+            .race-rule-mini-desc {
+                font-size: 0.8rem;
+                color: #94a3b8;
+                line-height: 1.45;
+                margin: 0;
+            }
         }
 
         .race-spec-row {
