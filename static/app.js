@@ -653,26 +653,30 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
         let raceQuestions = [], raceTimer = null, raceSubmissionQueue = Promise.resolve(), raceAnsweredMap = {}, raceFinished = false;
         const raceHeaders = () => ({ 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUserToken || ''}` });
         const simulatedLeaderboard = [
-            ['Aarav Sharma', 14], ['Priya Nair', 13], ['Rohan Mehta', 12], ['Ananya Iyer', 11], ['Kavya Singh', 10], ['Vikram Rao', 9]
+            ['Aarav Sharma', 14], ['Priya Nair', 13], ['Rohan Mehta', 12], ['Ananya Iyer', 12], ['Kavya Singh', 11], ['Vikram Rao', 10]
         ];
-        const simulatedEntrants = [['Neha Kapoor', 12], ['Arjun Reddy', 13], ['Ishita Das', 11]];
-        const simulatedScoreChanges = [8, 10, 12, 9, 13, 11, 14, 7];
-        let simulatedScoreIndex = 0;
         function renderMovingLeaderboard() {
             const rows = document.getElementById('moving_leaderboard_rows');
             if (!rows) return;
             rows.innerHTML = simulatedLeaderboard.slice(0, 6).map(([name, score], index) => `<div class="moving-leaderboard-row" style="animation-delay:${index * 55}ms"><b>#${index + 1}</b><span>${name}</span><em>${score}/15</em></div>`).join('');
         }
-        function rotateMovingLeaderboard() {
-            const climber = simulatedEntrants.length ? simulatedEntrants.shift() : simulatedLeaderboard.pop();
-            if (climber) climber[1] = simulatedScoreChanges[simulatedScoreIndex++ % simulatedScoreChanges.length];
-            simulatedLeaderboard.push(climber);
-            simulatedLeaderboard.sort((a, b) => b[1] - a[1]);
-            renderMovingLeaderboard();
-            document.querySelector('.moving-leaderboard-row')?.classList.add('rank-moving');
-        }
         renderMovingLeaderboard();
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(rotateMovingLeaderboard, 4200);
+        function enterContestWithWhoosh(btn) {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                openRaceModal();
+                return;
+            }
+            const corners = ['tl', 'tr', 'bl', 'br'].map((pos) => {
+                const el = document.createElement('div');
+                el.className = `contest-whoosh-corner contest-whoosh-${pos}`;
+                document.body.appendChild(el);
+                return el;
+            });
+            setTimeout(() => {
+                corners.forEach((el) => el.remove());
+                openRaceModal();
+            }, 320);
+        }
         async function loadRaceStatus() {
             if (!currentUserToken) return;
             try {

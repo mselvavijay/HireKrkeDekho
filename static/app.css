@@ -2229,6 +2229,19 @@
             align-items: center;
             gap: 9px;
             min-height: 28px;
+            opacity: 0;
+            transform: translateY(6px);
+            animation: raceBulletLoop 4.5s ease-in-out infinite;
+        }
+
+        .race-arena-points li:nth-child(1) { animation-delay: 0s; }
+        .race-arena-points li:nth-child(2) { animation-delay: 0.9s; }
+        .race-arena-points li:nth-child(3) { animation-delay: 1.8s; }
+
+        @keyframes raceBulletLoop {
+            0% { opacity: 0; transform: translateY(6px); }
+            12%, 72% { opacity: 1; transform: translateY(0); }
+            84%, 100% { opacity: 0; transform: translateY(-4px); }
         }
 
         .race-arena-points li::before {
@@ -2240,40 +2253,29 @@
             background: #4c8dff;
         }
 
-        .race-desktop-rules-grid {
-            display: none;
+        .race-actions-row {
+            margin-top: 28px;
         }
 
-        @media (min-width: 901px) {
-            .race-desktop-rules-grid {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 14px;
-                margin-top: 28px;
-                max-width: 520px;
-            }
-
-            .race-rule-mini-card {
-                background: rgba(15, 23, 42, 0.55);
-                border: 1px solid rgba(59, 130, 246, 0.22);
-                border-radius: 12px;
-                padding: 14px 16px;
-            }
-
-            .race-rule-mini-title {
-                font-size: 0.88rem;
-                font-weight: 700;
-                color: #e2e8f0;
-                margin-bottom: 4px;
-            }
-
-            .race-rule-mini-desc {
-                font-size: 0.8rem;
-                color: #94a3b8;
-                line-height: 1.45;
-                margin: 0;
-            }
+        /* 4-corner whoosh animation on Enter Contest click */
+        .contest-whoosh-corner {
+            position: fixed;
+            width: 28px;
+            height: 28px;
+            border: 3px solid #60a5fa;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
         }
+        .contest-whoosh-tl { top: 18px; left: 18px; border-right: none; border-bottom: none; border-top-left-radius: 8px; animation: whooshTL 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .contest-whoosh-tr { top: 18px; right: 18px; border-left: none; border-bottom: none; border-top-right-radius: 8px; animation: whooshTR 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .contest-whoosh-bl { bottom: 18px; left: 18px; border-right: none; border-top: none; border-bottom-left-radius: 8px; animation: whooshBL 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .contest-whoosh-br { bottom: 18px; right: 18px; border-left: none; border-top: none; border-bottom-right-radius: 8px; animation: whooshBR 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes whooshTL { 0% { opacity: 0; transform: translate(-12px, -12px) scale(0.7); } 45% { opacity: 1; transform: translate(0, 0) scale(1.15); } 100% { opacity: 0; transform: translate(10px, 10px) scale(0.9); } }
+        @keyframes whooshTR { 0% { opacity: 0; transform: translate(12px, -12px) scale(0.7); } 45% { opacity: 1; transform: translate(0, 0) scale(1.15); } 100% { opacity: 0; transform: translate(-10px, 10px) scale(0.9); } }
+        @keyframes whooshBL { 0% { opacity: 0; transform: translate(-12px, 12px) scale(0.7); } 45% { opacity: 1; transform: translate(0, 0) scale(1.15); } 100% { opacity: 0; transform: translate(10px, -10px) scale(0.9); } }
+        @keyframes whooshBR { 0% { opacity: 0; transform: translate(12px, 12px) scale(0.7); } 45% { opacity: 1; transform: translate(0, 0) scale(1.15); } 100% { opacity: 0; transform: translate(-10px, -10px) scale(0.9); } }
 
         .race-spec-row {
             display: flex;

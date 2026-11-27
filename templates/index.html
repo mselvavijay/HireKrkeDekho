@@ -649,8 +649,8 @@
                         <li>Seize today&apos;s #1 spot on leaderboard</li>
                     </ul>
                     <div class="race-actions-row">
-                        <button id="race_entry_btn" class="btn-primary-hero btn-race-start cta-shimmer" type="button" onclick="trackRaceEvent('contest_cta_clicked'); openRaceModal()" aria-label="Take Today's Contest">
-                            <span id="race_entry_btn_label">Take Today&apos;s Contest</span>
+                        <button id="race_entry_btn" class="btn-primary-hero btn-race-start cta-shimmer" type="button" onclick="trackRaceEvent('contest_cta_clicked'); enterContestWithWhoosh(this)" aria-label="Enter Contest">
+                            <span id="race_entry_btn_label">Enter Contest</span>
                             <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
                         <a class="btn-secondary-hero btn-race-standings" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" onclick="trackRaceEvent('leaderboard_cta_clicked')" aria-label="View Leaderboard" style="text-decoration:none">
@@ -658,17 +658,6 @@
                         </a>
                         <span class="race-seat-label" id="race_seat_status"></span>
                         <span id="race_contest_date" hidden>Today</span>
-                    </div>
-
-                    <div class="race-desktop-rules-grid" aria-label="Scoring and Contest Rules">
-                        <div class="race-rule-mini-card">
-                            <div class="race-rule-mini-title">Speed + Accuracy</div>
-                            <p class="race-rule-mini-desc">Faster correct answers earn higher rank on today&apos;s live leaderboard.</p>
-                        </div>
-                        <div class="race-rule-mini-card">
-                            <div class="race-rule-mini-title">1 Verified Attempt / Day</div>
-                            <p class="race-rule-mini-desc">Server-timed 15s rounds with anti-cheat &amp; #1 Champion Card.</p>
-                        </div>
                     </div>
                 </div>
 
