@@ -35,6 +35,21 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
             // Upper nav sliding pill indicator
             const navEl = document.getElementById('site_nav_links');
             const indicator = navEl?.querySelector('.nav-pill-indicator');
+            const headerEl = document.querySelector('.site-header');
+            const lockableNavTargets = new Set(['#how_it_works', '#ai_race']);
+            const clearNavLock = () => {
+                sessionStorage.removeItem('hkd_nav_locked');
+                headerEl?.classList.remove('nav-locked');
+            };
+            const releaseNavLockAboveTarget = () => {
+                if (!headerEl?.classList.contains('nav-locked')) return;
+                const targetSelector = sessionStorage.getItem('hkd_active_nav');
+                if (!lockableNavTargets.has(targetSelector)) return clearNavLock();
+                const target = document.querySelector(targetSelector);
+                if (!target) return clearNavLock();
+                const landingTop = target.getBoundingClientRect().top + window.scrollY - 84;
+                if (window.scrollY < landingTop) clearNavLock();
+            };
             const moveNavPill = (el) => {
                 if (!indicator || !el) return;
                 indicator.style.width = el.offsetWidth + 'px';
@@ -47,8 +62,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 if (savedPill) {
                     pills.forEach(link => link.classList.toggle('active', link === savedPill));
                 }
-                if (sessionStorage.getItem('hkd_nav_locked') === '1' && window.location.hash) {
-                    document.querySelector('.site-header')?.classList.add('nav-locked');
+                if (sessionStorage.getItem('hkd_nav_locked') === '1' && lockableNavTargets.has(window.location.hash)) {
+                    headerEl?.classList.add('nav-locked');
                 }
                 const getActive = () => navEl.querySelector('.tabs-pill.active') || pills[0];
                 requestAnimationFrame(() => moveNavPill(getActive()));
@@ -59,9 +74,14 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     link.addEventListener('click', () => {
                         pills.forEach(l => l.classList.remove('active'));
                         link.classList.add('active');
-                        sessionStorage.setItem('hkd_active_nav', link.getAttribute('href'));
-                        sessionStorage.setItem('hkd_nav_locked', '1');
-                        document.querySelector('.site-header')?.classList.add('nav-locked');
+                        const href = link.getAttribute('href');
+                        sessionStorage.setItem('hkd_active_nav', href);
+                        if (lockableNavTargets.has(href)) {
+                            sessionStorage.setItem('hkd_nav_locked', '1');
+                            headerEl?.classList.add('nav-locked');
+                        } else {
+                            clearNavLock();
+                        }
                         moveNavPill(link);
                     });
                 });
@@ -70,6 +90,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                     if (!navEl.contains(e.relatedTarget)) moveNavPill(getActive());
                 });
                 window.addEventListener('resize', () => moveNavPill(getActive()));
+                window.addEventListener('scroll', releaseNavLockAboveTarget, { passive: true });
             }
 
             // Scroll-shrink header

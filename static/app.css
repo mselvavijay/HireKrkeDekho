@@ -2215,9 +2215,9 @@
 
         .race-arena-points {
             display: grid;
-            gap: 8px;
-            margin: 0 0 26px;
-            padding: 0;
+            gap: 14px;
+            margin: 4px 0 32px;
+            padding: 4px 0;
             list-style: none;
             color: #cbd5e1;
             font-size: 0.96rem;
@@ -2228,6 +2228,7 @@
             display: flex;
             align-items: center;
             gap: 9px;
+            min-height: 24px;
         }
 
         .race-arena-points li::before {
