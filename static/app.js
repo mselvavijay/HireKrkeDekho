@@ -685,7 +685,7 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 if (!r.ok) return;
                 window._raceLastTopic = data.theme || 'Daily Contest';
                 const label = document.getElementById('race_seat_status');
-                if (label) label.textContent = data.theme || 'Today\'s contest topic';
+                if (label) label.textContent = `Topic: ${data.theme || "Today's Challenge"}`;
                 const inlineTopic = document.getElementById('race_modal_topic_inline');
                 if (inlineTopic) inlineTopic.textContent = data.theme || 'Technical Challenge';
                 const topicName = document.getElementById('race_modal_topic_name');

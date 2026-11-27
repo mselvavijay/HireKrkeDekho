@@ -2224,6 +2224,14 @@
             line-height: 1.45;
         }
 
+        .race-topic-line {
+            margin: 10px 0 24px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: #93c5fd;
+            letter-spacing: 0.01em;
+        }
+
         .race-arena-points li {
             display: flex;
             align-items: center;
@@ -2231,17 +2239,26 @@
             min-height: 28px;
             opacity: 0;
             transform: translateY(6px);
-            animation: raceBulletLoop 4.5s ease-in-out infinite;
         }
 
-        .race-arena-points li:nth-child(1) { animation-delay: 0s; }
-        .race-arena-points li:nth-child(2) { animation-delay: 0.9s; }
-        .race-arena-points li:nth-child(3) { animation-delay: 1.8s; }
+        .race-arena-points li:nth-child(1) { animation: raceBullet1 4.5s ease-in-out infinite; }
+        .race-arena-points li:nth-child(2) { animation: raceBullet2 4.5s ease-in-out infinite; }
+        .race-arena-points li:nth-child(3) { animation: raceBullet3 4.5s ease-in-out infinite; }
 
-        @keyframes raceBulletLoop {
+        @keyframes raceBullet1 {
             0% { opacity: 0; transform: translateY(6px); }
-            12%, 72% { opacity: 1; transform: translateY(0); }
-            84%, 100% { opacity: 0; transform: translateY(-4px); }
+            10%, 82% { opacity: 1; transform: translateY(0); }
+            92%, 100% { opacity: 0; transform: translateY(-4px); }
+        }
+        @keyframes raceBullet2 {
+            0%, 20% { opacity: 0; transform: translateY(6px); }
+            30%, 82% { opacity: 1; transform: translateY(0); }
+            92%, 100% { opacity: 0; transform: translateY(-4px); }
+        }
+        @keyframes raceBullet3 {
+            0%, 40% { opacity: 0; transform: translateY(6px); }
+            50%, 82% { opacity: 1; transform: translateY(0); }
+            92%, 100% { opacity: 0; transform: translateY(-4px); }
         }
 
         .race-arena-points li::before {

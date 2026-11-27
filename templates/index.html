@@ -67,7 +67,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-<link rel="stylesheet" href="/static/app.css?v=20261127-contest-v4">
+<link rel="stylesheet" href="/static/app.css?v=20261128-contest-v5">
 <link rel="stylesheet" href="/static/tabs.css?v=20261126-v7">
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="shortcut icon" type="image/png" href="/static/favicon.ico">
@@ -643,6 +643,7 @@
                 <!-- Column 1: Header, Description & Actions -->
                 <div class="race-arena-header">
                     <h2 class="race-arena-title">Daily Contest</h2>
+                    <div class="race-topic-line" id="race_seat_status">Topic: Today&apos;s Challenge</div>
                     <ul class="race-arena-points">
                         <li>15 Rapid Fire Questions</li>
                         <li>15 seconds on the clock</li>
@@ -653,10 +654,9 @@
                             <span id="race_entry_btn_label">Enter Contest</span>
                             <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
-                        <a class="btn-secondary-hero btn-race-standings" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" onclick="trackRaceEvent('leaderboard_cta_clicked')" aria-label="View Leaderboard" style="text-decoration:none">
+                        <a class="btn-primary-hero btn-race-standings" href="/race/leaderboard/page" target="_blank" rel="noopener noreferrer" onclick="trackRaceEvent('leaderboard_cta_clicked')" aria-label="View Leaderboard" style="text-decoration:none">
                             <span>View Leaderboard</span>
                         </a>
-                        <span class="race-seat-label" id="race_seat_status"></span>
                         <span id="race_contest_date" hidden>Today</span>
                     </div>
                 </div>
@@ -891,7 +891,7 @@
     </div>
 
     <!-- Application Script -->
-    <script src="/static/app.js?v=20261127-contest-v4" defer></script>
+    <script src="/static/app.js?v=20261128-contest-v5" defer></script>
 </body>
 
     <!-- Toast Container -->
