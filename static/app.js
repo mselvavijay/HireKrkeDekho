@@ -182,7 +182,8 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 theme: 'outline',
                 size: 'large',
                 text: 'continue_with',
-                shape: 'pill'
+                shape: 'pill',
+                width: Math.max(180, Math.min(250, Math.floor(slot.getBoundingClientRect().width)))
             });
             _googleButtonRendered = true;
         }
@@ -659,13 +660,11 @@ let currentUserId = localStorage.getItem('career_bot_user_id') || null;
                 if (!r.ok) return;
                 window._raceLastTopic = data.theme || 'Daily Contest';
                 const label = document.getElementById('race_seat_status');
-                if (label) label.textContent = `${data.theme} · ${data.question_count} questions · ${data.seconds_per_question}s each`;
+                if (label) label.textContent = data.theme || 'Today\'s contest topic';
                 const inlineTopic = document.getElementById('race_modal_topic_inline');
                 if (inlineTopic) inlineTopic.textContent = data.theme || 'Technical Challenge';
                 const topicName = document.getElementById('race_modal_topic_name');
                 if (topicName) topicName.textContent = data.theme || 'Core Engineering';
-                const meta = document.getElementById('race_modal_meta');
-                if (meta) meta.textContent = `${data.question_count} rapid-fire questions · ${data.seconds_per_question}s each · accuracy first`;
                 if (data.attempt_status === 'completed') {
                     const intro = document.getElementById('race_intro');
                     const play = document.getElementById('race_play');

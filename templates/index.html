@@ -61,7 +61,6 @@
     </script>
     <title>HireKrkeDekho | AI Career Advisor & Tech Skill Contest</title>
     <!-- Preload critical LCP image for mobile & desktop with responsive WebP -->
-    <link rel="preload" as="image" href="/static/hirekrkedekho-hero-3d-mobile.webp" type="image/webp" media="(max-width: 768px)" fetchpriority="high">
     <link rel="preload" as="image" href="/static/hirekrkedekho-hero-3d-clean.webp" type="image/webp" media="(min-width: 769px)" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,7 +175,6 @@
                             <!-- 3D Team Avatar Centerpiece -->
                             <div class="avatar-3d-bobbing">
                                 <picture>
-                                    <source media="(max-width: 768px)" srcset="/static/hirekrkedekho-hero-3d-mobile.webp" type="image/webp">
                                     <source srcset="/static/hirekrkedekho-hero-3d-clean.webp" type="image/webp">
                                     <img src="/static/hirekrkedekho-hero-3d-clean.png" alt="HireKrkeDekho Tech Candidate Community" class="hero-3d-avatar-img" width="1040" height="690" fetchpriority="high" decoding="async">
                                 </picture>
@@ -399,7 +397,7 @@
                         <div class="composer-surface-bar">
                             
                             <input type="text" id="user_input_field"
-                                placeholder="Describe your background, target role or question"
+                                placeholder="Describe your background or role"
                                 onkeydown="if(event.key==='Enter' && !event.shiftKey) submitMessage()"
                                 autocomplete="off" spellcheck="true">
                             <button class="btn-composer-send" id="btn_send_action" type="button" onclick="submitMessage()">
@@ -645,24 +643,11 @@
                 <!-- Column 1: Header, Description & Actions -->
                 <div class="race-arena-header">
                     <h2 class="race-arena-title">Daily Contest</h2>
-                    <p class="race-arena-copy">15 rapid-fire engineering challenges. 15 seconds on the clock. Put your real problem-solving speed to the test and seize today&apos;s #1 spot on the leaderboard.</p>
-                    
-                    <div class="race-spec-row">
-                        <div class="race-spec-pill">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            <span>15s Per Question</span>
-                        </div>
-                        <div class="race-spec-pill">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                            <span>Single Verified Attempt</span>
-                        </div>
-                        <div class="race-spec-pill">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            <span>Accuracy-First Scoring</span>
-                        </div>
-                    </div>
-
-                    <p class="race-arena-copy" style="margin-bottom:10px;">Your next leaderboard position starts here.</p>
+                    <ul class="race-arena-points">
+                        <li>15 Rapid Fire Questions</li>
+                        <li>15 seconds on the clock</li>
+                        <li>Seize today&apos;s #1 spot on leaderboard</li>
+                    </ul>
                     <div class="race-actions-row">
                         <button id="race_entry_btn" class="btn-primary-hero btn-race-start cta-shimmer" type="button" onclick="trackRaceEvent('contest_cta_clicked'); openRaceModal()" aria-label="Take Today's Contest">
                             <span id="race_entry_btn_label">Take Today&apos;s Contest</span>
@@ -691,7 +676,7 @@
         <div class="footer-container">
             <div class="footer-brand-wrap">
                 <p class="footer-copyright">&copy; 2026 HireKrkeDekho &bull; Intelligent Talent &amp; Career Discovery</p>
-                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; display:flex; gap:12px; flex-wrap:wrap;">
+                <p class="footer-legal-links" style="font-size:0.75rem; color:var(--text-muted); margin-top:6px; display:flex; gap:12px; flex-wrap:wrap;">
                     <a href="/about" style="color:var(--text-secondary); text-decoration:none;">About</a>
                     <a href="/contact" style="color:var(--text-secondary); text-decoration:none;">Contact</a>
                     <a href="/careers" style="color:var(--text-secondary); text-decoration:none;">Careers</a>
@@ -731,7 +716,6 @@
             <div class="modal-header">
                 <div>
                     <h3 class="modal-title" id="race_modal_title">Join Today&apos;s Contest &ndash; <span id="race_modal_topic_inline" class="contest-topic-accent">Skill</span></h3>
-                    <p id="race_modal_meta" class="contest-modal-meta">15 rapid-fire questions &middot; 15s each &middot; Server-timed</p>
                 </div>
                 <button class="btn-modal-close" onclick="closeRaceModal()" aria-label="Close">&times;</button>
             </div>

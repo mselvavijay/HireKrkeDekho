@@ -2213,6 +2213,32 @@
             margin: 0 0 22px;
         }
 
+        .race-arena-points {
+            display: grid;
+            gap: 8px;
+            margin: 0 0 26px;
+            padding: 0;
+            list-style: none;
+            color: #cbd5e1;
+            font-size: 0.96rem;
+            line-height: 1.45;
+        }
+
+        .race-arena-points li {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .race-arena-points li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            flex: 0 0 6px;
+            border-radius: 50%;
+            background: #4c8dff;
+        }
+
         .race-spec-row {
             display: flex;
             align-items: center;
@@ -3773,6 +3799,13 @@
 
         .modal-overlay.open {
             display: flex;
+            overscroll-behavior: contain;
+        }
+
+        html:has(.modal-overlay.open),
+        body:has(.modal-overlay.open) {
+            overflow: hidden !important;
+            overscroll-behavior: none;
         }
 
         .auth-modal {
@@ -4934,6 +4967,10 @@
             transform: scale(1.1);
         }
         @media (max-width: 640px) {
+            .site-footer {
+                padding: 22px 16px calc(22px + env(safe-area-inset-bottom, 0px));
+            }
+
             .footer-container {
                 flex-direction: column;
                 align-items: center;
@@ -4953,6 +4990,22 @@
             .footer-copyright {
                 font-size: 0.8rem;
                 text-align: center;
+                line-height: 1.45;
+            }
+
+            .footer-legal-links {
+                display: grid !important;
+                grid-template-columns: repeat(2, max-content);
+                justify-content: center;
+                column-gap: 18px !important;
+                row-gap: 10px !important;
+                text-align: left;
+                width: 100%;
+            }
+
+            .footer-legal-links a:last-child {
+                grid-column: 1 / -1;
+                justify-self: center;
             }
 
             .footer-social-group {
@@ -5143,6 +5196,31 @@
         .race-challenge-btn:hover { color:#fff; text-decoration:underline; }
         .race-complete-icon { display:grid; place-items:center; width:50px; height:50px; margin:auto; border-radius:50%; background:#173d35; color:#71e2b2; font-size:1.45rem; font-weight:900; }
         @media (max-width:640px) { 
+            .race-modal .modal-header {
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .race-modal .modal-title {
+                min-width: 0;
+                padding-right: 8px;
+                line-height: 1.35;
+            }
+
+            .race-modal .contest-topic-accent {
+                display: inline-block;
+            }
+
+            .contest-topic-highlight {
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .contest-topic-name {
+                max-width: 100%;
+                line-height: 1.28;
+                overflow-wrap: anywhere;
+            }
             .race-modal { width:calc(100vw - 20px); max-width:calc(100vw - 20px); padding:18px 14px; } 
             .race-options.race-options-2col { grid-template-columns: 1fr; }
             .race-options button { min-height:46px; padding:10px 12px; font-size:.88rem; } 
@@ -5679,4 +5757,117 @@
             display: none !important;
             width: 0 !important;
             height: 0 !important;
+        }
+
+        /* Mobile-only: preserve the three-step story without horizontal motion. */
+        @media (max-width: 1024px) and (prefers-reduced-motion: no-preference) {
+            .how-input .how-role-card {
+                position: relative;
+                padding-right: 30px;
+            }
+
+            .how-input .how-role-card::after {
+                content: '\2713';
+                position: absolute;
+                top: 50%;
+                right: 0;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                background: #22c55e;
+                color: #07111f;
+                font-size: 12px;
+                font-weight: 800;
+                opacity: 0;
+                transform: translateY(-50%) scale(.5);
+                animation: mobile-how-check 8s ease-in-out infinite;
+            }
+
+            .how-input .how-roles li:nth-child(2) .how-role-card::after { animation-delay: .8s; }
+            .how-input .how-roles li:nth-child(3) .how-role-card::after { animation-delay: 1.6s; }
+
+            .how-arrow-badge {
+                position: relative;
+                overflow: visible;
+            }
+
+            .how-arrow-badge::after {
+                content: '\2726';
+                position: absolute;
+                color: #bfdbfe;
+                font-size: 18px;
+                opacity: 0;
+                animation: mobile-how-spark 8s ease-in-out infinite;
+            }
+
+            .how-arrow-to-offer .how-arrow-badge { animation: mobile-how-arrow 8s ease-in-out infinite 2.5s; }
+            .how-arrow-to-offer .how-arrow-badge::after { animation-delay: 2.5s; }
+            .how-output { animation: mobile-how-offer 8s ease-in-out infinite 3.1s; }
+            .how-arrow-to-cta .how-arrow-badge { animation: mobile-how-arrow 8s ease-in-out infinite 4.7s; }
+            .how-arrow-to-cta .how-arrow-badge::after { animation-delay: 4.7s; }
+            .btn-find-jobs-standalone { animation: mobile-how-cta 8s ease-in-out infinite 5.3s; }
+
+            @keyframes mobile-how-check {
+                0%, 8%, 100% { opacity: 0; transform: translateY(-50%) scale(.5); }
+                3%, 6% { opacity: 1; transform: translateY(-50%) scale(1); }
+            }
+
+            @keyframes mobile-how-arrow {
+                0%, 100% { box-shadow: none; }
+                3%, 7% { box-shadow: 0 0 0 7px rgba(59, 130, 246, .12), 0 0 20px rgba(96, 165, 250, .9); }
+            }
+
+            @keyframes mobile-how-spark {
+                0%, 100% { opacity: 0; transform: translate(-8px, 6px) scale(.4); }
+                4% { opacity: 1; transform: translate(8px, -8px) scale(1); }
+                8% { opacity: 0; transform: translate(12px, -12px) scale(.4); }
+            }
+
+            @keyframes mobile-how-offer {
+                0%, 100% { filter: brightness(1); }
+                4%, 14% { filter: brightness(1.12); }
+            }
+
+            @keyframes mobile-how-cta {
+                0%, 100% { box-shadow: 0 8px 24px rgba(31, 107, 255, .5); }
+                4%, 12% { box-shadow: 0 0 0 7px rgba(59, 130, 246, .18), 0 10px 28px rgba(59, 130, 246, .8); }
+            }
+        }
+
+        @media (max-width: 640px) {
+            .composer-surface-bar {
+                gap: 6px;
+                padding-left: 12px;
+            }
+
+            .composer-surface-bar input,
+            .composer-surface-bar input::placeholder {
+                font-size: 13px;
+            }
+
+            .btn-composer-send {
+                width: 44px;
+                min-width: 44px;
+                padding: 0;
+                font-size: 0;
+            }
+
+            .btn-composer-send::after {
+                content: '\2192';
+                font-size: 20px;
+                line-height: 1;
+            }
+
+            .auth-google-center-box,
+            .google-login-slot {
+                min-width: 0;
+                overflow: hidden !important;
+            }
+
+            .google-login-slot > div,
+            .google-login-slot iframe {
+                max-width: 100% !important;
+            }
         }

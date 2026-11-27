@@ -42,7 +42,7 @@
             position: sticky; top: 0; z-index: 10;
         }
         .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
-        .nav-logo img { height: 32px; border-radius: 6px; }
+        .nav-logo img { height: 36px; border-radius: 6px; }
         .nav-links { display: flex; gap: 20px; }
         .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; }
         .nav-links a:hover { color: var(--text-primary); }
@@ -222,6 +222,7 @@
         .page-header h1 { font-size:1.65rem; }
         .cta-card { background:rgba(15,22,40,.55); border:1px solid var(--border); border-radius:10px; padding:18px 20px; }
         .cta-card h2 { font-size:1rem; }
+        .cta-card:has(#btn-challenge-copy) { flex-direction:column; align-items:flex-start; }
         .cta-pulse { animation:none; }
         .day-tab, .topic-pill { border-radius:6px; }
         .day-tab.active { background:rgba(99,102,241,.12); }
@@ -246,7 +247,7 @@
         .rank-row:nth-child(even) { background:rgba(255,255,255,.015); }
         .rank-row:first-of-type { border-top:0; }
         .player-name { letter-spacing:-.01em; }
-        footer { margin-top:28px; padding:16px 0 8px; }
+        footer { margin-top:72px; padding:36px 0 104px; }
         @media (max-width:480px) { .rank-table-head, .rank-row { grid-template-columns:32px 1fr auto 46px; } .rank-table-head { font-size:.64rem; } .rank-row { padding:12px 4px; } }
         @media (prefers-reduced-motion: reduce) {
             *, .cta-pulse { animation: none !important; transition: none !important; }
@@ -384,10 +385,10 @@
             `Take the challenge here: ${challengeUrl}\n\n` +
             `Let's see who's at the top!`;
 
-        ctaHead.textContent = "Made It to the Leaderboard? Challenge a Friend!";
+        ctaHead.textContent = "Made it to the leaderboard?";
         ctaSub.textContent = `Your rank: #${myToday.rank} · ${myToday.score}/15 in ${secs}s. Share your result and come back tomorrow for the next contest!`;
         ctaActions.innerHTML = `
-            <button class="btn btn-primary" id="btn-challenge-copy">Share challenge</button>
+            <button class="btn btn-primary" id="btn-challenge-copy">Challenge a friend</button>
         `;
         document.getElementById("btn-challenge-copy").onclick = () => {
             trackLbEvent("challenge_friend_clicked", { method: "share" });
@@ -415,7 +416,7 @@
         const d = days[idx];
         if (!d) return;
         document.getElementById("day-topic").textContent = `${d.contest_date} · ${d.theme}`;
-        document.getElementById("day-count").textContent = `${d.total_participants} verified participant${d.total_participants === 1 ? "" : "s"}`;
+        document.getElementById("day-count").textContent = "Today’s top 10";
 
         const wrap = document.getElementById("board-wrap");
         if (!d.entries.length) {
