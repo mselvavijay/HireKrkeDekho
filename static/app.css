@@ -5425,6 +5425,55 @@
             text-decoration: underline;
         }
 
+/* Phone header: an authenticated account must not push the menu off-screen. */
+@media (max-width: 640px) {
+    header.site-header {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+    }
+
+    .header-brand {
+        min-width: 0;
+    }
+
+    .header-actions {
+        min-width: 0;
+        gap: 6px;
+    }
+
+    .user-account-badge {
+        width: 40px;
+        height: 40px;
+        padding: 4px;
+        justify-content: center;
+        flex: 0 0 40px;
+    }
+
+    .user-account-badge .user-info-text,
+    .user-account-badge .btn-signout {
+        display: none;
+    }
+
+    .user-account-badge .user-avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    .hero-section,
+    .hero-content-wrap,
+    .hero-stage-split,
+    .hero-text-col,
+    .hero-avatar-col,
+    .hero-avatar-showcase {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .hero-services-grid {
+        width: 100%;
+    }
+}
+
 /* ==========================================================================
    UNSLOP PASS: Clean, deliberate craftsmanship based on heydamir/unslop
    ========================================================================== */
